@@ -1,53 +1,53 @@
-# Documentation Metadata Checker
+---
+name: doc-metadata-analyzer
+version: 1.0.0
+description: Check documentation pages for SEO metadata compliance
+author: Dev GTM
+tags: [seo, metadata, documentation, validation]
+mcp_server: true
+---
 
-## Overview
+# Documentation Metadata Analyzer
 
-This MCP server provides AI agents with the ability to check documentation pages for proper SEO metadata. It validates whether meta titles and meta descriptions exist and whether they meet recommended character length guidelines for optimal search engine visibility.
+Checks documentation pages for proper meta title and description tags, validating them against SEO best practices.
 
-## When to Use This Skill
+## When to Use
 
-Use this skill when:
-- A user asks to check if a documentation page has proper metadata
-- A user wants to validate SEO metadata for documentation
-- A user asks about meta title or meta description length
-- A user wants to know if their documentation follows SEO best practices
-- A user provides a documentation URL and asks about its metadata quality
+Use this skill when you need to:
+- Check if a documentation page has meta title and description
+- Validate metadata character lengths for SEO
+- Audit documentation sites for metadata compliance
+- Get specific recommendations for improving metadata
 
 ## Tool: check_documentation_metadata
-
-### Purpose
-
-Checks if a documentation page has proper meta title and meta description, and validates their character lengths against SEO best practices.
 
 ### Input
 
 ```json
 {
-  "url": "https://docs.example.com/page"
+  "url": "https://docs.example.com"
 }
 ```
 
 **Parameters:**
-- `url` (string, required): The documentation page URL to check. Must use HTTP or HTTPS protocol.
+- `url` (string, required): Documentation page URL (HTTP/HTTPS only)
 
 ### Output
 
-Returns a JSON object with validation results:
-
 ```json
 {
-  "url": "https://docs.example.com/page",
+  "url": "https://docs.example.com",
   "title": {
-    "value": "Getting Started Guide",
+    "value": "Example Documentation",
     "exists": true,
     "length": 21,
     "status": "warning",
     "issues": ["Title too short (21 chars, recommended: 50-60)"]
   },
   "description": {
-    "value": "Learn how to get started with our platform. This comprehensive guide covers installation, configuration, and your first steps.",
+    "value": "Learn how to use our platform...",
     "exists": true,
-    "length": 142,
+    "length": 145,
     "status": "ideal",
     "issues": []
   },
@@ -56,141 +56,83 @@ Returns a JSON object with validation results:
 }
 ```
 
-**Response Fields:**
-- `url`: The URL that was checked
-- `title`: Title validation results
-  - `value`: The extracted title text (null if missing)
-  - `exists`: Whether the title exists (boolean)
-  - `length`: Character count
-  - `status`: "ideal", "warning", or "missing"
-  - `issues`: Array of validation issues
-- `description`: Description validation results (same structure as title)
-- `success`: Whether the check completed successfully
-- `error`: Error message if check failed (null if successful)
+**Status values:**
+- `ideal` - Length is within recommended range
+- `warning` - Length is outside recommended range
+- `missing` - Tag not found
 
-### SEO Best Practices
+### SEO Guidelines
 
 **Meta Title:**
-- **Ideal length**: 50-60 characters
-- **Warning threshold**: <30 or >65 characters
-- **Why it matters**: Search engines typically display 50-60 characters in search results. Titles that are too short may not be descriptive enough, while titles that are too long get truncated.
+- Ideal: 50-60 characters
+- Warning: <30 or >65 characters
 
 **Meta Description:**
-- **Ideal length**: 140-160 characters
-- **Warning threshold**: <70 or >165 characters
-- **Why it matters**: Search engines typically display 140-160 characters in search results. Descriptions that are too short don't provide enough context, while descriptions that are too long get cut off.
+- Ideal: 140-160 characters
+- Warning: <70 or >165 characters
 
-## Example Usage
+## Usage Examples
 
-### Example 1: Checking a Documentation Page
+### Check a single page
 
-**User**: "Can you check the metadata for https://docs.stripe.com/api?"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "https://docs.stripe.com/api"}`
-
-**Agent Response**: 
 ```
-I checked the metadata for the Stripe API documentation page:
-
-✓ **Title**: "Stripe API Reference" (21 characters)
-  - ⚠️ Warning: Title is too short (recommended: 50-60 characters)
-  - Suggestion: Consider a more descriptive title like "Stripe API Reference - Complete Payment Integration Documentation"
-
-✓ **Description**: "Complete reference documentation for the Stripe API..." (145 characters)
-  - ✅ Ideal length
-
-The page has both title and description, but the title could be more descriptive to improve SEO.
+Check the metadata for https://docs.python.org/3/
 ```
 
-### Example 2: Missing Metadata
+### Audit multiple pages
 
-**User**: "Check https://example.com/docs"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "https://example.com/docs"}`
-
-**Agent Response**:
 ```
-I checked the metadata for that page:
-
-❌ **Title**: Missing
-  - The page doesn't have a meta title tag
-
-❌ **Description**: Missing
-  - The page doesn't have a meta description tag
-
-Both the title and description are missing. I recommend adding:
-- A descriptive title (50-60 characters)
-- A clear description (140-160 characters)
+Check the metadata for these URLs:
+- https://docs.stripe.com/api
+- https://docs.github.com/en
+- https://docs.aws.amazon.com/
 ```
 
-### Example 3: Invalid URL
+### Get recommendations
 
-**User**: "Check ftp://example.com/docs"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "ftp://example.com/docs"}`
-
-**Agent Response**:
 ```
-I couldn't check that URL because it uses the FTP protocol. This tool only works with HTTP and HTTPS URLs. Please provide a web URL (starting with http:// or https://).
+What's wrong with the metadata on https://example.com/docs?
 ```
 
-## Error Handling
+## Response Format
 
-The tool handles various error scenarios gracefully:
-
-- **Invalid protocol**: Returns error if URL doesn't use HTTP/HTTPS
-- **Network errors**: Returns error if page cannot be fetched (404, timeout, etc.)
-- **Parse errors**: Returns error if HTML cannot be parsed
-- **Missing metadata**: Returns validation results with "missing" status
-
-All errors are returned in a structured format with clear error messages.
-
-## Integration
-
-### Claude Desktop Configuration
-
-Add to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "doc-metadata-checker": {
-      "command": "python",
-      "args": ["-m", "doc_metadata_analyzer.server"],
-      "cwd": "/path/to/docx-to-md"
-    }
-  }
-}
-```
-
-### Running the Server
-
-```bash
-# From the project directory
-python -m doc_metadata_analyzer.server
-```
+When presenting results to users:
+- Show title and description values
+- Highlight character counts
+- Explain status (ideal/warning/missing)
+- Provide specific recommendations
+- Use clear visual indicators (✓, ⚠️, ❌)
 
 ## Limitations
 
-- Only checks meta title and meta description (not other metadata)
-- Does not analyze content quality or semantic meaning
-- Does not check for generic terms or keyword optimization
-- Requires HTTP/HTTPS URLs (no FTP, file://, etc.)
-- Does not handle JavaScript-rendered content (checks static HTML only)
+- Only checks meta title and description (not other tags)
+- Requires HTTP/HTTPS URLs
+- Does not handle JavaScript-rendered content
+- Does not analyze content quality or keyword optimization
+- No batch processing in single call
 
-## Use Cases
+## Error Handling
 
-1. **Documentation Audits**: Check multiple documentation pages for metadata compliance
-2. **SEO Optimization**: Validate metadata before publishing documentation
-3. **Quality Assurance**: Ensure all documentation pages have proper metadata
-4. **Competitive Analysis**: Compare metadata across different documentation sites
-5. **Migration Validation**: Verify metadata after documentation platform migrations
+**Invalid protocol:**
+```json
+{
+  "success": false,
+  "error": "Invalid URL protocol (must be HTTP or HTTPS)"
+}
+```
 
-## Tips for AI Agents
+**Network error:**
+```json
+{
+  "success": false,
+  "error": "Failed to fetch URL: Connection timeout"
+}
+```
 
-- Always present results in a user-friendly format (not raw JSON)
-- Highlight issues with clear visual indicators (✓, ⚠️, ❌)
-- Provide specific, actionable recommendations
-- Explain why metadata length matters for SEO
-- Offer to check multiple pages if the user has a list
-- Suggest improvements based on the validation results
+**Parse error:**
+```json
+{
+  "success": false,
+  "error": "Failed to parse HTML: Invalid document"
+}
+```

@@ -1,9 +1,4 @@
-"""
-MCP Server for Documentation Metadata Checker.
-
-This module implements the Model Context Protocol server that exposes
-the check_documentation_metadata tool to AI agents.
-"""
+"""MCP Server for Documentation Metadata Checker."""
 
 import json
 import asyncio
@@ -14,20 +9,12 @@ from mcp.types import Tool, TextContent
 from .checker import MetadataChecker
 
 
-# Initialize the MCP server
 server = Server("doc-metadata-checker")
-
-# Initialize the metadata checker
 checker = MetadataChecker()
 
 
 @server.list_tools()
 async def list_tools() -> list[Tool]:
-    """List available tools for AI agents.
-    
-    Returns:
-        List of Tool definitions that agents can invoke
-    """
     return [
         Tool(
             name="check_documentation_metadata",
@@ -53,46 +40,19 @@ async def list_tools() -> list[Tool]:
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
-    """Handle tool invocation from AI agents.
-    
-    Args:
-        name: Name of the tool to invoke
-        arguments: Tool arguments provided by the agent
-    
-    Returns:
-        List of TextContent with tool results
-    
-    Raises:
-        ValueError: If tool name is unknown or arguments are invalid
-    """
     if name == "check_documentation_metadata":
-        # Validate arguments
         if "url" not in arguments:
             raise ValueError("Missing required argument: url")
         
-        url = arguments["url"]
-        
-        # Check the metadata
-        result = checker.check_url(url)
-        
-        # Convert result to JSON
+        result = checker.check_url(arguments["url"])
         result_json = json.dumps(result.to_dict(), indent=2)
         
-        return [
-            TextContent(
-                type="text",
-                text=result_json
-            )
-        ]
+        return [TextContent(type="text", text=result_json)]
     else:
         raise ValueError(f"Unknown tool: {name}")
 
 
 async def main():
-    """Main entry point for the MCP server.
-    
-    Starts the server and handles stdio communication with AI agents.
-    """
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
             read_stream,
