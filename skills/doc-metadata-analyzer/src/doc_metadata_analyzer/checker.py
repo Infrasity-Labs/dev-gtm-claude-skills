@@ -80,12 +80,12 @@ class MetadataChecker:
         return response.text
     
     def _extract_metadata(self, html: str) -> Tuple[Optional[str], Optional[str]]:
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         title = None
         title_tag = soup.find('title')
-        if title_tag and title_tag.string:
-            title = self._normalize_whitespace(title_tag.string)
+        if title_tag:
+            title = self._normalize_whitespace(title_tag.get_text())
         
         description = None
         desc_tag = soup.find('meta', attrs={'name': 'description'})

@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-Simple script to check documentation metadata.
-Usage: python check_metadata.py <url>
-"""
+"""Simple script to check documentation metadata."""
 
 import sys
 import json
-from src.doc_metadata_analyzer.checker import MetadataChecker
+from doc_metadata_analyzer.checker import MetadataChecker
+
 
 def main():
     if len(sys.argv) < 2:
@@ -24,7 +22,6 @@ def main():
         print(f"❌ Error: {result.error}")
         sys.exit(1)
     
-    # Display results
     print("=" * 60)
     print(f"📄 TITLE: {result.title.value or 'Missing'}")
     print(f"   Length: {result.title.length} chars")
@@ -41,10 +38,9 @@ def main():
             print(f"   ⚠️  {issue}")
     
     print("=" * 60)
-    
-    # Also output JSON
     print("\n📊 JSON Output:")
     print(json.dumps(result.to_dict(), indent=2))
+
 
 if __name__ == "__main__":
     main()

@@ -3,8 +3,8 @@
 import json
 import pytest
 from unittest.mock import patch
-from src.doc_metadata_analyzer.server import list_tools, call_tool
-from src.doc_metadata_analyzer.models import CheckResult, TitleCheck, DescriptionCheck
+from doc_metadata_analyzer.server import list_tools, call_tool
+from doc_metadata_analyzer.models import CheckResult, TitleCheck, DescriptionCheck
 
 
 @pytest.mark.asyncio
@@ -45,7 +45,7 @@ async def test_call_tool_with_valid_url():
         error=None
     )
     
-    with patch('src.doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
+    with patch('doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
         result = await call_tool(
             name="check_documentation_metadata",
             arguments={"url": "https://example.com"}
@@ -94,7 +94,7 @@ async def test_call_tool_with_invalid_url():
         error="Invalid URL protocol (must be HTTP or HTTPS)"
     )
     
-    with patch('src.doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
+    with patch('doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
         result = await call_tool(
             name="check_documentation_metadata",
             arguments={"url": "ftp://example.com"}
@@ -115,7 +115,7 @@ async def test_call_tool_with_network_error():
         error="Failed to fetch URL: Connection error"
     )
     
-    with patch('src.doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
+    with patch('doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
         result = await call_tool(
             name="check_documentation_metadata",
             arguments={"url": "https://nonexistent.example.com"}
@@ -136,7 +136,7 @@ async def test_call_tool_response_structure():
         error=None
     )
     
-    with patch('src.doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
+    with patch('doc_metadata_analyzer.server.checker.check_url', return_value=mock_result):
         result = await call_tool(
             name="check_documentation_metadata",
             arguments={"url": "https://example.com"}
