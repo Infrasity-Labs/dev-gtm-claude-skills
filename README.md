@@ -1,4 +1,4 @@
-# MCP Skills Repository
+<!-- # MCP Skills Repository
 
 A collection of MCP (Model Context Protocol) skills for AI agents like Claude, Kiro, and other MCP-compatible agents.
 
@@ -208,4 +208,4 @@ For issues or questions:
 
 - [Model Context Protocol](https://modelcontextprotocol.io/) - Official MCP documentation
 - [Claude Desktop](https://claude.ai/download) - AI agent with MCP support
-- [Kiro](https://kiro.ai/) - AI-powered development environment
+- [Kiro](https://kiro.ai/) - AI-powered development environment -->
