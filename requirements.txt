@@ -1,4 +1,8 @@
-python-docx>=0.8.11
-hypothesis>=6.0.0
-pytest>=7.0.0
-pytest-cov>=4.0.0
+# MCP Skills Repository - Master Requirements
+# Install individual skill requirements from their respective directories
+
+# To install all skills:
+# pip install -r skills/doc-metadata-analyzer/requirements.txt
+# pip install -r skills/docx-to-md/requirements.txt
+
+# Or install specific skills as needed
