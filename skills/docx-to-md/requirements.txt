@@ -1,0 +1,7 @@
+# DOCX to Markdown Converter
+python-docx>=0.8.11
+
+# Testing
+hypothesis>=6.0.0
+pytest>=7.0.0
+pytest-cov>=4.0.0
