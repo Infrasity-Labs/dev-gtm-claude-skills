@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "doc-metadata-analyzer"
 version = "1.0.0"
-description = "MCP server for checking documentation metadata and SEO compliance"
+description = "Python agent skill for checking documentation metadata and SEO compliance"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
     {name = "MCP Skills Contributors"}
 ]
-keywords = ["mcp", "model-context-protocol", "documentation", "seo", "metadata", "ai-agent", "claude", "kiro"]
+keywords = ["agent-skill", "documentation", "seo", "metadata", "ai-agent", "claude", "kiro"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -26,18 +26,12 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
 ]
 dependencies = [
-    "mcp>=1.0.0",
     "requests>=2.31.0",
     "beautifulsoup4>=4.12.0",
-    "lxml>=4.9.0",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-cov>=4.0.0",
-]
+dev = []
 
 [project.urls]
 Homepage = "https://github.com/yourusername/doc-metadata-analyzer"
@@ -45,16 +39,6 @@ Documentation = "https://github.com/yourusername/doc-metadata-analyzer#readme"
 Repository = "https://github.com/yourusername/doc-metadata-analyzer"
 Issues = "https://github.com/yourusername/doc-metadata-analyzer/issues"
 
-[project.scripts]
-doc-metadata-analyzer = "src.doc_metadata_analyzer.server:main"
-
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"]
-
-[tool.pytest.ini_options]
-testpaths = ["."]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = "-v"
+include = ["scripts*"]

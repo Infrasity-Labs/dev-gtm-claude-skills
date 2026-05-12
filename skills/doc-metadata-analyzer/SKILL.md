@@ -1,53 +1,213 @@
-# Documentation Metadata Checker
+---
+name: doc-metadata-analyzer
+version: 1.0.0
+description: Check documentation pages for SEO metadata compliance
+author: Dev GTM
+tags: [seo, metadata, documentation, validation, agent-skill]
+---
 
-## Overview
+# Documentation Metadata Analyzer
 
-This MCP server provides AI agents with the ability to check documentation pages for proper SEO metadata. It validates whether meta titles and meta descriptions exist and whether they meet recommended character length guidelines for optimal search engine visibility.
+A Python agent skill that checks documentation pages for proper meta title and description tags, validating them against SEO best practices.
 
-## When to Use This Skill
+## When to Use
 
-Use this skill when:
-- A user asks to check if a documentation page has proper metadata
-- A user wants to validate SEO metadata for documentation
-- A user asks about meta title or meta description length
-- A user wants to know if their documentation follows SEO best practices
-- A user provides a documentation URL and asks about its metadata quality
+Use this skill when you need to:
+- Check if a documentation page has meta title and description
+- Validate metadata character lengths for SEO
+- Audit documentation sites for metadata compliance
+- Get specific recommendations for improving metadata
+- Analyze multiple pages for SEO optimization
 
-## Tool: check_documentation_metadata
+## Installation
 
-### Purpose
+Ensure the skill package is in your Python path:
 
-Checks if a documentation page has proper meta title and meta description, and validates their character lengths against SEO best practices.
-
-### Input
-
-```json
-{
-  "url": "https://docs.example.com/page"
-}
+```python
+import sys
+from pathlib import Path
+sys.path.insert(0, "path/to/skills/doc-metadata-analyzer")
 ```
 
-**Parameters:**
-- `url` (string, required): The documentation page URL to check. Must use HTTP or HTTPS protocol.
+## Function: check_documentation_metadata
 
-### Output
+### Import
 
-Returns a JSON object with validation results:
+```python
+from doc_metadata_analyzer import check_documentation_metadata
+```
 
+### Function Signature
+
+```python
+def check_documentation_metadata(
+    url: str,
+    timeout: int = 30,
+    user_agent: str = "DocMetadataChecker/1.0"
+) -> CheckResult
+```
+
+### Parameters
+
+- `url` (str, required): Documentation page URL (HTTP/HTTPS only)
+- `timeout` (int, optional): Request timeout in seconds (default: 30)
+- `user_agent` (str, optional): User agent string for HTTP requests (default: "DocMetadataChecker/1.0")
+
+### Return Value
+
+Returns a `CheckResult` object with the following attributes:
+
+```python
+result.url           # str: The checked URL
+result.success       # bool: Whether check completed successfully
+result.error         # str | None: Error message if success=False
+result.title         # TitleCheck: Title validation result
+result.description   # DescriptionCheck: Description validation result
+```
+
+**TitleCheck attributes:**
+```python
+result.title.value    # str | None: The title text
+result.title.exists   # bool: Whether title tag exists
+result.title.length   # int: Character count
+result.title.status   # str: "ideal", "warning", or "missing"
+result.title.issues   # list[str]: List of validation issues
+```
+
+**DescriptionCheck attributes:**
+```python
+result.description.value    # str | None: The description text
+result.description.exists   # bool: Whether meta description exists
+result.description.length   # int: Character count
+result.description.status   # str: "ideal", "warning", or "missing"
+result.description.issues   # list[str]: List of validation issues
+```
+
+### Status Values
+
+- `ideal` - Length is within recommended range
+- `warning` - Length is outside recommended range
+- `missing` - Tag not found
+
+### SEO Guidelines
+
+**Meta Title:**
+- Ideal: 50-60 characters
+- Warning: <30 or >65 characters
+
+**Meta Description:**
+- Ideal: 140-160 characters
+- Warning: <70 or >165 characters
+
+## Usage Examples
+
+### Basic Usage
+
+```python
+from doc_metadata_analyzer import check_documentation_metadata
+
+# Check a documentation page
+result = check_documentation_metadata("https://docs.python.org/3/")
+
+if result.success:
+    print(f"Title: {result.title.value}")
+    print(f"Status: {result.title.status}")
+    print(f"Length: {result.title.length} chars")
+    
+    if result.title.issues:
+        for issue in result.title.issues:
+            print(f"Issue: {issue}")
+else:
+    print(f"Error: {result.error}")
+```
+
+### Check Multiple Pages
+
+```python
+urls = [
+    "https://docs.stripe.com/api",
+    "https://docs.github.com/en",
+    "https://docs.aws.amazon.com/"
+]
+
+for url in urls:
+    result = check_documentation_metadata(url)
+    print(f"\n{url}")
+    print(f"  Title: {result.title.status}")
+    print(f"  Description: {result.description.status}")
+```
+
+### Custom Parameters
+
+```python
+# Custom timeout for slow sites
+result = check_documentation_metadata(
+    "https://docs.example.com",
+    timeout=60
+)
+
+# Custom user agent
+result = check_documentation_metadata(
+    "https://docs.example.com",
+    user_agent="MyBot/1.0"
+)
+```
+
+### Detailed Analysis
+
+```python
+result = check_documentation_metadata("https://docs.example.com")
+
+if result.success:
+    # Title analysis
+    if result.title.exists:
+        print(f"✓ Title found: {result.title.value}")
+        print(f"  Length: {result.title.length} chars")
+        if result.title.status == "ideal":
+            print("  ✓ Length is ideal for SEO")
+        else:
+            print(f"  ⚠️  {', '.join(result.title.issues)}")
+    else:
+        print("❌ Title is missing")
+    
+    # Description analysis
+    if result.description.exists:
+        print(f"\n✓ Description found: {result.description.value}")
+        print(f"  Length: {result.description.length} chars")
+        if result.description.status == "ideal":
+            print("  ✓ Length is ideal for SEO")
+        else:
+            print(f"  ⚠️  {', '.join(result.description.issues)}")
+    else:
+        print("\n❌ Description is missing")
+```
+
+### JSON Serialization
+
+```python
+import json
+
+result = check_documentation_metadata("https://docs.example.com")
+result_dict = result.to_dict()
+json_output = json.dumps(result_dict, indent=2)
+print(json_output)
+```
+
+**Output format:**
 ```json
 {
-  "url": "https://docs.example.com/page",
+  "url": "https://docs.example.com",
   "title": {
-    "value": "Getting Started Guide",
+    "value": "Example Documentation",
     "exists": true,
     "length": 21,
     "status": "warning",
     "issues": ["Title too short (21 chars, recommended: 50-60)"]
   },
   "description": {
-    "value": "Learn how to get started with our platform. This comprehensive guide covers installation, configuration, and your first steps.",
+    "value": "Learn how to use our platform...",
     "exists": true,
-    "length": 142,
+    "length": 145,
     "status": "ideal",
     "issues": []
   },
@@ -56,141 +216,105 @@ Returns a JSON object with validation results:
 }
 ```
 
-**Response Fields:**
-- `url`: The URL that was checked
-- `title`: Title validation results
-  - `value`: The extracted title text (null if missing)
-  - `exists`: Whether the title exists (boolean)
-  - `length`: Character count
-  - `status`: "ideal", "warning", or "missing"
-  - `issues`: Array of validation issues
-- `description`: Description validation results (same structure as title)
-- `success`: Whether the check completed successfully
-- `error`: Error message if check failed (null if successful)
+## Response Format Guidelines
 
-### SEO Best Practices
-
-**Meta Title:**
-- **Ideal length**: 50-60 characters
-- **Warning threshold**: <30 or >65 characters
-- **Why it matters**: Search engines typically display 50-60 characters in search results. Titles that are too short may not be descriptive enough, while titles that are too long get truncated.
-
-**Meta Description:**
-- **Ideal length**: 140-160 characters
-- **Warning threshold**: <70 or >165 characters
-- **Why it matters**: Search engines typically display 140-160 characters in search results. Descriptions that are too short don't provide enough context, while descriptions that are too long get cut off.
-
-## Example Usage
-
-### Example 1: Checking a Documentation Page
-
-**User**: "Can you check the metadata for https://docs.stripe.com/api?"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "https://docs.stripe.com/api"}`
-
-**Agent Response**: 
-```
-I checked the metadata for the Stripe API documentation page:
-
-✓ **Title**: "Stripe API Reference" (21 characters)
-  - ⚠️ Warning: Title is too short (recommended: 50-60 characters)
-  - Suggestion: Consider a more descriptive title like "Stripe API Reference - Complete Payment Integration Documentation"
-
-✓ **Description**: "Complete reference documentation for the Stripe API..." (145 characters)
-  - ✅ Ideal length
-
-The page has both title and description, but the title could be more descriptive to improve SEO.
-```
-
-### Example 2: Missing Metadata
-
-**User**: "Check https://example.com/docs"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "https://example.com/docs"}`
-
-**Agent Response**:
-```
-I checked the metadata for that page:
-
-❌ **Title**: Missing
-  - The page doesn't have a meta title tag
-
-❌ **Description**: Missing
-  - The page doesn't have a meta description tag
-
-Both the title and description are missing. I recommend adding:
-- A descriptive title (50-60 characters)
-- A clear description (140-160 characters)
-```
-
-### Example 3: Invalid URL
-
-**User**: "Check ftp://example.com/docs"
-
-**Agent Action**: Invoke `check_documentation_metadata` with `{"url": "ftp://example.com/docs"}`
-
-**Agent Response**:
-```
-I couldn't check that URL because it uses the FTP protocol. This tool only works with HTTP and HTTPS URLs. Please provide a web URL (starting with http:// or https://).
-```
+When presenting results to users:
+- Show title and description values
+- Highlight character counts
+- Explain status (ideal/warning/missing)
+- Provide specific recommendations from the issues list
+- Use clear visual indicators (✓, ⚠️, ❌)
 
 ## Error Handling
 
-The tool handles various error scenarios gracefully:
+All errors are returned in the `CheckResult` object with `success=False` and an error message. No exceptions are raised.
 
-- **Invalid protocol**: Returns error if URL doesn't use HTTP/HTTPS
-- **Network errors**: Returns error if page cannot be fetched (404, timeout, etc.)
-- **Parse errors**: Returns error if HTML cannot be parsed
-- **Missing metadata**: Returns validation results with "missing" status
+### Invalid Protocol
 
-All errors are returned in a structured format with clear error messages.
-
-## Integration
-
-### Claude Desktop Configuration
-
-Add to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "doc-metadata-checker": {
-      "command": "python",
-      "args": ["-m", "doc_metadata_analyzer.server"],
-      "cwd": "/path/to/docx-to-md"
-    }
-  }
-}
+```python
+result = check_documentation_metadata("ftp://example.com")
+# result.success == False
+# result.error == "Invalid URL protocol (must be HTTP or HTTPS)"
 ```
 
-### Running the Server
+### Network Error
 
-```bash
-# From the project directory
-python -m doc_metadata_analyzer.server
+```python
+result = check_documentation_metadata("https://nonexistent.example.com")
+# result.success == False
+# result.error == "Failed to fetch URL: Connection timeout"
+```
+
+### Parse Error
+
+```python
+result = check_documentation_metadata("https://example.com/invalid")
+# result.success == False
+# result.error == "Failed to parse HTML: Invalid document"
 ```
 
 ## Limitations
 
-- Only checks meta title and meta description (not other metadata)
-- Does not analyze content quality or semantic meaning
-- Does not check for generic terms or keyword optimization
-- Requires HTTP/HTTPS URLs (no FTP, file://, etc.)
-- Does not handle JavaScript-rendered content (checks static HTML only)
+- Only checks meta title and description (not other tags like Open Graph, Twitter Cards)
+- Requires HTTP/HTTPS URLs (no file:// or ftp://)
+- Does not handle JavaScript-rendered content (requires static HTML)
+- Does not analyze content quality or keyword optimization
+- No batch processing in single call (use a loop for multiple URLs)
 
-## Use Cases
+## Data Models
 
-1. **Documentation Audits**: Check multiple documentation pages for metadata compliance
-2. **SEO Optimization**: Validate metadata before publishing documentation
-3. **Quality Assurance**: Ensure all documentation pages have proper metadata
-4. **Competitive Analysis**: Compare metadata across different documentation sites
-5. **Migration Validation**: Verify metadata after documentation platform migrations
+### CheckResult
 
-## Tips for AI Agents
+```python
+@dataclass
+class CheckResult:
+    url: str
+    title: TitleCheck
+    description: DescriptionCheck
+    success: bool
+    error: Optional[str]
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization"""
+```
 
-- Always present results in a user-friendly format (not raw JSON)
-- Highlight issues with clear visual indicators (✓, ⚠️, ❌)
-- Provide specific, actionable recommendations
-- Explain why metadata length matters for SEO
-- Offer to check multiple pages if the user has a list
-- Suggest improvements based on the validation results
+### TitleCheck
+
+```python
+@dataclass
+class TitleCheck:
+    value: Optional[str]
+    exists: bool
+    length: int
+    status: str
+    issues: List[str]
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization"""
+```
+
+### DescriptionCheck
+
+```python
+@dataclass
+class DescriptionCheck:
+    value: Optional[str]
+    exists: bool
+    length: int
+    status: str
+    issues: List[str]
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization"""
+```
+
+## Importing Models
+
+```python
+from doc_metadata_analyzer import (
+    check_documentation_metadata,
+    CheckResult,
+    TitleCheck,
+    DescriptionCheck
+)
+```
