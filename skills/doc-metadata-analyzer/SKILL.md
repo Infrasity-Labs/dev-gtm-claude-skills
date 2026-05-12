@@ -10,6 +10,30 @@ tags: [seo, metadata, documentation, validation, agent-skill]
 
 A Python agent skill that checks documentation pages for proper meta title and description tags, validating them against SEO best practices.
 
+## 🤖 FOR AI AGENTS: How to Use This Skill
+
+**Simple usage - just run the CLI script:**
+
+```bash
+cd path/to/doc-metadata-analyzer
+python check_metadata.py https://docs.example.com
+```
+
+**If you get import errors**, install dependencies first:
+
+```bash
+cd path/to/doc-metadata-analyzer
+pip install -r requirements.txt
+python check_metadata.py https://docs.example.com
+```
+
+**That's it!** The script will:
+- Fetch the URL
+- Analyze title and description metadata
+- Show results with SEO recommendations
+
+---
+
 ## When to Use
 
 Use this skill when you need to:
@@ -19,22 +43,12 @@ Use this skill when you need to:
 - Get specific recommendations for improving metadata
 - Analyze multiple pages for SEO optimization
 
-## Installation
-
-Ensure the skill package is in your Python path:
-
-```python
-import sys
-from pathlib import Path
-sys.path.insert(0, "path/to/skills/doc-metadata-analyzer")
-```
-
 ## Function: check_documentation_metadata
 
 ### Import
 
 ```python
-from doc_metadata_analyzer import check_documentation_metadata
+from scripts import check_documentation_metadata
 ```
 
 ### Function Signature
@@ -104,7 +118,7 @@ result.description.issues   # list[str]: List of validation issues
 ### Basic Usage
 
 ```python
-from doc_metadata_analyzer import check_documentation_metadata
+from scripts import check_documentation_metadata
 
 # Check a documentation page
 result = check_documentation_metadata("https://docs.python.org/3/")
@@ -124,6 +138,8 @@ else:
 ### Check Multiple Pages
 
 ```python
+from scripts import check_documentation_metadata
+
 urls = [
     "https://docs.stripe.com/api",
     "https://docs.github.com/en",
@@ -140,6 +156,8 @@ for url in urls:
 ### Custom Parameters
 
 ```python
+from scripts import check_documentation_metadata
+
 # Custom timeout for slow sites
 result = check_documentation_metadata(
     "https://docs.example.com",
@@ -156,6 +174,8 @@ result = check_documentation_metadata(
 ### Detailed Analysis
 
 ```python
+from scripts import check_documentation_metadata
+
 result = check_documentation_metadata("https://docs.example.com")
 
 if result.success:
@@ -186,6 +206,7 @@ if result.success:
 
 ```python
 import json
+from scripts import check_documentation_metadata
 
 result = check_documentation_metadata("https://docs.example.com")
 result_dict = result.to_dict()
@@ -311,10 +332,29 @@ class DescriptionCheck:
 ## Importing Models
 
 ```python
-from doc_metadata_analyzer import (
+from scripts import (
     check_documentation_metadata,
     CheckResult,
     TitleCheck,
     DescriptionCheck
 )
+```
+
+## For Manual Installation (Human Users Only)
+
+**Note for AI Agents:** Skip this section. Dependencies are already installed in your environment.
+
+If you need to manually install this skill for use outside of an AI agent environment, ensure the skill package is in your Python path:
+
+```python
+import sys
+from pathlib import Path
+sys.path.insert(0, "path/to/skills/doc-metadata-analyzer")
+```
+
+Then install the required dependencies:
+
+```bash
+cd skills/doc-metadata-analyzer
+pip install -r requirements.txt
 ```
