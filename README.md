@@ -1,85 +1,103 @@
-# Dev GTM Claude Skills
+# Infrasity AI Skills
 
-A collection of MCP servers I built to extend Claude and other AI agents with useful capabilities for developers and technical writers.
+Production-grade AI skills built for developer GTM, GEO (Generative Engine Optimization), AI discoverability, and technical content workflows.
 
-## What's Here
+These skills are designed to help developer-focused companies improve:
 
-### doc-metadata-analyzer
+- AI visibility
+- LLM discoverability
+- Documentation quality
+- SERP performance
+- Technical content operations
+- Developer marketing workflows
 
-Checks documentation pages for SEO metadata. I got tired of manually inspecting meta tags, so I built this to let Claude do it for me.
+Compatible with:
+- Claude
+- Cursor
+- Kiro
+- Windsurf
+- Copilot
+- Internal AI agents
+- Custom automation pipelines
 
-**What it does:**
-- Fetches any documentation URL
-- Extracts meta title and description
-- Validates against SEO best practices (50-60 chars for titles, 140-160 for descriptions)
-- Returns structured results with specific recommendations
+---
+# Current Skills
 
-**Status:** Working and tested  
-**Details:** [skills/doc-metadata-analyzer](skills/doc-metadata-analyzer)
+## doc-metadata-analyzer
 
-<!-- ### docx-to-md
+Audit technical documentation pages for metadata quality, SERP optimization, and discoverability readiness.
 
-Converts Word documents to Markdown. Still working on this one.
+### Capabilities
 
-**Status:** In progress  
-**Details:** [skills/docx-to-md](skills/docx-to-md) -->
+- Extracts meta titles and descriptions
+- Detects missing metadata
+- Validates SEO best-practice limits
+- Identifies weak or low-information metadata
+- Returns structured machine-readable reports
+- Designed specifically for developer documentation ecosystems
 
-## Using These Skills
 
-Each skill is an MCP server that works with Claude Desktop, Kiro, and other MCP-compatible agents.
+## Example Output
 
-### Quick setup for doc-metadata-analyzer:
-
-1. Install dependencies:
-```bash
-cd skills/doc-metadata-analyzer
-pip install -r requirements.txt
-```
-
-2. Add to your MCP config:
-
-**For Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 ```json
 {
-  "mcpServers": {
-    "doc-metadata-analyzer": {
-      "command": "python3",
-      "args": ["-m", "src.doc_metadata_analyzer.server"],
-      "cwd": "/absolute/path/to/dev-gtm-claude-skills/skills/doc-metadata-analyzer"
-    }
+  "url": "https://docs.example.com/auth",
+  "title": {
+    "value": "Authentication API Documentation",
+    "exists": true,
+    "length": 34,
+    "status": "warning",
+    "issues": [
+        "Title too short"
+    ]
+  },
+  "description": {
+    "value": "Learn how to authenticate with the API.",
+    "exists": true,
+    "length": 42,
+    "status": "warning",
+    "issues": [
+        "Description too short"
+    ]
   }
 }
 ```
+---
+## DOCX to Markdown Converter
 
-3. Restart your agent and ask it to check a URL:
+Convert Microsoft Word (.docx) files to clean Markdown (.md) files with proper formatting preservation.
+
+## Status
+
+🚧 **In Development** - This skill is currently being built.
+
+## Planned Features
+
+- ✅ **DOM-based Architecture**: Clean separation between parsing and generation
+- ✅ **Format Preservation**: Maintain headings, lists, tables, bold, italic, code
+- ✅ **Error Handling**: Graceful handling of unsupported elements
+- ✅ **Property-Based Testing**: Comprehensive test coverage with Hypothesis
+- 🚧 **Parser Layer**: DOCX file parsing (in progress)
+- 🚧 **Generator Layer**: Markdown generation (planned)
+- 🚧 **CLI Interface**: Command-line tool (planned)
+---
+
+# Quick Start
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 ```
-Check the metadata for https://docs.python.org/3/
-```
 
-See individual skill directories for detailed setup instructions.
-
-## Why MCP?
-
-MCP (Model Context Protocol) lets you extend AI agents with custom tools. Instead of copy-pasting URLs and manually checking things, you can ask Claude to do it and get structured results back.
-
-These skills are things I needed for my own work. If they're useful to you too, great.
-
-## Requirements
-
-- Python 3.9+
-- An MCP-compatible AI agent (Claude Desktop, Kiro, etc.)
-
-## Structure
+### 2. Choose a skill
 
 ```
-dev-gtm-claude-skills/
-├── skills/
-│   ├── doc-metadata-analyzer/     # SEO metadata checker
-│   └── docx-to-md/                # Word to Markdown converter
-├── README.md                      # Setup guides
+cd dev-gtm-claude-skills/skills/doc-metadata-analyzer
 ```
 
-## Contributing
+### 3. Add skill to your AI agent
 
-Found a bug? Have an idea? Open an issue or PR.
-
+```
+cp -r doc-metadata-analyzer /path-to-agent/skills/
+```
