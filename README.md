@@ -42,7 +42,7 @@ Audit technical documentation pages for metadata quality, SERP optimization, and
 ```json
 {
   "url": "https://docs.example.com/auth",
-  "meta_title": {
+  "title": {
     "value": "Authentication API Documentation",
     "exists": true,
     "length": 34,
@@ -51,7 +51,7 @@ Audit technical documentation pages for metadata quality, SERP optimization, and
         "Title too short"
     ]
   },
-  "meta_description": {
+  "description": {
     "value": "Learn how to authenticate with the API.",
     "exists": true,
     "length": 42,
@@ -87,13 +87,13 @@ Convert Microsoft Word (.docx) files to clean Markdown (.md) files with proper f
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/infrasity-ai-skills.git
+git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 ```
 
 ### 2. Choose a skill
 
 ```
-cd infrasity-ai-skills/skills/doc-metadata-analyzer
+cd dev-gtm-claude-skills/skills/doc-metadata-analyzer
 ```
 
 ### 3. Add skill to your AI agent
