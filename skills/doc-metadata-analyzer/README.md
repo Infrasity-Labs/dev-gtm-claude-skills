@@ -1,14 +1,14 @@
 # Documentation Metadata Analyzer
 
-An MCP (Model Context Protocol) server that enables AI agents to check documentation pages for proper SEO metadata. Validates meta titles and meta descriptions against SEO best practices.
+A Python agent skill that enables AI agents to check documentation pages for proper SEO metadata. Validates meta titles and meta descriptions against SEO best practices.
 
 ## Features
 
 - ✅ **Meta Title Validation**: Checks existence and character length (ideal: 50-60 chars)
 - ✅ **Meta Description Validation**: Checks existence and character length (ideal: 140-160 chars)
 - ✅ **SEO Best Practices**: Validates against search engine optimization guidelines
-- ✅ **MCP Protocol**: Works with Claude, Kiro, and other MCP-compatible AI agents
-- ✅ **Clear Responses**: Structured JSON output with actionable recommendations
+- ✅ **Simple Python API**: Direct function calls without protocol complexity
+- ✅ **Clear Responses**: Structured result objects with actionable recommendations
 
 ## Installation
 
@@ -17,110 +17,84 @@ An MCP (Model Context Protocol) server that enables AI agents to check documenta
 - Python 3.9 or higher
 - pip (Python package manager)
 
+### Method 1: Clone Repository
+
+```bash
+# Clone the entire repository
+git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
+cd dev-gtm-claude-skills/skills/doc-metadata-analyzer
+
+# Add skill to your AI agent
+cp -r doc-metadata-analyzer /path-to-agent/skills/
+
+# Test it works
+Analyse metadata for https://docs.example.com/
+```
+
 ### Install Dependencies
 
 ```bash
-cd skills/doc-metadata-analyzer
+cd doc-metadata-analyzer
 pip install -r requirements.txt
 ```
 
 ### Required Packages
 
-- `mcp>=1.0.0` - Model Context Protocol SDK
 - `requests>=2.31.0` - HTTP requests
-- `beautifulsoup4>=4.12.0` - HTML parsing
-- `lxml>=4.9.0` - Fast HTML parser
+- `beautifulsoup4>=4.12.0` - HTML parsing (uses built-in html.parser)
 
-## Usage
 
-### Running the MCP Server
 
-```bash
-# From the skill directory
-python -m src.doc_metadata_analyzer.server
+
+### Result Structure
+
+The `CheckResult` object contains:
+
+```python
+result.url           # str: The checked URL
+result.success       # bool: Whether check completed successfully
+result.error         # str | None: Error message if success=False
+result.title         # TitleCheck: Title validation result
+result.description   # DescriptionCheck: Description validation result
 ```
 
-The server will start and listen for MCP protocol messages via stdio.
+**TitleCheck / DescriptionCheck attributes:**
+```python
+result.title.value    # str | None: The title/description text
+result.title.exists   # bool: Whether tag exists
+result.title.length   # int: Character count
+result.title.status   # str: "ideal", "warning", or "missing"
+result.title.issues   # list[str]: List of validation issues
+```
 
-### Connecting from AI Agents
+### Serialization
 
-#### Kiro Configuration
+Convert results to dictionary for JSON output:
 
-Add to `~/.kiro/settings/mcp.json`:
+```python
+import json
 
+result = check_documentation_metadata("https://docs.example.com")
+result_dict = result.to_dict()
+json_output = json.dumps(result_dict, indent=2)
+print(json_output)
+```
+
+**Output format:**
 ```json
 {
-  "mcpServers": {
-    "doc-metadata-analyzer": {
-      "command": "/path/to/venv/bin/python3",
-      "args": ["-m", "src.doc_metadata_analyzer.server"],
-      "cwd": "/absolute/path/to/skills/doc-metadata-analyzer",
-      "env": {},
-      "disabled": false,
-      "autoApprove": []
-    }
-  }
-}
-```
-
-#### Claude Desktop Configuration
-
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "doc-metadata-analyzer": {
-      "command": "python",
-      "args": ["-m", "src.doc_metadata_analyzer.server"],
-      "cwd": "/absolute/path/to/skills/doc-metadata-analyzer"
-    }
-  }
-}
-```
-
-### Using with AI Agents
-
-Once configured, you can ask your AI agent:
-
-```
-Check the metadata for https://docs.python.org/3/
-```
-
-Or:
-
-```
-Can you analyze the SEO metadata for https://stripe.com/docs/api?
-```
-
-## Tool Reference
-
-### check_documentation_metadata
-
-Checks if a documentation page has proper meta title and description with correct character lengths.
-
-**Input:**
-```json
-{
-  "url": "https://docs.example.com/page"
-}
-```
-
-**Output:**
-```json
-{
-  "url": "https://docs.example.com/page",
+  "url": "https://docs.example.com",
   "title": {
-    "value": "Page Title",
+    "value": "Example Documentation",
     "exists": true,
-    "length": 10,
+    "length": 21,
     "status": "warning",
-    "issues": ["Title too short (10 chars, recommended: 50-60)"]
+    "issues": ["Title too short (21 chars, recommended: 50-60)"]
   },
   "description": {
-    "value": "Page description text...",
+    "value": "Learn how to use our platform...",
     "exists": true,
-    "length": 150,
+    "length": 145,
     "status": "ideal",
     "issues": []
   },
@@ -147,61 +121,43 @@ Checks if a documentation page has proper meta title and description with correc
 
 ```
 doc-metadata-analyzer/
-├── src/
-│   └── doc_metadata_analyzer/
-│       ├── __init__.py
-│       ├── server.py          # MCP server implementation
-│       ├── checker.py          # Metadata checking logic
-│       ├── models.py           # Data models
-│       └── constants.py        # SEO thresholds
-├── test_mcp_server.py          # MCP integration tests
-├── check_metadata.py           # Standalone test script
-├── SKILL.md                    # Agent skill documentation
-├── README.md                   # This file
-└── requirements.txt            # Python dependencies
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest test_mcp_server.py -v
-
-# Run with coverage
-pytest test_mcp_server.py --cov=src.doc_metadata_analyzer
-```
-
-### Testing the Checker
-
-```bash
-# Test with a real URL
-python check_metadata.py https://docs.python.org/3/
+├── scripts/                # Package directory
+│   ├── __init__.py         # Public API
+│   ├── checker.py          # Metadata checking logic
+│   ├── models.py           # Data models
+│   └── constants.py        # SEO thresholds
+├── check_metadata.py       # Standalone CLI script
+├── SKILL.md                # Agent skill documentation
+├── README.md               # README
+└── requirements.txt        # Python dependencies
 ```
 
 ## Troubleshooting
 
-### Server Won't Start
+### Import Errors
 
-**Issue**: `ModuleNotFoundError: No module named 'mcp'`
+**Issue**: `ModuleNotFoundError: No module named 'scripts'`
+
+**Solution**: Ensure the package is in your Python path:
+```python
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+```
+
+Or install the package in development mode:
+```bash
+pip install -e .
+```
+
+### Missing Dependencies
+
+**Issue**: `ModuleNotFoundError: No module named 'requests'` (or beautifulsoup4, lxml)
 
 **Solution**: Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-
-### AI Agent Can't Find the Tool
-
-**Issue**: Tool doesn't appear in AI agent
-
-**Solution**:
-1. Check that the path in config is absolute
-2. Restart the AI agent after config changes
-3. Verify the server starts without errors:
-   ```bash
-   python -m src.doc_metadata_analyzer.server
-   ```
 
 ### URL Fetch Errors
 
@@ -212,20 +168,4 @@ pip install -r requirements.txt
 - Check that the URL uses HTTP or HTTPS (not FTP, file://, etc.)
 - Ensure you have internet connectivity
 - Some sites may block automated requests
-
-## Limitations
-
-- Only checks meta title and description (not other metadata)
-- Does not analyze content quality or semantic meaning
-- Requires HTTP/HTTPS URLs
-- Does not handle JavaScript-rendered content
-- No support for batch processing multiple URLs in one call
-
-## License
-
-MIT License
-
-## Related Skills
-
-- **docx-to-md**: DOCX to Markdown converter
-- Part of the multi-skill MCP repository
+- Try increasing the timeout parameter
