@@ -1,5 +1,0 @@
-include README.md
-include LICENSE
-include requirements.txt
-include SKILL.md
-recursive-include src *.py
