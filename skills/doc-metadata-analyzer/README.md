@@ -28,9 +28,9 @@ Analyse metadata for https://docs.example.com/
 ```
 
 <p align="center">
-  <a href="./assets/doc-metadata-analyzer-video.mp4">
+  <a href="../../assets/doc-metadata-analyzer-video.mp4">
     <img 
-      src="./assets/doc-metadata-analyzer-video.gif" 
+      src="../../assets/doc-metadata-analyzer-video.gif" 
       width="100%" 
       alt="Documentation Metadata Analyzer Demo"
     />
