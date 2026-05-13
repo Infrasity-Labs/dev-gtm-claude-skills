@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/infrasity_logo.avif" alt="Infrasity Logo" width="140"/>
+  <img src="./assets/infrasity_logo.avif" alt="Infrasity Logo" width="400"/>
 </p>
 
 <h1 align="center">Infrasity AI Skills</h1>
@@ -57,7 +57,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/dev-gtm-claude-skills.png" alt="dev-gtm-claude-skills" width="140"/>
+  <img src="./assets/dev-gtm-claude-skills.png" width="100%" alt="dev-gtm-claude-skills"/>
 </p>
 
 # Infrasity Claude Skills
