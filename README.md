@@ -1,6 +1,68 @@
-# Infrasity AI Skills
+<p align="center">
+  <img src="./assets/infrasity_logo.avif" alt="Infrasity Logo" width="140"/>
+</p>
 
-Production-grade AI skills built for developer GTM, GEO (Generative Engine Optimization), AI discoverability, and technical content workflows.
+<h1 align="center">Infrasity AI Skills</h1>
+
+<p align="center">
+  Production-grade AI skills for GEO, AI discoverability, developer GTM, and technical content workflows.
+</p>
+
+<p align="center">
+
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3.9+-blue" />
+  </a>
+
+  <a href="https://claude.ai/">
+    <img src="https://img.shields.io/badge/Claude-Compatible-orange" />
+  </a>
+
+  <a href="https://img.shields.io/badge/GEO-Optimized-purple">
+    <img src="https://img.shields.io/badge/GEO-Optimized-purple" />
+  </a>
+
+  <a href="https://img.shields.io/badge/AI_Visibility-Enabled-blueviolet">
+    <img src="https://img.shields.io/badge/AI_Visibility-Enabled-blueviolet" />
+  </a>
+
+  <a href="https://img.shields.io/badge/Developer_GTM-Infrastructure-darkgreen">
+    <img src="https://img.shields.io/badge/Developer_GTM-Infrastructure-darkgreen" />
+  </a>
+
+  <a href="https://img.shields.io/badge/LLM-Citation_Ready-8A2BE2">
+    <img src="https://img.shields.io/badge/LLM-Citation_Ready-8A2BE2" />
+  </a>
+
+  <a href="https://img.shields.io/badge/AI_Discoverability-Infrastructure-black">
+    <img src="https://img.shields.io/badge/AI_Discoverability-Infrastructure-black" />
+  </a>
+
+  <a href="https://img.shields.io/badge/Technical_Content-Intelligence-informational">
+    <img src="https://img.shields.io/badge/Technical_Content-Intelligence-informational" />
+  </a>
+
+  <a href="https://img.shields.io/badge/Agentic_AI-Ready-red">
+    <img src="https://img.shields.io/badge/Agentic_AI-Ready-red" />
+  </a>
+
+  <a href="https://www.linkedin.com/company/infrasity/posts/?feedView=all">
+    <img src="https://img.shields.io/badge/LinkedIn-Infrasity-0A66C2?logo=linkedin&logoColor=white" />
+  </a>
+
+  <a href="https://www.instagram.com/infrasity/">
+    <img src="https://img.shields.io/badge/Instagram-@infrasity-E4405F?logo=instagram&logoColor=white" />
+  </a>
+
+</p>
+
+<p align="center">
+  <img src="./assets/dev-gtm-claude-skills.png" alt="dev-gtm-claude-skills" width="140"/>
+</p>
+
+# Infrasity Claude Skills
+
+Production-grade Claude skills built for developer GTM, GEO (Generative Engine Optimization), AI discoverability, and technical content workflows.
 
 These skills are designed to help developer-focused companies improve:
 
@@ -13,12 +75,6 @@ These skills are designed to help developer-focused companies improve:
 
 Compatible with:
 - Claude
-- Cursor
-- Kiro
-- Windsurf
-- Copilot
-- Internal AI agents
-- Custom automation pipelines
 
 ---
 # Current Skills
@@ -37,51 +93,6 @@ Audit technical documentation pages for metadata quality, SERP optimization, and
 - Designed specifically for developer documentation ecosystems
 
 
-## Example Output
-
-```json
-{
-  "url": "https://docs.example.com/auth",
-  "title": {
-    "value": "Authentication API Documentation",
-    "exists": true,
-    "length": 34,
-    "status": "warning",
-    "issues": [
-        "Title too short"
-    ]
-  },
-  "description": {
-    "value": "Learn how to authenticate with the API.",
-    "exists": true,
-    "length": 42,
-    "status": "warning",
-    "issues": [
-        "Description too short"
-    ]
-  }
-}
-```
----
-## DOCX to Markdown Converter
-
-Convert Microsoft Word (.docx) files to clean Markdown (.md) files with proper formatting preservation.
-
-## Status
-
-🚧 **In Development** - This skill is currently being built.
-
-## Planned Features
-
-- ✅ **DOM-based Architecture**: Clean separation between parsing and generation
-- ✅ **Format Preservation**: Maintain headings, lists, tables, bold, italic, code
-- ✅ **Error Handling**: Graceful handling of unsupported elements
-- ✅ **Property-Based Testing**: Comprehensive test coverage with Hypothesis
-- 🚧 **Parser Layer**: DOCX file parsing (in progress)
-- 🚧 **Generator Layer**: Markdown generation (planned)
-- 🚧 **CLI Interface**: Command-line tool (planned)
----
-
 # Quick Start
 
 ### 1. Clone Repository
@@ -99,5 +110,6 @@ cd dev-gtm-claude-skills/skills/doc-metadata-analyzer
 ### 3. Add skill to your AI agent
 
 ```
-cp -r doc-metadata-analyzer /path-to-agent/skills/
+Create a .zip file of /doc-metadata-analyzer
+Upload the .zip file to Claude
 ```

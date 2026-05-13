@@ -12,11 +12,6 @@ A Python agent skill that enables AI agents to check documentation pages for pro
 
 ## Installation
 
-### Prerequisites
-
-- Python 3.9 or higher
-- pip (Python package manager)
-
 ### Method 1: Clone Repository
 
 ```bash
@@ -24,84 +19,19 @@ A Python agent skill that enables AI agents to check documentation pages for pro
 git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 cd dev-gtm-claude-skills/skills/doc-metadata-analyzer
 
-# Add skill to your AI agent
-cp -r doc-metadata-analyzer /path-to-agent/skills/
+# Add skill to Claude
+Create a .zip file of /doc-metadata-analyzer
+Upload the .zip file to Claude
 
 # Test it works
 Analyse metadata for https://docs.example.com/
 ```
 
-### Install Dependencies
-
-```bash
-cd doc-metadata-analyzer
-pip install -r requirements.txt
-```
-
-### Required Packages
-
-- `requests>=2.31.0` - HTTP requests
-- `beautifulsoup4>=4.12.0` - HTML parsing (uses built-in html.parser)
-
-
-
-
-### Result Structure
-
-The `CheckResult` object contains:
-
-```python
-result.url           # str: The checked URL
-result.success       # bool: Whether check completed successfully
-result.error         # str | None: Error message if success=False
-result.title         # TitleCheck: Title validation result
-result.description   # DescriptionCheck: Description validation result
-```
-
-**TitleCheck / DescriptionCheck attributes:**
-```python
-result.title.value    # str | None: The title/description text
-result.title.exists   # bool: Whether tag exists
-result.title.length   # int: Character count
-result.title.status   # str: "ideal", "warning", or "missing"
-result.title.issues   # list[str]: List of validation issues
-```
-
-### Serialization
-
-Convert results to dictionary for JSON output:
-
-```python
-import json
-
-result = check_documentation_metadata("https://docs.example.com")
-result_dict = result.to_dict()
-json_output = json.dumps(result_dict, indent=2)
-print(json_output)
-```
-
-**Output format:**
-```json
-{
-  "url": "https://docs.example.com",
-  "title": {
-    "value": "Example Documentation",
-    "exists": true,
-    "length": 21,
-    "status": "warning",
-    "issues": ["Title too short (21 chars, recommended: 50-60)"]
-  },
-  "description": {
-    "value": "Learn how to use our platform...",
-    "exists": true,
-    "length": 145,
-    "status": "ideal",
-    "issues": []
-  },
-  "success": true,
-  "error": null
-}
-```
+<p align="center">
+  <a href="./assets/doc-metadata-analyzer-video.mp4">
+    <img src="./assets/doc-metadata-analyzer-video.gif" width="900"/>
+  </a>
+</p>
 
 ## SEO Guidelines
 
@@ -132,40 +62,3 @@ doc-metadata-analyzer/
 └── requirements.txt        # Python dependencies
 ```
 
-## Troubleshooting
-
-### Import Errors
-
-**Issue**: `ModuleNotFoundError: No module named 'scripts'`
-
-**Solution**: Ensure the package is in your Python path:
-```python
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent))
-```
-
-Or install the package in development mode:
-```bash
-pip install -e .
-```
-
-### Missing Dependencies
-
-**Issue**: `ModuleNotFoundError: No module named 'requests'` (or beautifulsoup4, lxml)
-
-**Solution**: Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-### URL Fetch Errors
-
-**Issue**: "Failed to fetch URL" errors
-
-**Solution**:
-- Verify the URL is accessible in a browser
-- Check that the URL uses HTTP or HTTPS (not FTP, file://, etc.)
-- Ensure you have internet connectivity
-- Some sites may block automated requests
-- Try increasing the timeout parameter
