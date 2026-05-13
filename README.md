@@ -74,7 +74,7 @@ Infrasity AI Skills is a collection of modular skills for Claude that automate d
 
 | Skill | What it does | Trigger phrase |
 |---|---|---|
-| [`doc-metadata-analyzer`](./skills/doc-metadata-analyzer/) | Audits documentation pages for meta title and description quality against SEO/GEO best practices | `Analyse metadata for https://...` |
+| [`doc-metadata-analyzer`](./skills/doc-metadata-analyzer/) | Audits documentation pages for meta title and description quality against SEO/GEO best practices | `Analyze metadata for https://...` |
 
 More skills are in development. See [Contributing](#contributing) to add your own.
 
@@ -130,11 +130,11 @@ git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 cd dev-gtm-claude-skills
 
 # 2. Copy a skill into Claude Code's skills directory
-cp -r skills/doc-metadata-analyzer ~/.claude/skills/
+mkdir -p ~/.claude/skills/ && cp -r skills/doc-metadata-analyzer ~/.claude/skills/
 
 # 3. Install the skill's dependencies
 cd ~/.claude/skills/doc-metadata-analyzer
-pip install -r requirements.txt
+pip install -r requirements.txt --break-system-packages
 ```
 
 Claude Code picks up skills automatically from `~/.claude/skills/`. No further configuration needed.
@@ -148,7 +148,7 @@ Each skill folder contains a `SKILL.md` — a structured instruction file that t
 You can also invoke a skill explicitly:
 
 ```
-Read skills/doc-metadata-analyzer/SKILL.md and analyse https://docs.yourproduct.com
+Read skills/doc-metadata-analyzer/SKILL.md and analyze https://docs.yourproduct.com
 ```
 
 ---
@@ -158,7 +158,7 @@ Read skills/doc-metadata-analyzer/SKILL.md and analyse https://docs.yourproduct.
 Once `doc-metadata-analyzer` is installed:
 
 ```
-Analyse metadata for https://docs.stripe.com/api
+Analyze metadata for https://docs.stripe.com/api
 ```
 
 Claude fetches the page, validates the `<title>` and `<meta name="description">` tags, and returns a structured report:
