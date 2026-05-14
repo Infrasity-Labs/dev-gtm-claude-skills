@@ -4,6 +4,7 @@ from typing import Optional, Tuple
 from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
+import re
 
 from .models import CheckResult, TitleCheck, DescriptionCheck
 from .constants import (
@@ -80,7 +81,6 @@ class MetadataChecker:
         return response.text
     
     def _extract_metadata(self, html: str) -> Tuple[Optional[str], Optional[str]]:
-        import re
         soup = BeautifulSoup(html, 'html.parser')
         
         title = None
@@ -101,7 +101,7 @@ class MetadataChecker:
         
         # Regex fallback
         if not description:
-            m = re.search(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', html, re.IGNORECASE)
+            m = re.search(r'<meta(?=[^>]*\bname\s*=\s*["\']description["\'])[^>]*\bcontent\s*=\s*["\'](.*?)["\']', html, re.IGNORECASE | re.DOTALL)
             if m:
                 description = self._normalize_whitespace(m.group(1))
         

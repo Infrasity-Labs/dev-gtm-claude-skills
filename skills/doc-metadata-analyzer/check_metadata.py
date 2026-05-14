@@ -27,15 +27,13 @@ def main():
     
     print("=" * 60)
     
-    # Title section with status indicator
-    if result.title.status == "ideal":
-        status_icon = "✓"
-    elif result.title.status == "warning":
-        status_icon = "⚠️"
-    else:
-        status_icon = "✗"
+    # Status indicator mapping
+    status_map = {"ideal": "✓", "warning": "⚠️", "missing": "✗"}
     
-    print(f"📄 TITLE — {status_icon} {result.title.status.upper()}")
+    # Title section with status indicator
+    title_icon = status_map.get(result.title.status, "✗")
+    
+    print(f"📄 TITLE — {title_icon} {result.title.status.upper()}")
     print(f"   Content: \"{result.title.value}\"" if result.title.value else "   Content: Not found")
     print(f"   Length: {result.title.length} chars (ideal: 50-60)")
     if result.title.issues:
@@ -43,14 +41,9 @@ def main():
             print(f"   Issue: {issue}")
     
     # Description section with status indicator
-    if result.description.status == "ideal":
-        status_icon = "✓"
-    elif result.description.status == "warning":
-        status_icon = "⚠️"
-    else:
-        status_icon = "✗"
+    desc_icon = status_map.get(result.description.status, "✗")
     
-    print(f"\n📝 DESCRIPTION — {status_icon} {result.description.status.upper()}")
+    print(f"\n📝 DESCRIPTION — {desc_icon} {result.description.status.upper()}")
     print(f"   Content: \"{result.description.value}\"" if result.description.value else "   Content: Not found")
     print(f"   Length: {result.description.length} chars (ideal: 140-160)")
     if result.description.issues:
