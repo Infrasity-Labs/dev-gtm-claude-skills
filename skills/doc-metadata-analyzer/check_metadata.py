@@ -26,19 +26,36 @@ def main():
         sys.exit(1)
     
     print("=" * 60)
-    print(f"📄 TITLE: {result.title.value or 'Missing'}")
-    print(f"   Length: {result.title.length} chars")
-    print(f"   Status: {result.title.status.upper()}")
+    
+    # Title section with status indicator
+    if result.title.status == "ideal":
+        status_icon = "✓"
+    elif result.title.status == "warning":
+        status_icon = "⚠️"
+    else:
+        status_icon = "✗"
+    
+    print(f"📄 TITLE — {status_icon} {result.title.status.upper()}")
+    print(f"   Content: \"{result.title.value}\"" if result.title.value else "   Content: Not found")
+    print(f"   Length: {result.title.length} chars (ideal: 50-60)")
     if result.title.issues:
         for issue in result.title.issues:
-            print(f"   ⚠️  {issue}")
+            print(f"   Issue: {issue}")
     
-    print(f"\n📝 DESCRIPTION: {result.description.value or 'Missing'}")
-    print(f"   Length: {result.description.length} chars")
-    print(f"   Status: {result.description.status.upper()}")
+    # Description section with status indicator
+    if result.description.status == "ideal":
+        status_icon = "✓"
+    elif result.description.status == "warning":
+        status_icon = "⚠️"
+    else:
+        status_icon = "✗"
+    
+    print(f"\n📝 DESCRIPTION — {status_icon} {result.description.status.upper()}")
+    print(f"   Content: \"{result.description.value}\"" if result.description.value else "   Content: Not found")
+    print(f"   Length: {result.description.length} chars (ideal: 140-160)")
     if result.description.issues:
         for issue in result.description.issues:
-            print(f"   ⚠️  {issue}")
+            print(f"   Issue: {issue}")
     
     print("=" * 60)
     print("\n📊 JSON Output:")

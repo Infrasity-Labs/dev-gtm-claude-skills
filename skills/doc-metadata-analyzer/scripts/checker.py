@@ -80,6 +80,7 @@ class MetadataChecker:
         return response.text
     
     def _extract_metadata(self, html: str) -> Tuple[Optional[str], Optional[str]]:
+        import re
         soup = BeautifulSoup(html, 'html.parser')
         
         title = None
@@ -87,10 +88,22 @@ class MetadataChecker:
         if title_tag:
             title = self._normalize_whitespace(title_tag.get_text())
         
+        # Regex fallback if BeautifulSoup found nothing (e.g. markdown input)
+        if not title:
+            m = re.search(r'<title[^>]*>(.*?)</title>', html, re.IGNORECASE | re.DOTALL)
+            if m:
+                title = self._normalize_whitespace(m.group(1))
+        
         description = None
         desc_tag = soup.find('meta', attrs={'name': 'description'})
         if desc_tag and desc_tag.get('content'):
             description = self._normalize_whitespace(desc_tag['content'])
+        
+        # Regex fallback
+        if not description:
+            m = re.search(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', html, re.IGNORECASE)
+            if m:
+                description = self._normalize_whitespace(m.group(1))
         
         return title, description
     
