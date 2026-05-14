@@ -1,6 +1,6 @@
 ---
 name: doc-metadata-analyzer
-version: 1.1.0
+version: 1.3.0
 description: Check documentation pages for SEO metadata compliance
 author: Dev GTM
 tags: [seo, metadata, documentation, validation, agent-skill]
@@ -10,6 +10,14 @@ tags: [seo, metadata, documentation, validation, agent-skill]
 
 Validates `<title>` and `<meta name="description">` tags on documentation pages against SEO best practices.
 
+**Key output:** For each URL checked, you MUST show:
+1. The **exact text** of the title and description tags (quoted)
+2. The **character count** and how it compares to ideal ranges
+3. The **status** (ideal/warning/missing) with specific issues
+4. A **concrete recommendation** for improvement
+
+---
+
 ## Quick start
 
 ```bash
@@ -18,13 +26,15 @@ pip install -r requirements.txt --break-system-packages -q
 python check_metadata.py https://docs.example.com
 ```
 
-**Important:** Many sites return 403 to the default user-agent. If the CLI fails with a 403 or fetch error, use the fallback workflow below instead.
+**Important:** Many sites return 403 to the default user-agent. **If the CLI fails, you MUST try the fallback workflow using `web_fetch`** (see below). Do not stop at the first error.
 
 ---
 
 ## Workflow: choosing the right approach
 
-### Step 1 — Try the CLI
+**IMPORTANT:** Always try BOTH methods if the first one fails.
+
+### Method 1 — Try the CLI first (fastest)
 
 ```bash
 python check_metadata.py https://docs.example.com
@@ -32,12 +42,20 @@ python check_metadata.py https://docs.example.com
 
 If it succeeds, you're done. Read the JSON output at the bottom of stdout.
 
-### Step 2 — Fallback when the CLI gets a 403 or network error
+### Method 2 — Fallback using web_fetch (REQUIRED if CLI fails)
 
-Sites like react.dev, Next.js docs, and others block the default user-agent. When this happens:
+**When to use:** CLI returns 403, network error, or any fetch failure.
 
-1. Fetch the page HTML using the `web_fetch` tool (it uses a browser-like user-agent).
-2. Pass the raw HTML directly into the checker's internal methods, bypassing the HTTP layer.
+**Why it works:** Sites like Stripe, React, Next.js docs block the default Python user-agent but allow browser-like requests. The `web_fetch` tool uses a browser user-agent.
+
+**Steps:**
+1. Use `web_fetch` tool to get the HTML
+   - **CRITICAL:** `web_fetch` may return markdown-converted content by default
+   - You need the **raw HTML source**, not markdown
+   - Look for the raw HTML in the response (may be in a `source` or `content` field)
+2. Pass the raw HTML to the checker's internal methods
+
+**Important:** If `web_fetch` returns markdown (no `<title>` or `<meta>` tags visible), the regex fallback in `_extract_metadata()` will handle it, but you should try to get raw HTML first.
 
 ```python
 import sys
@@ -45,7 +63,8 @@ sys.path.insert(0, "/mnt/skills/user/doc-metadata-analyzer")
 from scripts.checker import MetadataChecker
 from scripts.models import CheckResult
 
-# raw_html = the string returned by web_fetch
+# Get raw HTML from web_fetch (not markdown-converted)
+# raw_html should contain actual HTML tags like <title> and <meta>
 checker = MetadataChecker()
 title_text, desc_text = checker._extract_metadata(raw_html)
 title_check    = checker._validate_title(title_text)
@@ -63,7 +82,7 @@ import json
 print(json.dumps(result.to_dict(), indent=2))
 ```
 
-This gives identical output to the CLI with no network call from Python.
+**Note:** The `_extract_metadata()` method now includes regex fallback, so it will work even if BeautifulSoup fails (e.g., when given markdown instead of HTML).
 
 ---
 
@@ -118,11 +137,38 @@ To check OG/Twitter/canonical tags, parse them manually from the raw HTML after 
 
 ## Presenting results to the user
 
-Always show:
-- The raw value found (or "not found")
-- Character count and status (✓ ideal / ⚠ warning / ✗ missing)
-- The specific issue string from `result.title.issues` / `result.description.issues`
-- A concrete rewrite suggestion when a tag is missing or out of range
+**CRITICAL — Never infer or hardcode metadata values:**
+- The `value` field in the result MUST come directly from the HTML parsing
+- Do NOT substitute values from page headings, document source tags, or your knowledge of the site
+- If `value` is `None`, report it as "Not found" — do not guess or infer content
+- Only show what the actual HTML `<title>` and `<meta name="description">` tags contain
+
+**Required format for each field (title and description):**
+
+1. **Status indicator** — ✓ Ideal / ⚠ Warning / ✗ Missing
+2. **Actual content** — Show the exact text found (or "Not found" if missing)
+   - Format: `"[exact text here]"`
+   - If missing, explicitly state: "No [title/description] tag found"
+3. **Character count** — Show length and compare to ideal range
+4. **Specific issues** — List all items from `result.title.issues` / `result.description.issues`
+5. **Recommendation** — Provide a concrete rewrite suggestion when needed
+
+**Example output format:**
+
+```
+Title — ⚠ Warning
+Content: "Vercel Documentation"
+Length: 20 characters (ideal: 50-60)
+Issue: Title too short — missing key information about platform capabilities
+Recommendation: "Vercel Documentation: Deploy, Scale & Build with Serverless, Edge & AI"
+
+Meta description — ✗ Missing  
+Content: Not found
+Issue: No meta description tag present
+Recommendation: Add a 140-160 character description covering deployment, serverless functions, edge networking, and AI infrastructure
+```
+
+**Critical:** Always quote the actual content found so users can see exactly what's on the page
 
 ---
 

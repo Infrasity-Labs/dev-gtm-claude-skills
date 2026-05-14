@@ -46,14 +46,6 @@
     <img src="https://img.shields.io/badge/Agentic_AI-Ready-red" />
   </a>
 
-  <a href="https://www.linkedin.com/company/infrasity/posts/?feedView=all">
-    <img src="https://img.shields.io/badge/LinkedIn-Infrasity-0A66C2?logo=linkedin&logoColor=white" />
-  </a>
-
-  <a href="https://www.instagram.com/infrasity/">
-    <img src="https://img.shields.io/badge/Instagram-@infrasity-E4405F?logo=instagram&logoColor=white" />
-  </a>
-
 </p>
 
 <p align="center">
@@ -62,9 +54,9 @@
 
 ---
 
-## What this is
+## Dev-GTM-Claude-Skills
 
-Infrasity AI Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package — a `SKILL.md` that tells Claude when and how to use it, Python tooling that does the work, and a README with full usage docs.
+Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package — a `SKILL.md` that tells Claude when and how to use it, Python tooling that does the work, and a README with full usage docs.
 
 **GEO (Generative Engine Optimization)** is the practice of making your content and documentation discoverable and citable by AI systems — ChatGPT, Claude, Perplexity, and others. These skills are built specifically for developer-focused companies that need to measure and improve their AI visibility, not just their traditional SERP rankings.
 
@@ -236,6 +228,23 @@ The `description` field in the frontmatter is what Claude uses to decide when to
 Open a PR with your skill folder and a brief description of what it covers.
 
 ---
+
+## Let's Connect
+<p align="center">
+
+  <a href="https://infrasity.com">
+    <img src="https://img.shields.io/badge/INFRASITY.COM-000000?style=for-the-badge&logo=googlechrome&logoColor=white" />
+  </a>
+
+  <a href="https://www.linkedin.com/company/infrasity/posts/?feedView=all">
+    <img src="https://img.shields.io/badge/LINKEDIN-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+
+  <a href="https://www.youtube.com/@Infrasity">
+    <img src="https://img.shields.io/badge/YOUTUBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white" />
+  </a>
+
+</p>
 
 ## License
 
