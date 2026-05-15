@@ -168,6 +168,16 @@ Claude fetches the page, validates the `<title>` and `<meta name="description">`
 
 Full output also includes a JSON payload suitable for piping into other tools or dashboards.
 
+<p align="center">
+  <a href="./assets/doc-metadata-analyzer-video.mp4">
+    <img 
+      src="./assets/doc-metadata-analyzer-video.gif" 
+      width="100%" 
+      alt="Documentation Metadata Analyzer Demo"
+    />
+  </a>
+</p>
+
 ---
 
 ## Repository structure
