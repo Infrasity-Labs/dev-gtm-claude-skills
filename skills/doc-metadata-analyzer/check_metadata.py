@@ -26,19 +26,29 @@ def main():
         sys.exit(1)
     
     print("=" * 60)
-    print(f"📄 TITLE: {result.title.value or 'Missing'}")
-    print(f"   Length: {result.title.length} chars")
-    print(f"   Status: {result.title.status.upper()}")
+    
+    # Status indicator mapping
+    status_map = {"ideal": "✓", "warning": "⚠️", "missing": "✗"}
+    
+    # Title section with status indicator
+    title_icon = status_map.get(result.title.status, "✗")
+    
+    print(f"📄 TITLE — {title_icon} {result.title.status.upper()}")
+    print(f"   Content: \"{result.title.value}\"" if result.title.value else "   Content: Not found")
+    print(f"   Length: {result.title.length} chars (ideal: 50-60)")
     if result.title.issues:
         for issue in result.title.issues:
-            print(f"   ⚠️  {issue}")
+            print(f"   Issue: {issue}")
     
-    print(f"\n📝 DESCRIPTION: {result.description.value or 'Missing'}")
-    print(f"   Length: {result.description.length} chars")
-    print(f"   Status: {result.description.status.upper()}")
+    # Description section with status indicator
+    desc_icon = status_map.get(result.description.status, "✗")
+    
+    print(f"\n📝 DESCRIPTION — {desc_icon} {result.description.status.upper()}")
+    print(f"   Content: \"{result.description.value}\"" if result.description.value else "   Content: Not found")
+    print(f"   Length: {result.description.length} chars (ideal: 140-160)")
     if result.description.issues:
         for issue in result.description.issues:
-            print(f"   ⚠️  {issue}")
+            print(f"   Issue: {issue}")
     
     print("=" * 60)
     print("\n📊 JSON Output:")
