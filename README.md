@@ -2,8 +2,6 @@
   <img src="./assets/infrasity_logo.avif" alt="Infrasity Logo" width="400"/>
 </p>
 
-<h1 align="center">Infrasity AI Skills</h1>
-
 <p align="center">
   Production-grade Claude skills for GEO, AI discoverability, developer GTM, and technical content workflows.
 </p>
@@ -56,9 +54,9 @@
 
 ## Dev-GTM-Claude-Skills
 
-Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package — a `SKILL.md` that tells Claude when and how to use it, Python tooling that does the work, and a README with full usage docs.
+Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package: a `SKILL.md` that tells Claude when and how to use it, Python tooling that does the work, and a README with full usage docs.
 
-**GEO (Generative Engine Optimization)** is the practice of making your content and documentation discoverable and citable by AI systems — ChatGPT, Claude, Perplexity, and others. These skills are built specifically for developer-focused companies that need to measure and improve their AI visibility, not just their traditional SERP rankings.
+**GEO (Generative Engine Optimization)** is the practice of making your content and documentation discoverable and citable by AI systems: ChatGPT, Claude, Perplexity, and others. These skills are built specifically for developer-focused companies that need to measure and improve their AI visibility, not just their traditional SERP rankings.
 
 ---
 
@@ -66,7 +64,7 @@ Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate
 
 | Skill | What it does | Trigger phrase |
 |---|---|---|
-| [`doc-metadata-analyzer`](./skills/doc-metadata-analyzer/) | Audits documentation pages for meta title and description quality against SEO/GEO best practices | `Analyze metadata for https://...` |
+| [`docs-auditor`](./skills/docs-auditor/) | Audits any developer documentation site across 33 checks in 7 categories and produces a scored report (out of 100) covering AI/LLM discoverability, structure, content completeness, content quality, technical SEO, internal linking, and versioning | `Analyze docs for https://...` |
 
 More skills are in development. See [Contributing](#contributing) to add your own.
 
@@ -74,20 +72,12 @@ More skills are in development. See [Contributing](#contributing) to add your ow
 
 ## Installation
 
-There are two ways to use these skills depending on how you access Claude.
-
-### Option A — Claude.ai (Free, Pro, Max, Team, Enterprise)
-
-Skills are natively supported in Claude.ai on all plans, including free. No Python or CLI required.
-
-**One-time setup (do this once):**
-
-1. Go to **[Settings → Capabilities](https://claude.ai/settings/capabilities)** and make sure **Code execution and file creation** is enabled.
-2. Go to **[Customize → Skills](https://claude.ai/customize/skills)**.
-3. Click **+** → **Create skill** → **Upload a skill**.
+1. Go to **[Settings -> Capabilities](https://claude.ai/settings/capabilities)** and make sure **Code execution and file creation** is enabled.
+2. Go to **[Customize -> Skills](https://claude.ai/customize/skills)**.
+3. Click **+** -> **Create skill** -> **Upload a skill**.
 4. Upload the skill as a ZIP file (see below).
 
-**To upload `doc-metadata-analyzer`:**
+**To upload `docs-auditor`:**
 
 ```bash
 # Clone the repo
@@ -95,16 +85,15 @@ git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 
 # Zip the skill folder
 cd dev-gtm-claude-skills/skills
-zip -r doc-metadata-analyzer.zip doc-metadata-analyzer/
+zip -r docs-auditor.zip docs-auditor/
 ```
 
 <p align="center">
   <img src="./assets/converting-to-zip.gif" width="100%" alt="Converting to zip GIF"/>
 </p>
 
-Then upload `doc-metadata-analyzer.zip` in the Skills settings above. Once uploaded, toggle the skill on — it's immediately active across all your chats.
+Then upload `docs-auditor.zip` in the Skills settings above. Once uploaded, toggle the skill on and it is immediately active across all your chats.
 
-> Skills you upload are private to your account. Claude installs any required packages automatically the first time it uses the skill.
 
 <p align="center">
   <img src="./assets/add-to-claude.gif" width="100%" alt="Add to claude GIF"/>
@@ -112,71 +101,43 @@ Then upload `doc-metadata-analyzer.zip` in the Skills settings above. Once uploa
 
 ---
 
-### Option B — Claude Code (CLI)
-
-**Prerequisites:** Python 3.9+, [Claude Code](https://claude.ai/code)
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
-cd dev-gtm-claude-skills
-
-# 2. Copy a skill into Claude Code's skills directory
-mkdir -p ~/.claude/skills/ && cp -r skills/doc-metadata-analyzer ~/.claude/skills/
-
-# 3. Install the skill's dependencies
-cd ~/.claude/skills/doc-metadata-analyzer
-pip install -r requirements.txt --break-system-packages
-```
-
-Claude Code picks up skills automatically from `~/.claude/skills/`. No further configuration needed.
-
----
-
-## How skills work
-
-Each skill folder contains a `SKILL.md` — a structured instruction file that tells Claude what the skill does, when to use it, and how to invoke the underlying tooling. When you describe a task that matches a skill's description, Claude reads the `SKILL.md` and follows its workflow automatically.
-
-You can also invoke a skill explicitly:
-
-```
-Read skills/doc-metadata-analyzer/SKILL.md and analyze https://docs.yourproduct.com
-```
-
----
-
 ## Quick example
 
-Once `doc-metadata-analyzer` is installed:
+Once `docs-auditor` is installed:
 
 ```
-Analyze metadata for https://docs.stripe.com/api
+Analyze docs for https://docs.stripe.com
 ```
 
-Claude fetches the page, validates the `<title>` and `<meta name="description">` tags, and returns a structured report:
+Claude fetches the docs site and its key sub-pages (`/quickstart`, `/changelog`, `/robots.txt`, `/llms.txt`, `/sitemap.xml`, and more), then runs 33 checks across 7 categories and returns a scored visual report.
 
-```
-📄 TITLE: Stripe API Reference
-   Length: 21 chars
-   Status: WARNING
-   ⚠️  Title slightly short (21 chars, ideal: 50–60)
-
-📝 DESCRIPTION: "A complete reference to Stripe's API..."
-   Length: 143 chars
-   Status: IDEAL ✓
-```
-
-Full output also includes a JSON payload suitable for piping into other tools or dashboards.
+The report renders as an interactive visual widget in claude.ai, with pass/warn/fail badges per check and short evidence notes for every finding.
 
 <p align="center">
-  <a href="./assets/doc-metadata-analyzer-video.mp4">
-    <img 
-      src="./assets/doc-metadata-analyzer-video.gif" 
-      width="100%" 
-      alt="Documentation Metadata Analyzer Demo"
+  <a href="./assets/docs-auditor-gif.gif">
+    <img
+      src="./assets/docs-auditor-gif.gif"
+      width="100%"
+      alt="Docs Auditor Demo"
     />
   </a>
 </p>
+
+---
+
+## What the 7 categories cover
+
+The audit runs checks across 7 categories. Each check is marked **pass**, **warn**, or **fail** based on evidence fetched from the live site.
+
+| # | Category | Checks |
+|---|----------|--------|
+| 1 | **AI & LLM Discoverability** | `llms.txt`, `llms-full.txt`, docs pages listed in llms.txt, AI bots in robots.txt, docs in sitemap.xml |
+| 2 | **Structure & Navigation** | Overview page, quickstart, API reference, sidebar, breadcrumbs, search |
+| 3 | **Content Completeness** | Tutorials/examples, code snippets, multi-language examples, changelog, FAQ/troubleshooting, error codes |
+| 4 | **Content Quality** | Intro clarity, quickstart completeness, page depth (no stubs) |
+| 5 | **Technical SEO & Crawlability** | HTTPS, meta titles, meta descriptions, canonical URLs, noindex directives |
+| 6 | **Internal Linking & Flow** | Cross-links between pages, prev/next navigation, GitHub links, community/support links |
+| 7 | **Versioning & Maintenance** | Version badge, freshness signals, pinned install commands, deprecation notices |
 
 ---
 
@@ -186,12 +147,10 @@ Full output also includes a JSON payload suitable for piping into other tools or
 dev-gtm-claude-skills/
 ├── assets/                    # Logos and images for this README
 ├── skills/
-│   └── doc-metadata-analyzer/
-│       ├── SKILL.md           # Agent instructions — Claude reads this
+│   └── docs-auditor/
+│       ├── SKILL.md           # Agent instructions - Claude reads this
 │       ├── README.md          # Full usage docs for humans
-│       ├── check_metadata.py  # CLI entry point
-│       ├── requirements.txt
-│       └── scripts/           # Core Python library
+│       └── references/        # Widget template, scoring guide, fetch strategy
 └── README.md
 ```
 
@@ -203,8 +162,8 @@ To add a new skill, create a folder under `skills/` with this structure:
 
 ```
 skills/your-skill-name/
-├── SKILL.md          # Required — agent instructions (see below)
-├── README.md         # Required — human-facing docs
+├── SKILL.md          # Required - agent instructions (see below)
+├── README.md         # Required - human-facing docs
 ├── requirements.txt  # Required if the skill has dependencies
 └── scripts/          # Python tooling (if applicable)
 ```
@@ -215,7 +174,7 @@ skills/your-skill-name/
 ---
 name: your-skill-name
 version: 1.0.0
-description: One sentence — what does this skill check or produce?
+description: One sentence - what does this skill check or produce?
 author: Your Name
 tags: [relevant, tags]
 ---
@@ -233,7 +192,7 @@ tags: [relevant, tags]
 ...
 ```
 
-The `description` field in the frontmatter is what Claude uses to decide when to activate the skill — write it to match the natural language a user would use when asking for this task.
+The `description` field in the frontmatter is what Claude uses to decide when to activate the skill. Write it to match the natural language a user would use when asking for this task.
 
 Open a PR with your skill folder and a brief description of what it covers.
 
@@ -258,6 +217,6 @@ Open a PR with your skill folder and a brief description of what it covers.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).
 
 Built by [Infrasity](https://www.linkedin.com/company/infrasity/).
