@@ -54,7 +54,7 @@
 
 ## Dev-GTM-Claude-Skills
 
-Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package: a `SKILL.md` that tells Claude when and how to use it, Python tooling that does the work, and a README with full usage docs.
+Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate developer GTM and AI discoverability workflows. Each skill is a self-contained package: a `SKILL.md` that tells Claude when and how to use it, optional Python tooling or agent-led workflows, and a README with full usage docs.
 
 **GEO (Generative Engine Optimization)** is the practice of making your content and documentation discoverable and citable by AI systems: ChatGPT, Claude, Perplexity, and others. These skills are built specifically for developer-focused companies that need to measure and improve their AI visibility, not just their traditional SERP rankings.
 
