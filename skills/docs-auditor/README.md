@@ -5,7 +5,7 @@ Audits any developer documentation site across **33 checks** in **7 categories**
 <p align="center">
   <a href="../../assets/docs-auditor-gif.gif">
     <img
-      src="./assets/docs-auditor-gif.gif"
+      src="../../assets/docs-auditor-gif.gif"
       width="100%"
       alt="Docs Auditor in action"
     />
@@ -76,7 +76,7 @@ The audit runs 33 checks grouped into 7 categories. Each check is evaluated agai
 <p align="center">
   <a href="../../assets/docs-auditor-gif.gif">
     <img
-      src="./assets/docs-auditor-gif.gif"
+      src="../../assets/docs-auditor-gif.gif"
       width="100%"
       alt="Example audit report widget"
     />
