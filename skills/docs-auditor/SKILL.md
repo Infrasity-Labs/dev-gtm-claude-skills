@@ -27,7 +27,7 @@ paths on its own, even if the root domain is known.
 Given a docs URL like `https://docs.example.com/`, construct and run this search:
 
 ```
-docs.example.com/llms.txt docs.example.com/robots.txt docs.example.com/sitemap.xml example.com/llms.txt
+docs.example.com/llms.txt docs.example.com/robots.txt docs.example.com/sitemap.xml example.com/llms.txt example.com/robots.txt example.com/sitemap.xml
 ```
 
 Include both the subdomain and the root domain variants in the same query — these files
