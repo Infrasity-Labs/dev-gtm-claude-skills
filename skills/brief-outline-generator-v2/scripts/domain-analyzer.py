@@ -18,11 +18,13 @@ Output (JSON to stdout):
 """
 
 import argparse
+import gzip
 import json
 import re
 import sys
 import urllib.request
 import urllib.error
+import zlib
 from collections import Counter
 from html.parser import HTMLParser
 from urllib.parse import urlparse, urljoin
@@ -124,17 +126,34 @@ def extract_sitemap_urls(xml):
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (compatible; ContentBriefBot/1.0)',
     'Accept': 'text/html,application/xml,application/xhtml+xml,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
 }
 
 def fetch_url(url, timeout=8):
     req = urllib.request.Request(url, headers=HEADERS)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
+            raw = resp.read()
+
+            # Decompress if the server sent gzip or deflate. Some CDNs compress
+            # unconditionally regardless of Accept-Encoding, so we check the
+            # response header rather than trusting the request.
+            encoding = (resp.headers.get('Content-Encoding') or '').lower().strip()
+            if encoding == 'gzip':
+                raw = gzip.decompress(raw)
+            elif encoding == 'deflate':
+                # 'deflate' over HTTP is technically raw deflate, but some servers
+                # send zlib-wrapped data. Try zlib decode first, fall back to raw.
+                try:
+                    raw = zlib.decompress(raw)
+                except zlib.error:
+                    raw = zlib.decompress(raw, -zlib.MAX_WBITS)
+
             charset = 'utf-8'
             ct = resp.headers.get('Content-Type', '')
             if 'charset=' in ct:
                 charset = ct.split('charset=')[-1].strip().split(';')[0].strip()
-            return resp.read().decode(charset, errors='replace')
+            return raw.decode(charset, errors='replace')
     except urllib.error.HTTPError as e:
         raise RuntimeError(f'HTTP {e.code} for {url}')
     except urllib.error.URLError as e:
@@ -153,11 +172,17 @@ STOPWORDS = {
     'who', 'her', 'his', 'him', 'she', 'her', 'we', 'my', 'an', 'is', 'it',
     'of', 'to', 'in', 'a', 'at', 'by', 'on', 'or', 'as', 'if', 'be', 'do',
     'so', 'up', 'no', 'go', 'me', 'he', 'us', 'an', 'to',
+    # Common 3-letter words admitted by the length>2 filter that aren't tech terms
+    'see', 'way', 'via', 'let', 'now', 'too', 'why', 'out', 'off', 'own',
+    'top', 'try', 'run', 'set', 'put', 'far', 'big', 'old', 'few', 'end',
+    'yet', 'per', 'eg', 'ie',
 }
 
 def extract_key_terms(text, n=10):
     words = re.sub(r'[^a-z0-9\s-]', ' ', text.lower()).split()
-    words = [w for w in words if len(w) > 4 and w not in STOPWORDS]
+    # len(w) > 2 keeps short technical terms (AWS, GCP, API, SDK, Go, Go, SQL, K8s, etc.).
+    # Common short non-technical words are filtered by STOPWORDS above.
+    words = [w for w in words if len(w) > 2 and w not in STOPWORDS]
     freq = Counter(words)
     return [word for word, count in freq.most_common(n * 2) if count >= 2][:n]
 

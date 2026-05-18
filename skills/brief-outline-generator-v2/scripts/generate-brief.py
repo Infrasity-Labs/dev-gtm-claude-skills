@@ -646,8 +646,11 @@ def generate_brief(cfg):
     for section in cfg.get('outline', []):
         render_section(doc, section, bullet_num_id, force_h3=False)
 
-    # Save — note: filename uses 'outline-' prefix (this is an outline generator)
+    # Save — note: filename uses 'outline-' prefix (this is an outline generator).
+    # Ensure the parent directory exists so the script works outside the sandboxed
+    # Claude environment where /mnt/user-data/outputs/ is pre-created.
     output_path = cfg.get('output_path') or f'/mnt/user-data/outputs/outline-{slug}.docx'
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     doc.save(output_path)
 
     kw_summary = ', '.join(
