@@ -426,7 +426,7 @@ Note how these questions: (a) use natural phrasing a real user would type, (b) c
 Before generating the DOCX, walk the whole outline and ask:
 
 1. **Could a writer publish this by adding transition words?** If yes → it's a brief, not an outline. Strip back.
-2. **Does every bullet have a subject + verb + object + qualifier?** If yes → too long, rewrite as a topic prompt.
+2. **Does every bullet (except FAQ questions) have a subject + verb + object + qualifier?** If yes → too long, rewrite as a topic prompt.
 3. **Could a writer guess what each bullet means in 3 different ways?** If yes → the bullet is too abstract. Name the actual thing (file names, components, concrete examples, technical terms).
 4. **Is every bullet a complete thought when read aloud?** Sentence fragments without meaning ("Who this guide is for: builders standardizing repeat tasks") must be finished.
 5. **Is every technical claim accurate?** Skills are packages, not folders. Claude reads SKILL.md, not the whole package eagerly. If unsure, rewrite to avoid the claim.
@@ -434,6 +434,8 @@ Before generating the DOCX, walk the whole outline and ask:
 7. **Does any sub-bullet feel like its own H2?** If yes → promote it. Aspect vs. distinct concept matters.
 8. **Are H2 titles specific to the article's topic, not generic verbs?** "Define the task narrowly" → "Define what your skill should do."
 9. **Does the section order match the archetype?** If you forced a how-to template onto a listicle, restart.
-10. **Did you include a `topic_summary` or Writer Directives box?** If yes → remove. Not part of the new format.
+10. **No `topic_summary`, `directives`, or `faqs` fields present?** → Strip if present. FAQ questions live in `rules` as flat bullets.
+11. **Do all user-supplied keywords (focus + each secondary) appear naturally across the FAQ questions?** → If any is missing, rewrite a question to incorporate it.
+12. **Are FAQ questions concrete and action-oriented (`"How do I install..."`, `"What is the difference between..."`), not abstract (`"How does Claude decide..."`)?** → Rewrite vague ones.
 
-If all 10 checks pass, generate the DOCX.
+If all 12 checks pass, generate the DOCX.

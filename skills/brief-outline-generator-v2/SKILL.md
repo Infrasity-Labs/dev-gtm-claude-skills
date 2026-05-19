@@ -167,7 +167,7 @@ Use the section set for the archetype you chose in Step 4. **Do not force every 
 Before assembling the config, walk the outline and verify (this is from `section-rules.md`):
 
 1. Could a writer publish this by adding transition words? → If yes, strip back.
-2. Does every bullet read as a topic prompt, not a sentence? → If no, rewrite.
+2. Does every bullet (except FAQ questions) read as a topic prompt, not a sentence? → If no, rewrite.
 3. Could a writer guess each bullet's meaning in 3 different ways? → If yes, the bullet is too abstract. Name the actual thing (files, components, technical terms).
 4. Is every bullet a complete thought when read aloud? → If a bullet is a sentence fragment with no meaning ("Who this is for: builders doing X"), finish the thought.
 5. Is every technical claim accurate? → Skills are packages not folders; Claude reads SKILL.md, not the whole skill eagerly. If unsure, rewrite to avoid the claim.
