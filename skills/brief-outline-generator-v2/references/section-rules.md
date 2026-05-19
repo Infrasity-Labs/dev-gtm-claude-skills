@@ -28,17 +28,50 @@ If you can't tell whether something is a brief or an outline, ask: *would the wr
 ## Hard rules for every bullet
 
 1. **≤ 12 words per bullet.** Hard limit. Split if longer.
-2. **No em-dash explanatory clauses inside bullets.** `"X — why X matters"` is a brief sentence, not an outline prompt. Cut everything after the em-dash unless it's a parenthetical clarification of 2–3 words.
-3. **No invented numbers.** Banned: specific durations ("typically 4–24 hours"), specific percentages ("99.99%+"), specific multipliers ("3–5×"), specific counts of failed resources, specific time-ago references ("drifted 3 weeks behind"). If a number matters, the bullet says *"include a credible benchmark"* — the writer sources it.
-4. **No conclusions.** A bullet should name a topic to cover, not state what the writer should conclude. `"Why preparation matters more than tooling"` is a topic. `"Preparation matters more than tooling"` is a conclusion.
-5. **No invented case-study specifics.** Don't write "A fintech team's region fallback broke compliance" with a fabricated scenario. Write "Case where governance-critical attribute had a silent fallback" — the writer picks a real example or constructs one truthfully.
+2. **Must be a complete thought, not a fragment.** "Who this guide is for: builders standardizing repeat tasks" is meaningless — *what* about that audience? Fix: "Who this guide is for: developers automating repeat Claude workflows with reusable skills." Every bullet has to make sense on its own when read aloud.
+3. **Must be specific, not abstract.** A bullet should name the actual thing — file names, components, technical terms — not a vague gesture toward it. "A skill as a folder Claude reads on demand" is wrong (also factually wrong: a skill is a package, not a folder). Fix: "A skill: a package containing SKILL.md plus optional references/, scripts/, and examples/." The writer still does the explaining; the bullet just won't let them drift onto the wrong topic.
+4. **Must be factually accurate.** No technical hand-waving. If the bullet says "Claude reads SKILL.md", that has to actually be true. If you're unsure, look it up or rewrite to avoid the claim — never approximate.
+5. **No em-dash explanatory clauses inside bullets.** `"X — why X matters"` is a brief sentence, not an outline prompt. Cut everything after the em-dash unless it's a parenthetical clarification of 2–3 words.
+6. **No invented numbers.** Banned: specific durations ("typically 4–24 hours"), specific percentages ("99.99%+"), specific multipliers ("3–5×"), specific counts of failed resources, specific time-ago references ("drifted 3 weeks behind"). If a number matters, the bullet says *"include a credible benchmark"* — the writer sources it.
+7. **No conclusions.** A bullet should name a topic to cover, not state what the writer should conclude. `"Why preparation matters more than tooling"` is a topic. `"Preparation matters more than tooling"` is a conclusion.
+8. **No invented case-study specifics.** Don't write "A fintech team's region fallback broke compliance" with a fabricated scenario. Write "Case where governance-critical attribute had a silent fallback" — the writer picks a real example or constructs one truthfully.
+
+### Length follows substance, not a fixed cap
+
+There is **no fixed minimum or maximum number of bullets per section**. Some sections genuinely need 2 bullets; some need 9. The right number is the number of *distinct things the writer needs to address* — no more, no less.
+
+**The rule:** if a section has 8 things worth saying that each meet the bullet rules above (specific, complete, accurate, prompt-shaped), use 8 bullets. If it has 2, use 2. Padding to hit a target is as wrong as truncating to one.
+
+**How to know if you're padding:** ask "would removing this bullet leave a hole the writer would have to fill anyway?" If no — it's padding, remove it. **How to know if you're truncating:** ask "is there a question a reader would have after reading this section that none of my bullets prompt the writer to address?" If yes — add a bullet.
+
+Per-section guidance below uses "typical ranges" not caps. Treat them as orientation, not rules.
+
+### The specificity test
+
+The single biggest failure mode of this skill is producing bullets that are correctly short, correctly prompt-shaped, and **completely empty of meaning**. Before finalizing any bullet, ask:
+
+> *If a writer read this bullet, would they know exactly what to write about, or would they have to guess?*
+
+| Empty (wrong) | Specific (right) |
+|---|---|
+| "A skill as a folder Claude reads on demand" | "A skill: package with SKILL.md plus optional references/, scripts/, examples/" |
+| "Define the task narrowly" | "Pick one repeat workflow: e.g., generating SEO outlines, summarizing PRs, drafting briefs" |
+| "Write the description for triggering" | "Write the SKILL.md description: phrases users say that should invoke the skill" |
+| "Test on real prompts" | "Test by typing actual user prompts (not synthetic ones) and inspecting drift" |
+| "Document examples and ship" | "Add 1–2 examples/ files, then publish the skill folder to your team or registry" |
+| "Where automation helped" | "Which steps Terraform automated vs which required manual config" |
+
+Specificity is not the same as length. The "right" examples above are all the same length as the "wrong" ones — they just name the actual thing.
 
 ### Self-check before finalizing each bullet
 
 - Is it > 12 words? → split or trim
-- Does it state a conclusion the writer should reach? → downgrade to topic prompt
+- Could a writer guess what's meant 3 different ways? → make it specific
+- Is it a sentence fragment with no complete thought? → finish the thought
+- Does it state a conclusion? → downgrade to topic prompt
 - Does it contain a number that wasn't sourced from real data? → remove the number
 - Is it a complete sentence with subject + verb + qualifier? → it's a paragraph, rewrite
+- Is it technically accurate? → if unsure, rewrite to avoid the claim
 
 ---
 
@@ -49,6 +82,10 @@ If you can't tell whether something is a brief or an outline, ask: *would the wr
 3. **TLDR carries 2–3 topic pointers, not finished takeaways.** Outlines don't pre-write conclusions. The pointers name what the writer should address in the TLDR, not the takeaways themselves. See the TLDR section below for examples.
 4. **No clever H2 hooks.** Banned patterns: *"When X Stops Y for No Good Reason"*, *"X Is Not Y — Here's the Distinction That Matters"*, *"Why Most Teams End Up With Z"*, anything with "Here's", "Actually", or "Real" doing rhetorical work. Section headings describe content; they don't perform.
 5. **Hide domain context from the rendered output.** The metadata table never shows Domain or Domain Context rows. Domain context informs generation; it doesn't appear in the doc.
+6. **Promote distinct concepts to their own H2.** If a sub-bullet could be its own full section (e.g., "How skills differ from prompts and tools" inside "What Claude Skills Are"), it probably should be. Sub-bullets are *aspects of* a section's topic. If a bullet introduces a separate comparison, distinction, or concept the writer would explore in 200+ words, it belongs as a standalone H2.
+
+   **Test:** Read the sub-bullet aloud. If you find yourself thinking "actually, that's its own thing" — promote it. The good `terraform try()` outline does this: "try() vs Other Terraform Functions" is its own H2, not a bullet inside "What try() Does".
+7. **H2 titles must be specific to the article's topic, not generic.** "Define the task narrowly" is a generic verb phrase; "Define what your skill should do" is topic-specific. "Test on real prompts" gives no information; "Test the skill with real user prompts" tells the writer what to test and how. Use the article's noun ("skill", "DR strategy", "outline") in section titles, not abstract verbs alone.
 
 ---
 
@@ -168,19 +205,24 @@ These apply within whichever archetype you're using.
 **Rules:**
 - 2–3 short topic pointers, each ≤ 12 words
 - Pointers name *what the TLDR should address*, not the conclusions themselves
-- Pull from the article's structure: the central tension, the main shift the reader should make, the practical next step
+- **Must be specific to the article.** A pointer like "The shift from prompt engineering to reusable skills" is too abstract; the writer doesn't know what shift, or in what direction. Fix: "What changes between prompt engineering and shipping a reusable skill"
+- Pull from the article's structure: the central tension, the concrete distinction the reader needs, the practical next step they should take
 - One pointer per "thing the reader will walk away with"
 - Never write a finished takeaway sentence — that's the writer's job after drafting
 
-**Good TLDR pointers (topic pointers, not conclusions):**
-- The shift from "backups working" to "recovery being practiced"
-- Where most DR strategies break in the first hour
-- How to pick an approach without overspending on standby
+**Good TLDR pointers (specific, scoped, prompt-shaped):**
+- What a skill is composed of: SKILL.md, references/, scripts/, examples/
+- When to build a skill vs use a system prompt or one-off prompt
+- Common mistakes: vague descriptions, missing examples, over-engineering
+
+**Bad TLDR pointers (vague gestures, no scope):**
+- ❌ The shift from prompt engineering to reusable skills *(what shift? scope?)*
+- ❌ What separates a useful skill from an over-engineered one *(what separates them? give the writer a hook)*
+- ❌ Where new builders most often go wrong *(go wrong how? on what?)*
 
 **Bad TLDR pointers (these are conclusions, not pointers):**
 - ❌ Most DR strategies fail because backups aren't tested
 - ❌ Teams should run quarterly recovery drills
-- ❌ Pilot Light is the best middle-ground for cost vs RTO
 
 **Anti-pattern:** Writing the TLDR itself. The writer drafts the actual TLDR sentences *after* the article is complete; the outline just tells them what to point at.
 
@@ -192,7 +234,7 @@ These apply within whichever archetype you're using.
 - Open with the reader's lived frustration, not a definition or statistic
 - Specific scenario, not category
 - Close with scope: what this post covers and (implicitly) what it doesn't
-- 4–6 bullets, each ≤ 12 words
+- Typically 4–6 bullets (more if the introduction genuinely earns them; padding is worse than a short intro), each ≤ 12 words
 
 **Opening prompts that work:**
 - "[Specific failure scenario] — a recognizable moment for the reader"
@@ -213,7 +255,7 @@ These apply within whichever archetype you're using.
 **Purpose:** Name the failure modes the reader has seen but not articulated.
 
 **Rules:**
-- 4–6 failure modes, each as a short bullet
+- Typically 4–6 failure modes (more if the topic genuinely has them), each as a short bullet
 - Lead with the most counterintuitive one
 - Each bullet names the failure as a *topic*, not a conclusion
 - No invented frequencies ("most teams find...", "studies show...")
@@ -237,7 +279,7 @@ These apply within whichever archetype you're using.
 
 **Rules:**
 - H3 per strategy if more than 3
-- Each strategy: what / when / trade-off, in 3 short bullets max
+- Each strategy: what / when / trade-off — typically 3 short bullets, more if the strategy is multi-faceted
 - No invented RTO ranges, costs, or percentages
 - End with a comparison prompt (table or bulleted matrix) — *say "include a comparison"; don't write the comparison*
 
@@ -259,7 +301,7 @@ These apply within whichever archetype you're using.
 **Title patterns:** `"[Topic] in the Real World: Case Studies"`, `"When [X] Goes Wrong"`
 
 **Rules:**
-- 2–3 case studies, H3 per case
+- Typically 2–3 case studies (more if the topic has well-known public examples worth covering), H3 per case
 - Each case is 3–5 short bullet prompts — *never* a pre-written narrative
 - Bullets name *what to cover*, not the story itself
 - No invented company names, durations, or resource counts
@@ -299,7 +341,7 @@ These apply within whichever archetype you're using.
 
 **Per-step template:**
 - The H3 title is the action verb
-- 2–4 bullets, each a consideration or sub-task
+- Typically 2–4 bullets (more if the step has more sub-tasks), each a consideration or sub-task
 - No "what could go wrong" boxes — fold into a bullet if needed
 
 **Example:**
@@ -319,7 +361,7 @@ These apply within whichever archetype you're using.
 - Each capability connects to a problem named earlier in the outline
 - Reference real product features (from domain analysis) — never generic ("our platform helps you...")
 - No superlatives ("best", "most powerful")
-- Bullets: capability name → what it addresses → fit in workflow (3 bullets max per H3)
+- Bullets: capability name → what it addresses → fit in workflow (typically 3 bullets per H3, more if the capability is genuinely rich)
 
 **Anti-pattern:** Treating this section as a sales pitch. The product appears as a tool that fits a previously-named problem — not as the article's hero.
 
@@ -328,7 +370,7 @@ These apply within whichever archetype you're using.
 ### Conclusion *(used in How-to, Comparison, Listicle synthesis)*
 
 **Rules:**
-- 2–4 bullets, each ≤ 12 words
+- Typically 2–4 bullets (a short conclusion is fine; padding is worse), each ≤ 12 words
 - One bullet closes the loop on the introduction's pain
 - One bullet states a concrete next step the reader can take
 - *(Optional)* One bullet suggests evaluating `target_product` if set — non-pushy
@@ -338,28 +380,44 @@ These apply within whichever archetype you're using.
 
 ### FAQs
 
+FAQs serve two readers at once: the practitioner who finished the article and has follow-up questions, and the searcher who landed on this page via long-tail Google or AI search. Good FAQs answer both. **The outline only provides the questions — the writer drafts the answers.** Like every other section, FAQs are an outline, not a brief.
+
 **Rules:**
-- Exactly 5 questions
-- Topic-specific — never generic ("What is X?", "Why is X important?")
-- Questions reflect what a mid-senior practitioner would ask after reading
-- Each answer is a 1-bullet prompt: the *topic* of the answer, not the answer itself
-- At least one question addresses a common misconception
-- At least one is about a trade-off or cost
-- At least one is practical / how-to
+- **Questions only, no answers.** Use the `rules` field with a list of question strings, just like every other section. Do NOT pre-write answers — that turns the outline back into a brief.
+- **No fixed count.** Typically 5–8 questions, but the right number is the number of legitimate practitioner questions on this topic. If the topic has 7 real questions, use 7. If it has 4, use 4.
+- **Keywords must appear naturally across the question set.** The focus keyword and each secondary keyword should each appear in at least one question — paraphrased into something a real searcher would type, not keyword-stuffed. Across all questions combined, every supplied keyword should be covered.
+- **Topic-specific.** No generic framings like "What is X?" or "Why is X important?" — those are covered earlier in the article. FAQ questions are the *follow-ups*, not the basics.
+- **Concrete and action-oriented.** Practitioner questions usually start with "How do I…", "What's the difference between…", "Can I…", "Where do I…", "When should I…". Abstract framings ("How does Claude decide which skill to invoke") are weaker than concrete ones ("How do I know if my skill is triggering correctly?").
+- **Each question can be longer than 12 words** — the per-bullet ≤12-word rule applies to topic prompts in other sections, not to FAQ questions. A natural-sounding question takes the space it needs.
 
 **Format:**
-- Question as the bullet
-- Answer prompt as a sub-bullet or italic note: *"Topic: [brief direction]"*
+- Each question is one item in `rules`
+- No answer text, no "Topic:" prefix, no sub-bullets
 
-**Good question examples:**
-- How often should platform teams run disaster recovery drills?
-- Can we use one DR strategy across all our services?
-- What's the difference between disaster recovery and business continuity?
+**Good FAQ questions (concrete, action-oriented, keyword-incorporating):**
+- How do I add or install a Claude skill?
+- How do I know if my skill is triggering correctly?
+- What is the difference between a skill and a regular prompt?
+- How do Claude skills work in Claude Code?
+- What is the difference between Claude skills and MCP?
+- What are the best Claude skills to start with when building Claude skills for the first time?
+- Can I share Claude skills with my team or publicly?
+- Where can I find a Claude Skills guide or the official SKILL.md reference?
 
-**Bad question examples:**
+Note how these questions: (a) use natural phrasing a real user would type, (b) collectively cover all supplied keywords without stuffing, (c) ask the kinds of questions a practitioner has *after* reading the article.
+
+**Bad FAQ questions:**
 - ❌ What is disaster recovery? (definitional — covered earlier in the article)
 - ❌ Why is disaster recovery important? (lazy framing)
-- ❌ How do I get started? (vague)
+- ❌ How do I get started? (vague — get started with what?)
+- ❌ How does Claude decide which skill to invoke when multiple match? (overly abstract; few real users ask this)
+
+**Coverage check before finalizing FAQs:**
+- Does each user-supplied keyword (focus + each secondary) appear in at least one question?
+- At least one question covers installation / how-to-use (action-oriented)
+- At least one question covers a comparison or distinction the reader will have
+- At least one question covers sharing, deployment, or scale
+- No two questions cover the same ground
 
 ---
 
@@ -369,9 +427,13 @@ Before generating the DOCX, walk the whole outline and ask:
 
 1. **Could a writer publish this by adding transition words?** If yes → it's a brief, not an outline. Strip back.
 2. **Does every bullet have a subject + verb + object + qualifier?** If yes → too long, rewrite as a topic prompt.
-3. **Are there invented numbers anywhere?** If yes → remove or replace with "include credible benchmark".
-4. **Does the section order match the archetype?** If you forced a how-to template onto a listicle, restart.
-5. **Are H2 titles plain and descriptive?** If you wrote a clever hook, replace with a content label.
-6. **Did you include a `topic_summary` or Writer Directives box?** If yes → remove. Not part of the new format.
+3. **Could a writer guess what each bullet means in 3 different ways?** If yes → the bullet is too abstract. Name the actual thing (file names, components, concrete examples, technical terms).
+4. **Is every bullet a complete thought when read aloud?** Sentence fragments without meaning ("Who this guide is for: builders standardizing repeat tasks") must be finished.
+5. **Is every technical claim accurate?** Skills are packages, not folders. Claude reads SKILL.md, not the whole package eagerly. If unsure, rewrite to avoid the claim.
+6. **Are there invented numbers anywhere?** If yes → remove or replace with "include credible benchmark".
+7. **Does any sub-bullet feel like its own H2?** If yes → promote it. Aspect vs. distinct concept matters.
+8. **Are H2 titles specific to the article's topic, not generic verbs?** "Define the task narrowly" → "Define what your skill should do."
+9. **Does the section order match the archetype?** If you forced a how-to template onto a listicle, restart.
+10. **Did you include a `topic_summary` or Writer Directives box?** If yes → remove. Not part of the new format.
 
-If all 6 checks pass, generate the DOCX.
+If all 10 checks pass, generate the DOCX.
