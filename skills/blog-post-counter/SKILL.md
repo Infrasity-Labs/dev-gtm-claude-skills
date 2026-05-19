@@ -45,7 +45,7 @@ Scan the crawled pages for URL patterns that indicate a blog listing page. Commo
 - `/posts`
 - `/learn`
 
-Pick the one with the highest `url_rating` that is a **listing page** (not an individual post). If none are found in the first 100 results, do a second crawl without the `url_rating:desc` sort to surface more paths.
+Pick the one with the highest url_rating that appears to be a listing page (e.g., it has a shorter path like /blog/ rather than /blog/post-title). If none are found in the first 100 results, do a second crawl without the url_rating:desc sort to surface more paths.
 
 ### Step 4 — Count unique blog posts
 Call `Ahrefs:site-explorer-crawled-pages` again with:
@@ -66,7 +66,7 @@ Then deduplicate by applying ALL of the following exclusion rules:
 | Pagination pages (e.g. `/blog?page=2`, `/blog?e3085cf6_page=3`) | Not a post |
 | URLs with query params that are duplicates of a clean URL (e.g. `?ref=`, `?utm_source=`, `?query=`) | Duplicate |
 | RSS / Atom feeds (e.g. `/blog/rss.xml`, `/blog/feed`) | Not a post |
-| Any URL that is not a unique post path | Not a post |
+| Category, Tag, or Author pages (e.g. /blog/category/..., /blog/tag/..., /blog/author/...) | Not a post |
 
 Count what remains — these are unique blog posts.
 
