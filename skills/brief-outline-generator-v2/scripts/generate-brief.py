@@ -31,16 +31,26 @@ Config JSON shape:
       "subsections": [
         {"heading": "H3", "title": "...", "rules": [...], "subsections": []}
       ]
+    },
+    {
+      "heading": "H2",
+      "title": "FAQs",
+      "rules": [
+        "How do I install a Claude skill?",
+        "How is a Claude skill different from a regular prompt?"
+      ]
     }
   ]
 }
 
 Schema notes:
-- `topic_summary`, `directives`, and `visual` fields are no longer rendered.
-  If present in the config they are silently ignored — kept for backward
-  compatibility with old configs, but they produce nothing in the output.
+- `topic_summary`, `directives`, `visual`, and `faqs` fields are no longer
+  rendered. If present in the config they are silently ignored — kept for
+  backward compatibility with old configs, but they produce nothing.
 - `domain_context` is no longer rendered in the metadata table. The skill
   uses it upstream to inform generation, but it does not appear in the doc.
+- The FAQs section uses the same `rules` shape as every other section: a list
+  of question strings as topic prompts. The writer drafts the actual answers.
 """
 
 import argparse
@@ -430,7 +440,7 @@ def add_bullet(doc, text, num_id):
     return para
 
 
-# add_visual_note removed — `visual` field is no longer rendered.
+# add_visual_note and add_faq_item removed — `visual` and `faqs` fields are no longer rendered.
 
 
 # ─── Tables ───────────────────────────────────────────────────────────────────
@@ -565,9 +575,10 @@ def render_section(doc, section, bullet_num_id, force_h3=False):
     for sub in section.get('subsections', []):
         render_section(doc, sub, bullet_num_id, force_h3=True)
 
-    # NOTE: `topic_summary`, `directives`, and `visual` fields are intentionally
-    # ignored. Outlines don't carry pre-written abstracts, instruction boxes, or
-    # visual placeholders. If a config still includes them, they produce nothing.
+    # NOTE: `topic_summary`, `directives`, `visual`, and `faqs` fields are
+    # intentionally ignored. Outlines don't carry pre-written abstracts,
+    # instruction boxes, visual placeholders, or pre-written FAQ answers.
+    # If a config still includes them, they produce nothing.
 
 
 # ─── Main ─────────────────────────────────────────────────────────────────────

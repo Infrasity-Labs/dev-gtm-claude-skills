@@ -145,14 +145,20 @@ Use the section set for the archetype you chose in Step 4. **Do not force every 
 - ~~`topic_summary`~~ — removed. Outlines don't have abstracts.
 - ~~`directives`~~ — removed. The bullets themselves carry the direction.
 - ~~`visual`~~ — removed. If a visual matters, write it as a bullet prompt: *"Include a comparison table: dimension × tool"*.
+- ~~`faqs`~~ — removed. FAQs are questions only (in `rules`); the writer drafts answers.
 
 **Bullets in `rules` follow the hard rules in `section-rules.md`:**
 - ≤ 12 words each
+- Must be specific and a complete thought
 - No invented numbers
 - No conclusions — topic prompts only
 - No em-dash explanatory clauses
 
+**Length follows substance, not a fixed cap.** Use as many bullets as the section honestly needs — 2 if 2, 9 if 9. The "typical ranges" in `section-rules.md` are orientation, not limits. Padding to hit a target number is wrong; truncating to hit one is also wrong.
+
 **TLDR section:** include a TLDR heading with **2–3 short topic pointers** (each ≤ 12 words) that name what the writer should cover in the TLDR. Pointers are topics, not finished takeaways. Pull from the article's central tension, the main shift the reader should make, and the practical next step. See the TLDR section in `references/section-rules.md` for good/bad examples.
+
+**FAQs section:** Use the `rules` field with a list of question strings — questions only, no answers. The writer drafts the actual answers. Each question is one bullet. Focus on **how questions are framed**: concrete and action-oriented (`"How do I install a Claude skill?"`), not abstract (`"How does Claude decide which skill to invoke?"`). All user-supplied keywords (focus + each secondary) must appear naturally across the question set — paraphrased into something a real searcher would type, never keyword-stuffed. Typically 5–8 questions but no fixed cap. See the FAQs section in `section-rules.md` for examples.
 
 ---
 
@@ -161,13 +167,19 @@ Use the section set for the archetype you chose in Step 4. **Do not force every 
 Before assembling the config, walk the outline and verify (this is from `section-rules.md`):
 
 1. Could a writer publish this by adding transition words? → If yes, strip back.
-2. Does every bullet read as a topic prompt, not a sentence? → If no, rewrite.
-3. Any invented numbers? → Remove.
-4. Section order matches the archetype? → Verify.
-5. H2 titles are plain and descriptive (not clever hooks)? → Verify.
-6. No `topic_summary` or `directives` fields present? → Strip if present.
+2. Does every bullet (except FAQ questions) read as a topic prompt, not a sentence? → If no, rewrite.
+3. Could a writer guess each bullet's meaning in 3 different ways? → If yes, the bullet is too abstract. Name the actual thing (files, components, technical terms).
+4. Is every bullet a complete thought when read aloud? → If a bullet is a sentence fragment with no meaning ("Who this is for: builders doing X"), finish the thought.
+5. Is every technical claim accurate? → Skills are packages not folders; Claude reads SKILL.md, not the whole skill eagerly. If unsure, rewrite to avoid the claim.
+6. Any invented numbers? → Remove.
+7. Any sub-bullet that feels like its own H2? → Promote it.
+8. Are H2 titles specific to the article's topic (not generic verb phrases)? → "Define the task narrowly" → "Define what your skill should do."
+9. Section order matches the archetype? → Verify.
+10. No `topic_summary`, `directives`, or `faqs` fields present? → Strip if present. FAQ questions live in `rules` as flat bullets.
+11. Do all user-supplied keywords (focus + each secondary) appear naturally across the FAQ questions? → If any is missing, rewrite a question to incorporate it.
+12. Are FAQ questions concrete and action-oriented (`"How do I install..."`, `"What is the difference between..."`), not abstract (`"How does Claude decide..."`)? → Rewrite vague ones.
 
-If all 6 pass, proceed.
+If all 12 pass, proceed.
 
 ---
 
