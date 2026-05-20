@@ -84,6 +84,11 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | `{{EXEC_PARA_4}}` | Executive summary paragraph 4 |
 | `{{EXEC_BADGE_TEXT}}` | Summary badge text |
 | `{{COMP_TABLE_LABEL}}` | "X of Y" competitive position label |
+| `{{FASTEST_GROWING_COLOR}}` | CSS color for the fastest growing label |
+| `{{FASTEST_GROWING_LABEL}}` | Text label for the fastest growing domain |
+| `{{RANK_ABOVE}}` | Rank number of the competitor immediately above |
+| `{{STRAT_1_NUM_LABEL}}` | Label for strategy card 1 (e.g., "Close Gap") |
+| `{{COMP_DOMAIN_LIST}}` | Comma-separated list of all domains in the set |
 
 ---
 
@@ -268,7 +273,7 @@ body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;font-size:1
   <!-- HEADER -->
   <div class="header">
     <div class="header-logo"><span>✦ INFRASITY</span></div>
-    <h1>Q1 2026 <em>Strategic Performance</em></h1>
+    <h1>Strategic <em>Performance Report</em></h1>
     <p class="header-sub">Growth Journey &amp; Competitive Analysis: {{START_DATE}} → {{END_DATE}}</p>
   </div>
 

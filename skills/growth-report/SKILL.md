@@ -281,7 +281,7 @@ Then call `present_files` to deliver it to the user.
 |---|---|
 | Domain returns no data from bulk_traffic_estimation | Omit that domain from the competitive table; add a footnote |
 | Historical snapshot missing for START_DATE month | Use nearest available month; note actual date used in report footer |
-| `baseline_top3` is 0 (division by zero) | Set top3_growth_pct to "N/A" and skip the delta badge |
+| `baseline_top3` or `baseline_traffic` is 0 (division by zero) | Set the corresponding growth % to "N/A" and skip the delta badge |
 | `backlinks_bulk_ranks` 40204 error | Do not call this endpoint — it requires a separate subscription. Skip entirely. |
 | `ai_opt_llm_ment_agg_metrics` 40204 error | Do not include AI citations section. It is excluded from this skill. |
 
