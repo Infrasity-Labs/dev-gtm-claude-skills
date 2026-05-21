@@ -617,11 +617,11 @@ def generate_brief(cfg):
     ]
 
     meta_rows = [
-        {'key': 'Title',                           'value': cfg['title']},
-        {'key': 'URL Slug',                        'value': url_slug},
-        {'key': 'Word Count',                      'value': cfg['word_count_range']},
-        {'key': 'Target Intent',                   'value': cfg['target_intent']},
-        {'key': 'Target Audience',                 'value': audience},
+        {'key': 'Title',                            'value': cfg['title']},
+        {'key': 'URL Slug',                         'value': url_slug},
+        {'key': 'Word Count',                       'value': cfg['word_count_range']},
+        {'key': 'Target Intent',                    'value': cfg['target_intent']},
+        {'key': 'Target Audience',                  'value': audience},
         {'key': 'Meta Title (50-60 chars)',         'value': cfg.get('meta_title', '')},
         {'key': 'Meta Description (150-160 chars)', 'value': cfg.get('meta_description', '')},
     ]

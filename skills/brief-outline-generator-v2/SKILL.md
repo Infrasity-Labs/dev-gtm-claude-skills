@@ -78,14 +78,14 @@ Stop and report all validation errors before proceeding.
 
 Call `web_fetch` on `sitemap_url`.
 
-- **Readable XML** (response contains `<loc>` tags) → extract every `<loc>` URL. These are your site URLs.
+- **Readable XML** (response contains `<loc>` tags) → extract up to **20** page URLs. If the response is a Sitemap Index (URLs ending in `.xml`), fetch the most relevant sub-sitemap (e.g., `post-sitemap.xml`) to find actual page URLs.
 - **Binary / compressed** (unreadable response) → fall back: call `dataforseo:serp_organic_live_advanced` with `keyword="site:{domain_hostname}"` (e.g. `site:firefly.ai`) to get all indexed URLs.
 
-Cap at **20 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
+Cap at **10 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
 
 #### 3b — Read full page content
 
-For each URL from 3a, call `dataforseo:on_page_content_parsing` with `enable_javascript: true`.
+For each URL from 3a (cap at **5–10** URLs to ensure efficiency and avoid context limits), call `dataforseo:on_page_content_parsing` with `enable_javascript: true`.
 
 This returns fully rendered page text — headings, body copy, product descriptions, etc. Collect all output.
 
@@ -93,7 +93,7 @@ If a page fails (bot protection, timeout), skip it and continue — do not abort
 
 #### 3c — Extract meta title and description
 
-From the **homepage** content parsed in 3b, extract:
+From the **homepage** content (the URL matching `domain_url`) parsed in 3b, extract:
 - Page `<title>` → `meta_title`
 - `<meta name="description">` content → `meta_description`
 
