@@ -16,7 +16,7 @@ argument-hint: "[target_domain] [competitor1] [competitor2] ..."
 license: MIT
 metadata:
   author: Infrasity
-  version: "1.1.0"
+  version: "1.2.1"
   category: seo
 ---
 
@@ -41,11 +41,12 @@ ask for inputs one at a time:
 
 > To generate the report I need 4 things:
 >
-> 1. **Target domain** — the site to report on
-> 2. **Competitor domains** — up to 5–6 competitors
-> 3. **Date range** — start and end date for the 3-month window
-> 4. **Location** — country for search data
+> 1. **Target domain** — the site to report on, e.g. `firefly.ai`
+> 2. **Competitor domains** — up to 5–6 competitors, e.g. `spacelift.io, env0.com, terraform.io`
+> 3. **Date range** — start and end date for the 3-month window *(default: **Feb 20 → May 20, 2026**)*
+> 4. **Location** — country for search data *(default: **United States**)*
 >
+> Which of these do you want to change from the defaults?
 
 ---
 
@@ -95,9 +96,9 @@ This is the single most important parameter to get right — never omit it.
 
 Call `dataforseo_labs_google_historical_rank_overview` with:
 ```
-target:        TARGET_DOMAIN
-location_name: LOCATION
-language_code: en
+target:          TARGET_DOMAIN
+location_name:   LOCATION
+language_code:   en
 ignore_synonyms: false
 ```
 
@@ -121,9 +122,9 @@ bars in the report (typically 3–4 data points):
 
 Call `dataforseo_labs_google_domain_rank_overview` with:
 ```
-target:        TARGET_DOMAIN
-location_name: LOCATION
-language_code: en
+target:          TARGET_DOMAIN
+location_name:   LOCATION
+language_code:   en
 ignore_synonyms: false
 ```
 
@@ -154,12 +155,14 @@ Format rules:
 
 ## STEP 3 — Competitive Landscape
 
+### 3a — Current Traffic Snapshot
+
 Call `dataforseo_labs_bulk_traffic_estimation` with:
 ```
-targets:       [TARGET_DOMAIN, ...COMPETITORS]   ← all domains in a single API call
-location_name: LOCATION
-language_code: en
-item_types:    ["organic"]
+targets:         [TARGET_DOMAIN, ...COMPETITORS]   ← all domains in a single API call
+location_name:   LOCATION
+language_code:   en
+item_types:      ["organic"]
 ignore_synonyms: false
 ```
 
@@ -167,16 +170,52 @@ For each domain returned, extract: `etv`, `count`.
 
 Sort all domains **descending by etv**. Assign rank 1 = highest traffic.
 Determine:
-- `competitive_rank`   = rank position of TARGET_DOMAIN (1 = #1)
-- `total_domains`      = total count of all domains in the table
-- `domain_above`       = domain ranked one position above TARGET_DOMAIN (if any)
-- `domain_below`       = domain ranked one position below TARGET_DOMAIN (if any)
-- `gap_to_next_above`  = etv of domain_above − current_traffic (0 if TARGET_DOMAIN is #1)
+- `competitive_rank`     = rank position of TARGET_DOMAIN (1 = #1)
+- `total_domains`        = total count of all domains in the table
+- `domain_above`         = domain ranked one position above TARGET_DOMAIN (if any)
+- `domain_below`         = domain ranked one position below TARGET_DOMAIN (if any)
+- `gap_to_next_above`    = etv of domain_above − current_traffic (0 if TARGET_DOMAIN is #1)
 - `lead_over_next_below` = current_traffic − etv of domain_below (0 if TARGET_DOMAIN is last)
 
-**Trend assignment for the table:**
-- TARGET_DOMAIN: derive from `traffic_growth_pct` → `↑ +X%` (green) if positive, `↓ -X%` (red) if negative, `→ Stable` (gray) if within ±5%
-- Competitors: use `"Stable"` (gray) as default unless there is clear evidence of growth/decline
+### 3b — Competitor Trend Signals (Historical, Option 1)
+
+For **each competitor** (not the target domain), call `dataforseo_labs_google_historical_rank_overview`:
+```
+target:          COMPETITOR_DOMAIN
+location_name:   LOCATION
+language_code:   en
+ignore_synonyms: false
+```
+
+From the returned monthly array:
+- Find the snapshot closest to **START_DATE** → extract `comp_baseline_etv`
+- Find the snapshot closest to **END_DATE** → extract `comp_current_etv`
+- Calculate: `comp_trend_pct = ((comp_current_etv - comp_baseline_etv) / comp_baseline_etv) * 100`
+
+**Trend badge assignment rules (±5% stability threshold):**
+
+| Condition | Badge | CSS class |
+|---|---|---|
+| `comp_trend_pct > +5%` | `↑ +X.X%` | `trend-up` (green) |
+| `comp_trend_pct < -5%` | `↓ -X.X%` | `trend-down` (red) |
+| `-5% ≤ comp_trend_pct ≤ +5%` | `→ Stable (X.X%)` | `trend-stable` (gray) |
+
+**TARGET_DOMAIN trend for the competitive table** must also use the same START_DATE → END_DATE
+window for consistency. The historical data fetched in Step 1 already contains this:
+- `target_table_trend_pct = ((end_date_snapshot_etv - baseline_traffic) / baseline_traffic) * 100`
+
+Where `end_date_snapshot_etv` is the ETV from the Step 1 historical array snapshot closest to
+END_DATE (not `current_traffic` from Step 2, which is a live figure).
+
+Apply the same ±5% threshold rules to derive the target's trend badge.
+
+> ⚠️ `traffic_growth_pct` from Step 2 (baseline → live) is used for the timeline cards,
+> delta badges, and executive summary — but **NOT** for the competitive table trend column.
+> The competitive table trend column uses `target_table_trend_pct` (START_DATE → END_DATE)
+> for all domains including the target, ensuring a consistent apples-to-apples comparison.
+
+> ⚠️ Never default any competitor to "Stable" without running this calculation.
+> Every trend badge in the competitive table must be derived from real historical ETV data.
 
 ---
 
@@ -184,11 +223,11 @@ Determine:
 
 Call `dataforseo_labs_google_relevant_pages` with:
 ```
-target:        TARGET_DOMAIN
-location_name: LOCATION
-language_code: en
-order_by:      ["metrics.organic.etv,desc"]
-limit:         3
+target:          TARGET_DOMAIN
+location_name:   LOCATION
+language_code:   en
+order_by:        ["metrics.organic.etv,desc"]
+limit:           3
 ignore_synonyms: false
 ```
 
@@ -227,12 +266,13 @@ Format traffic_goal as e.g. `62,000+`. Round to nearest thousand for clean prese
 ## STEP 6 — Derive Strategic Priority Cards
 
 Always generate exactly 6 cards. Use actual data values in every description — no generic text.
+Reference competitor trend data from Step 3b to enrich card descriptions where relevant.
 
 | # | Card title formula | Content rule |
 |---|---|---|
-| 1 | "Close Gap to #[rank_above]" | Name domain_above, state gap_to_next_above as ETV, suggest content angle |
-| 2 | "Defend vs. #[rank_below_number]" | Name domain_below, state lead_over_next_below, advise on sustaining velocity |
-| 3 | Traffic recovery OR scale | If declined: "Reverse the [X]% Decline" with pos_4_10 count as pipeline. If grew: "Sustain [X]% Growth Trajectory" |
+| 1 | "Close Gap to #[rank_above]" | Name domain_above, state gap_to_next_above as ETV and its trend badge (growing/declining). If declining, frame as narrowing window opportunity. |
+| 2 | "Defend vs. / Watch [domain_below or fastest_growing_competitor]" | If a lower-ranked competitor is growing fast (>+20%), flag it as a rising threat. Otherwise name domain_below, state lead_over_next_below. |
+| 3 | Traffic recovery OR scale | If declined: "Reverse the [X]% Decline" with pos_4_10 count as pipeline. If grew: "Sustain [X]% Growth Trajectory" and note market context (e.g. if most competitors declined) |
 | 4 | "Scale Top Content Clusters" | Reference page_1 URL and its ETV; flag homepage concentration if true |
 | 5 | "Recover/Expand Keyword Coverage" | Use keywords_change as the specific number to recover or build on |
 | 6 | "Convert Pos 4–10 to Top 3" | Use current_pos_4_10 count; state that converting 20% would add ~N new top-3 rankings |
@@ -243,9 +283,7 @@ Always generate exactly 6 cards. Use actual data values in every description —
 
 Write naturally — no bullet points inside the paragraphs. All numbers must be real API values.
 
-- **Para 1:** Overall result. State traffic_growth_pct, competitive_rank of total_domains, whether
-  TARGET_DOMAIN is the fastest growing in the set (compare to competitors' trend badges).
-  Name the domains ranked immediately above and below with their ETVs.
+- **Para 1:** Overall result. State traffic_growth_pct, competitive_rank of total_domains. State the trend distribution of competitors (how many are growing, stable, or declining derived from Step 3b) and whether the target is the fastest growing. Name the domains ranked immediately above and below with their ETVs and trend directions.
 
 - **Para 2:** If `homepage_concentration = true`: flag that X% of traffic comes from one page,
   frame it as both a risk and an opportunity to diversify.
@@ -255,10 +293,22 @@ Write naturally — no bullet points inside the paragraphs. All numbers must be 
   state the specific number lost and the urgency to recapture. If positive, call it momentum.
 
 - **Para 4:** Q2 strategy. Name the specific gap to close (gap_to_next_above), the competitor
-  to chase (domain_above), and the recovery/scale action most impactful based on the data.
+  to chase (domain_above) and whether it is growing or declining. If domain_above is declining,
+  frame the opportunity as a narrowing window. Name the recovery/scale action most impactful
+  based on the data.
+
+**Fastest growing determination** — compare `target_table_trend_pct` against all competitors'
+`comp_trend_pct` values from Step 3b. If TARGET_DOMAIN has the highest trend percentage in the
+set, set `is_fastest_growing = true`. Use this in Para 1 and the summary badge.
 
 **Summary badge format:**
 `Rank #[competitive_rank] | [current_traffic_K]K Traffic | [traffic_growth_pct]% Growth | [current_top3] Top-3 Keywords | [Fastest Growing / Declining / Stable]`
+
+Where the last label is:
+- Fastest Growing if is_fastest_growing = true
+- Growing if traffic_growth_pct > 5% and not fastest growing
+- Declining if traffic_growth_pct < -5% and not fastest growing
+- Stable if -5% <= traffic_growth_pct <= +5% and not fastest growing
 
 ---
 
@@ -280,8 +330,10 @@ Then call `present_files` to deliver it to the user.
 | Situation | Action |
 |---|---|
 | Domain returns no data from bulk_traffic_estimation | Omit that domain from the competitive table; add a footnote |
-| Historical snapshot missing for START_DATE month | Use nearest available month; note actual date used in report footer |
-| `baseline_top3` or `baseline_traffic` is 0 (division by zero) | Set the corresponding growth % to "N/A" and skip the delta badge |
+| Historical snapshot missing for START_DATE or END_DATE month | Use nearest available month; note actual date used in report footer |
+| `baseline_traffic` is 0 (division by zero) | Set `traffic_growth_pct` to "N/A", skip all delta badges that depend on it, and note in the report footer that baseline data was unavailable for START_DATE |
+| `baseline_top3` is 0 (division by zero) | Set top3_growth_pct to "N/A" and skip the delta badge |
+| `comp_baseline_etv` is 0 (division by zero for competitor trend) | Mark that competitor as "N/A" in the trend column |
 | `backlinks_bulk_ranks` 40204 error | Do not call this endpoint — it requires a separate subscription. Skip entirely. |
 | `ai_opt_llm_ment_agg_metrics` 40204 error | Do not include AI citations section. It is excluded from this skill. |
 
@@ -294,6 +346,7 @@ Then call `present_files` to deliver it to the user.
 - ❌ **No `ignore_synonyms: true`** — always `false`, no exceptions
 - ❌ **No placeholder text** — every number in the HTML must come from a real API response
 - ❌ **No asking for inputs one at a time** — always collect all missing inputs in a single message
+- ❌ **No defaulting competitors to "Stable"** — always derive trend from historical ETV comparison
 
 ---
 
