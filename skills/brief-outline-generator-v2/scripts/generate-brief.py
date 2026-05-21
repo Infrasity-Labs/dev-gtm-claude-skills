@@ -19,6 +19,8 @@ Config JSON shape:
   "target_intent": "Informational",
   "target_product": "Firefly",               # optional
   "archetype": "how_to",                     # optional: listicle | comparison | how_to | concept
+  "meta_title": "Cloud Disaster Recovery: A Platform Team Guide",  # optional; fetched from URL
+  "meta_description": "Learn how platform teams implement cloud disaster recovery ...",  # optional
   "secondary_keywords": [
     {"keyword": "disaster recovery plan", "volume": "1,900"}
   ],
@@ -51,6 +53,13 @@ Schema notes:
   uses it upstream to inform generation, but it does not appear in the doc.
 - The FAQs section uses the same `rules` shape as every other section: a list
   of question strings as topic prompts. The writer drafts the actual answers.
+- The URL Slug in the metadata table is derived from `focus_keyword` (e.g.
+  `cloud disaster recovery` → `cloud-disaster-recovery`). The output filename
+  is derived from `title` instead — these are intentionally separate.
+- `meta_title` and `meta_description` are optional string fields. When present
+  they appear as "Meta Title (50-60 chars)" and "Meta Description (150-160 chars)"
+  rows in the metadata table, directly above the Keywords section. If absent,
+  the rows render as empty strings.
 """
 
 import argparse
@@ -593,7 +602,8 @@ def generate_brief(cfg):
     for w in warnings:
         print(f'⚠️  {w}')
 
-    slug      = to_slug(cfg['title'])
+    url_slug  = to_slug(cfg['focus_keyword'])   # shown in the metadata table
+    file_slug = to_slug(cfg['title'])           # used for the output filename
     audience  = infer_audience(cfg['title'], cfg['focus_keyword'])
     focus_vol = cfg.get('focus_keyword_volume') or 'N/A'
     archetype = cfg.get('archetype', '').strip() or 'unspecified'
@@ -607,11 +617,13 @@ def generate_brief(cfg):
     ]
 
     meta_rows = [
-        {'key': 'Title',           'value': cfg['title']},
-        {'key': 'URL Slug',        'value': slug},
-        {'key': 'Word Count',      'value': cfg['word_count_range']},
-        {'key': 'Target Intent',   'value': cfg['target_intent']},
-        {'key': 'Target Audience', 'value': audience},
+        {'key': 'Title',                            'value': cfg['title']},
+        {'key': 'URL Slug',                         'value': url_slug},
+        {'key': 'Word Count',                       'value': cfg['word_count_range']},
+        {'key': 'Target Intent',                    'value': cfg['target_intent']},
+        {'key': 'Target Audience',                  'value': audience},
+        {'key': 'Meta Title (50-60 chars)',         'value': cfg.get('meta_title', '')},
+        {'key': 'Meta Description (150-160 chars)', 'value': cfg.get('meta_description', '')},
     ]
 
     # ── Build document
@@ -660,7 +672,7 @@ def generate_brief(cfg):
     # Save — note: filename uses 'outline-' prefix (this is an outline generator).
     # Ensure the parent directory exists so the script works outside the sandboxed
     # Claude environment where /mnt/user-data/outputs/ is pre-created.
-    output_path = cfg.get('output_path') or f'/mnt/user-data/outputs/outline-{slug}.docx'
+    output_path = cfg.get('output_path') or f'/mnt/user-data/outputs/outline-{file_slug}.docx'
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     doc.save(output_path)
 
@@ -669,7 +681,8 @@ def generate_brief(cfg):
     )
     print(f'✅ Outline generated: {output_path}')
     print(f'   Archetype:     {archetype}')
-    print(f'   Slug:          {slug}')
+    print(f'   Slug (URL):    {url_slug}')
+    print(f'   Slug (file):   {file_slug}')
     print(f'   Audience:      {audience}')
     print(f'   Focus KW:      {cfg["focus_keyword"]} (vol: {focus_vol})')
     print(f'   Secondary KWs: {kw_summary or "none"}')

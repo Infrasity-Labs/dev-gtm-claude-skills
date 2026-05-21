@@ -29,7 +29,7 @@ Generates a content **outline** as a formatted `.docx` file. The output is a ske
 |---|---|---|
 | `title` | ✅ | Blog post title. Warn if > 70 chars. |
 | `focus_keyword` | ✅ | Primary keyword |
-| `domain_url` | ✅ | Client site, e.g. `https://firefly.ai` |
+| `sitemap_url` | ✅ | Full sitemap URL, e.g. `https://firefly.ai/sitemap.xml`. `domain_url` is derived from this automatically. |
 | `word_count_range` | ✅ | e.g. `1500-2000` |
 | `target_intent` | ✅ | `Informational`, `Commercial`, `Transactional`, or `Navigational` |
 | `target_product` | ⬜ | Product name — triggers a product integration section if provided |
@@ -43,9 +43,13 @@ Generates a content **outline** as a formatted `.docx` file. The output is a ske
 
 - `title`: non-empty; warn (don't block) if > 70 chars
 - `focus_keyword`: non-empty
-- `domain_url`: non-empty, starts with `http://` or `https://`
+- `sitemap_url`: non-empty, starts with `http://` or `https://` (accept any path — `.xml`, `.xml.gz`, or extensionless dynamic URLs are all valid)
 - `word_count_range`: two positive integers separated by `-` (e.g. `1500-2000`)
 - `target_intent`: one of `Informational`, `Commercial`, `Transactional`, `Navigational` (case-insensitive)
+
+Derive two values from `sitemap_url`:
+- `domain_url` — strip the path to get the origin, e.g. `https://firefly.ai/sitemap.xml` → `https://firefly.ai`. Used in the config JSON.
+- `domain_hostname` — strip the protocol too, e.g. `https://firefly.ai` → `firefly.ai`. Used in tool calls that require a bare hostname (e.g. `site:firefly.ai`).
 
 Stop and report all validation errors before proceeding.
 
@@ -66,13 +70,48 @@ Stop and report all validation errors before proceeding.
 
 ---
 
-### Step 3 — Run domain analysis
+### Step 3 — Domain analysis
 
-```bash
-python /path/to/skill/scripts/domain-analyzer.py --url {domain_url}
-```
+**DataForSEO tools are deferred — load them before calling.** Call `tool_search(query="on_page content parsing")` at the start of this step.
 
-Parse the JSON output. Use `domain_context` to inform generation (product name, key terms, audience). **Do not render `domain_context` in the output document.** If the script fails or returns `success: false`, set `domain_context` to `null` and continue.
+#### 3a — Discover site URLs
+
+Call `web_fetch` on `sitemap_url`.
+
+- **Readable XML** (response contains `<loc>` tags) → extract up to **20** page URLs. If the response is a Sitemap Index (URLs ending in `.xml`), fetch the most relevant sub-sitemap (e.g., `post-sitemap.xml`) to find actual page URLs.
+- **Binary / compressed** (unreadable response) → fall back: call `dataforseo:serp_organic_live_advanced` with `keyword="site:{domain_hostname}"` (e.g. `site:firefly.ai`) to get all indexed URLs.
+
+Cap at **10 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
+
+#### 3b — Read full page content
+
+For each URL from 3a (cap at **5–10** URLs to ensure efficiency and avoid context limits), call `dataforseo:on_page_content_parsing` with `enable_javascript: true`.
+
+This returns fully rendered page text — headings, body copy, product descriptions, etc. Collect all output.
+
+If a page fails (bot protection, timeout), skip it and continue — do not abort.
+
+#### 3c — Extract meta title and description
+
+From the **homepage** content (the URL matching `domain_url`) parsed in 3b, extract:
+- Page `<title>` → `meta_title`
+- `<meta name="description">` content → `meta_description`
+
+Surface character count advisories if outside recommended ranges:
+- `meta_title` outside 50–60 chars → *"Note: fetched meta title is N chars (recommended: 50–60)."*
+- `meta_description` outside 150–160 chars → *"Note: fetched meta description is N chars (recommended: 150–160)."*
+
+These are passed into the config as `meta_title` and `meta_description` and rendered in the metadata table.
+
+#### 3d — Compile domain_context
+
+From all parsed page content, extract and store:
+- Product name and core value proposition
+- Key technical terms and vocabulary used on the site
+- Target audience signals (roles, team types, use cases mentioned)
+- Existing content topics — used to avoid duplication in the outline
+
+Store as `domain_context`. **Do not render `domain_context` in the output document.** If all fetches fail, set `domain_context = null` and continue.
 
 ---
 
@@ -167,7 +206,7 @@ Use the section set for the archetype you chose in Step 4. **Do not force every 
 Before assembling the config, walk the outline and verify (this is from `section-rules.md`):
 
 1. Could a writer publish this by adding transition words? → If yes, strip back.
-2. Does every bullet (except FAQ questions) read as a topic prompt, not a sentence? → If no, rewrite.
+2. Does every bullet read as a topic prompt, not a sentence? (except FAQ questions, which are naturally full sentences) → If no, rewrite.
 3. Could a writer guess each bullet's meaning in 3 different ways? → If yes, the bullet is too abstract. Name the actual thing (files, components, technical terms).
 4. Is every bullet a complete thought when read aloud? → If a bullet is a sentence fragment with no meaning ("Who this is for: builders doing X"), finish the thought.
 5. Is every technical claim accurate? → Skills are packages not folders; Claude reads SKILL.md, not the whole skill eagerly. If unsure, rewrite to avoid the claim.
@@ -197,13 +236,21 @@ Write the complete config to `/home/claude/brief-config.json`:
   "target_intent": "...",
   "target_product": "...",
   "archetype": "how_to",
+  "meta_title": "...",
+  "meta_description": "...",
   "secondary_keywords": [
     { "keyword": "...", "volume": "N/A" }
   ],
-  "output_path": "/mnt/user-data/outputs/outline-{slug}.docx",
+  "output_path": "/mnt/user-data/outputs/outline-{file_slug}.docx",
   "outline": [ ... ]
 }
 ```
+
+**Slug note:** Two slugs are generated internally:
+- **URL Slug** (shown in the metadata table) — derived from `focus_keyword`, e.g. `"cloud disaster recovery"` → `cloud-disaster-recovery`.
+- **File slug** (used in the filename) — derived from `title`, e.g. `"How Do Platform Teams Implement Cloud Disaster Recovery"` → `outline-how-do-platform-teams-implement-cloud-disaster-recovery.docx`.
+
+The `output_path` in the config should reflect the title-based file slug.
 
 **Do not include `domain_context` in the config.** It informs generation upstream; it never appears in the rendered doc.
 
@@ -225,9 +272,10 @@ If the script exits non-zero, report the error from stdout/stderr and show the o
 
 Call `present_files` with the output path. Report:
 ```
-✅ Outline generated: outline-{slug}.docx
+✅ Outline generated: outline-{file_slug}.docx
    Archetype:     {archetype}
-   Slug:          {slug}
+   Slug (URL):    {url_slug}  (from focus keyword)
+   Slug (file):   {file_slug}  (from title)
    Audience:      {audience}
    Focus KW:      {focus_keyword} ({volume})
    Secondary KWs: {kw} ({vol}), ...
@@ -240,7 +288,7 @@ Call `present_files` with the output path. Report:
 
 The script produces a `.docx` with:
 
-1. **Metadata + keyword table** — 3 columns: Field | Value | USA Search Volume. Standard rows (Title, URL Slug, Word Count, Target Intent, Target Audience) span cols 2+3. Focus keyword and each secondary keyword get their own row with volume in col 3 (amber background). **Domain and Domain Context rows are NOT included in the table.**
+1. **Metadata + keyword table** — 3 columns: Field | Value | USA Search Volume. Standard rows (Title, URL Slug, Word Count, Target Intent, Target Audience, Meta Title (50-60 chars), Meta Description (150-160 chars)) span cols 2+3. **URL Slug is derived from `focus_keyword`, not the title.** Focus keyword and each secondary keyword get their own row with volume in col 3 (amber background). **Domain and Domain Context rows are NOT included in the table.**
 2. **H1 title**
 3. **Sections** — each `heading` field renders as `[H2]` or `[H3]` grey label prefix + heading text. `rules` render as bullet points. **No `topic_summary` block, no Writer Directives box** — those have been removed from the format.
 
@@ -250,5 +298,4 @@ The script produces a `.docx` with:
 
 - `references/section-rules.md` — Outline-first rules, archetypes, per-section rules, good/bad examples. **Read in Step 2 before doing anything else.**
 - `scripts/generate-brief.py` — The DOCX renderer. Always run this. Never reimplement it.
-- `scripts/domain-analyzer.py` — Domain fetcher. Run in Step 3.
 - `examples/` — Canonical good outlines, for **reference only**. Read these to calibrate bullet length, density, and tone — *not* to copy section structure, headings, or topics. The archetype rules in `references/section-rules.md` decide structure for the current topic. Never use an example outline as a template for the user's outline, even if the topic looks similar.
