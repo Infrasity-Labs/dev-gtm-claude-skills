@@ -6,7 +6,7 @@ description: >
   landscape, then outputs a polished dark-theme HTML report styled like an executive briefing.
   Use this skill whenever a user provides a target domain and a list of competitor URLs and asks
   for an SEO report, performance report, SEO analysis, competitive SEO comparison, traffic report,
-  ranking rank, or 3-month SEO summary. Also trigger when the user says "generate SEO report for
+  ranking report, or 3-month SEO summary. Also trigger when the user says "generate SEO report for
   X vs Y and Z", "create a performance report", "compare my SEO against competitors", or pastes a
   domain and asks how it's performing versus the market. Always use this skill for SEO report
   generation — do not attempt to build the report without following this structured data-fetch and
@@ -16,7 +16,7 @@ argument-hint: "[target_domain] [competitor1] [competitor2] ..."
 license: MIT
 metadata:
   author: Infrasity
-  version: "1.2.0"
+  version: "1.2.1"
   category: seo
 ---
 
@@ -200,7 +200,19 @@ From the returned monthly array:
 | `comp_trend_pct < -5%` | `↓ -X.X%` | `trend-down` (red) |
 | `-5% ≤ comp_trend_pct ≤ +5%` | `→ Stable (X.X%)` | `trend-stable` (gray) |
 
-Apply the same rule to **TARGET_DOMAIN** using `traffic_growth_pct`.
+**TARGET_DOMAIN trend for the competitive table** must also use the same START_DATE → END_DATE
+window for consistency. The historical data fetched in Step 1 already contains this:
+- `target_table_trend_pct = ((end_date_snapshot_etv - baseline_traffic) / baseline_traffic) * 100`
+
+Where `end_date_snapshot_etv` is the ETV from the Step 1 historical array snapshot closest to
+END_DATE (not `current_traffic` from Step 2, which is a live figure).
+
+Apply the same ±5% threshold rules to derive the target's trend badge.
+
+> ⚠️ `traffic_growth_pct` from Step 2 (baseline → live) is used for the timeline cards,
+> delta badges, and executive summary — but **NOT** for the competitive table trend column.
+> The competitive table trend column uses `target_table_trend_pct` (START_DATE → END_DATE)
+> for all domains including the target, ensuring a consistent apples-to-apples comparison.
 
 > ⚠️ Never default any competitor to "Stable" without running this calculation.
 > Every trend badge in the competitive table must be derived from real historical ETV data.
@@ -287,8 +299,17 @@ Write naturally — no bullet points inside the paragraphs. All numbers must be 
   frame the opportunity as a narrowing window. Name the recovery/scale action most impactful
   based on the data.
 
+**Fastest growing determination** — compare `target_table_trend_pct` against all competitors'
+`comp_trend_pct` values from Step 3b. If TARGET_DOMAIN has the highest trend percentage in the
+set, set `is_fastest_growing = true`. Use this in Para 1 and the summary badge.
+
 **Summary badge format:**
-`Rank #[competitive_rank] | [current_traffic_K]K Traffic | [traffic_growth_pct]% Growth | [current_top3] Top-3 Keywords | [#1 Fastest Growing / Declining / Stable]`
+`Rank #[competitive_rank] | [current_traffic_K]K Traffic | [traffic_growth_pct]% Growth | [current_top3] Top-3 Keywords | [Fastest Growing / Declining / Stable]`
+
+Where the last label is:
+- `Fastest Growing` if `is_fastest_growing = true`
+- `Declining` if `traffic_growth_pct < -5%` and not fastest growing
+- `Stable` if `-5% ≤ traffic_growth_pct ≤ +5%` and not fastest growing
 
 ---
 
@@ -311,6 +332,7 @@ Then call `present_files` to deliver it to the user.
 |---|---|
 | Domain returns no data from bulk_traffic_estimation | Omit that domain from the competitive table; add a footnote |
 | Historical snapshot missing for START_DATE or END_DATE month | Use nearest available month; note actual date used in report footer |
+| `baseline_traffic` is 0 (division by zero) | Set `traffic_growth_pct` to "N/A", skip all delta badges that depend on it, and note in the report footer that baseline data was unavailable for START_DATE |
 | `baseline_top3` is 0 (division by zero) | Set top3_growth_pct to "N/A" and skip the delta badge |
 | `comp_baseline_etv` is 0 (division by zero for competitor trend) | Mark that competitor as "N/A" in the trend column |
 | `backlinks_bulk_ranks` 40204 error | Do not call this endpoint — it requires a separate subscription. Skip entirely. |
