@@ -283,9 +283,7 @@ Reference competitor trend data from Step 3b to enrich card descriptions where r
 
 Write naturally — no bullet points inside the paragraphs. All numbers must be real API values.
 
-- **Para 1:** Overall result. State traffic_growth_pct, competitive_rank of total_domains. State how
-  many competitors are growing vs declining (derived from Step 3b trend data). Name the domains
-  ranked immediately above and below with their ETVs and trend directions.
+- **Para 1:** Overall result. State traffic_growth_pct, competitive_rank of total_domains. State the trend distribution of competitors (how many are growing, stable, or declining derived from Step 3b) and whether the target is the fastest growing. Name the domains ranked immediately above and below with their ETVs and trend directions.
 
 - **Para 2:** If `homepage_concentration = true`: flag that X% of traffic comes from one page,
   frame it as both a risk and an opportunity to diversify.
@@ -307,9 +305,10 @@ set, set `is_fastest_growing = true`. Use this in Para 1 and the summary badge.
 `Rank #[competitive_rank] | [current_traffic_K]K Traffic | [traffic_growth_pct]% Growth | [current_top3] Top-3 Keywords | [Fastest Growing / Declining / Stable]`
 
 Where the last label is:
-- `Fastest Growing` if `is_fastest_growing = true`
-- `Declining` if `traffic_growth_pct < -5%` and not fastest growing
-- `Stable` if `-5% ≤ traffic_growth_pct ≤ +5%` and not fastest growing
+- Fastest Growing if is_fastest_growing = true
+- Growing if traffic_growth_pct > 5% and not fastest growing
+- Declining if traffic_growth_pct < -5% and not fastest growing
+- Stable if -5% <= traffic_growth_pct <= +5% and not fastest growing
 
 ---
 
