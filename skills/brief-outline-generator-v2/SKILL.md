@@ -43,11 +43,13 @@ Generates a content **outline** as a formatted `.docx` file. The output is a ske
 
 - `title`: non-empty; warn (don't block) if > 70 chars
 - `focus_keyword`: non-empty
-- `sitemap_url`: non-empty, starts with `http://` or `https://`, ends with `.xml`
+- `sitemap_url`: non-empty, starts with `http://` or `https://` (accept any path — `.xml`, `.xml.gz`, or extensionless dynamic URLs are all valid)
 - `word_count_range`: two positive integers separated by `-` (e.g. `1500-2000`)
 - `target_intent`: one of `Informational`, `Commercial`, `Transactional`, `Navigational` (case-insensitive)
 
-Derive `domain_url` from `sitemap_url` by stripping the path — e.g. `https://firefly.ai/sitemap.xml` → `https://firefly.ai`. Use `domain_url` everywhere the config and output path require it.
+Derive two values from `sitemap_url`:
+- `domain_url` — strip the path to get the origin, e.g. `https://firefly.ai/sitemap.xml` → `https://firefly.ai`. Used in the config JSON.
+- `domain_hostname` — strip the protocol too, e.g. `https://firefly.ai` → `firefly.ai`. Used in tool calls that require a bare hostname (e.g. `site:firefly.ai`).
 
 Stop and report all validation errors before proceeding.
 
@@ -77,7 +79,7 @@ Stop and report all validation errors before proceeding.
 Call `web_fetch` on `sitemap_url`.
 
 - **Readable XML** (response contains `<loc>` tags) → extract every `<loc>` URL. These are your site URLs.
-- **Binary / compressed** (unreadable response) → fall back: call `dataforseo:serp_organic_live_advanced` with `keyword="site:{domain}"` (e.g. `site:firefly.ai`) to get all indexed URLs.
+- **Binary / compressed** (unreadable response) → fall back: call `dataforseo:serp_organic_live_advanced` with `keyword="site:{domain_hostname}"` (e.g. `site:firefly.ai`) to get all indexed URLs.
 
 Cap at **20 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
 
@@ -204,7 +206,7 @@ Use the section set for the archetype you chose in Step 4. **Do not force every 
 Before assembling the config, walk the outline and verify (this is from `section-rules.md`):
 
 1. Could a writer publish this by adding transition words? → If yes, strip back.
-2. Does every bullet read as a topic prompt, not a sentence? → If no, rewrite.
+2. Does every bullet read as a topic prompt, not a sentence? (except FAQ questions, which are naturally full sentences) → If no, rewrite.
 3. Could a writer guess each bullet's meaning in 3 different ways? → If yes, the bullet is too abstract. Name the actual thing (files, components, technical terms).
 4. Is every bullet a complete thought when read aloud? → If a bullet is a sentence fragment with no meaning ("Who this is for: builders doing X"), finish the thought.
 5. Is every technical claim accurate? → Skills are packages not folders; Claude reads SKILL.md, not the whole skill eagerly. If unsure, rewrite to avoid the claim.
@@ -239,7 +241,7 @@ Write the complete config to `/home/claude/brief-config.json`:
   "secondary_keywords": [
     { "keyword": "...", "volume": "N/A" }
   ],
-  "output_path": "/mnt/user-data/outputs/outline-{slug}.docx",
+  "output_path": "/mnt/user-data/outputs/outline-{file_slug}.docx",
   "outline": [ ... ]
 }
 ```
@@ -270,7 +272,7 @@ If the script exits non-zero, report the error from stdout/stderr and show the o
 
 Call `present_files` with the output path. Report:
 ```
-✅ Outline generated: outline-{slug}.docx
+✅ Outline generated: outline-{file_slug}.docx
    Archetype:     {archetype}
    Slug (URL):    {url_slug}  (from focus keyword)
    Slug (file):   {file_slug}  (from title)
