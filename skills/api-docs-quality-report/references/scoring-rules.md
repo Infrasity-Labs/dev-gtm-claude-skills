@@ -106,7 +106,7 @@ Evaluates whether the **HTTP error responses** are documented in the spec.
 
 | Status | Criteria |
 |---|---|
-| ✅ PASS | Documents `200`/`201` AND at least 4 of: `400`, `401`, `403`, `404`, `409`, `422` (if validation errors possible), `429`, `500`. Each error code has a description and ideally an error schema. |
+| ✅ PASS | Documents `200`/`201` AND all applicable error codes for the endpoint type (see table below). Each error code has a description and ideally an error schema. |
 | ⚠️ WARN | Documents `200`/`201` AND `422` only (FastAPI auto-generated). OR documents 2-3 error codes but misses important ones for the endpoint type. |
 | ❌ FAIL | Documents `200`/`201` only, with no error codes. OR documents only `200` (not even 422). |
 

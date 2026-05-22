@@ -53,7 +53,7 @@ Fetch `<docs_url>/llms.txt`.
 If found:
 - Extract every line matching the pattern `- [Page Title](URL): description`
 - Filter to API reference pages only — look for paths containing any of:
-  `api-reference`, `api-reference/`, `/api/`, `/endpoints/`, `/rest/`
+  `api-reference`, `api-reference/`, `/api/`, `/endpoints/`, `/rest/`, `/docs/`, `/reference/` or versioned paths (e.g., `/v1/`)
 - Exclude: overview/index pages (no HTTP method implied), SDK docs, CLI docs,
   Terraform docs, guides, quickstart pages
 - Store as `ENDPOINT_PAGES[]` — list of `{title, url, description}`
@@ -82,17 +82,18 @@ Report discovery summary:
 
 Before fetching individual pages, check if a standalone OpenAPI spec exists.
 
-Try these paths in order (stop at first success):
-1. `<docs_url>/openapi.json`
-2. `<docs_url>/openapi.yaml`
-3. `<docs_url>/api/openapi.json`
-4. Any URL referenced in llms.txt under "## OpenAPI Specs"
+Try these discovery methods in order (stop at first success):
+1. Inspect the `Link` HTTP header (RFC 8288) on the homepage or docs root for `rel="openapi"` or `rel="describedby"` — this is the standard discovery mechanism for API specifications
+2. `<docs_url>/openapi.json`
+3. `<docs_url>/openapi.yaml`
+4. `<docs_url>/api/openapi.json`
+5. Any URL referenced in llms.txt under "## OpenAPI Specs"
 
 **Result:**
 - If accessible: `SPEC_AVAILABLE = true`, store the URL
-- If 404 on all attempts: `SPEC_AVAILABLE = false`
+- If 404 on all attempts and no Link header found: `SPEC_AVAILABLE = false`
 
-A 404 spec is itself a **top-priority finding** — record it as Issue #1.
+A missing spec is itself a **top-priority finding** — record it as Issue #1.
 
 ---
 
@@ -196,7 +197,7 @@ Store as `SCORECARD[]`.
 Read `references/html-template.md` for the complete HTML structure, CSS variables,
 JavaScript, and all section markup.
 
-Substitute all `{{VARIABLE}}` placeholders with real audit data.
+Substitute all `{{VARIABLE}}` placeholders with real audit data, ensuring all values are HTML-escaped to prevent XSS.
 
 **Key variable map:**
 
