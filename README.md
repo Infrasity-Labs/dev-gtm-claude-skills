@@ -43,7 +43,7 @@ Dev-GTM-Claude-Skills is a collection of modular skills for Claude that automate
 - [Installation](#installation)
 - [Skills](#skills)
 - [Commands](#commands)
-- [Sample Output](#sample-output)
+- [Sample Outputs](#sample-outputs)
 - [Requirements](#requirements)
 - [Repository Structure](#repository-structure)
 - [Contributing](#contributing)
