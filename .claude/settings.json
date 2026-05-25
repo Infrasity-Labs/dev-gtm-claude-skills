@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dataforseo": {
+      "command": "npx",
+      "args": ["-y", "@dataforseo/mcp-server"],
+      "env": {
+        "DATAFORSEO_USERNAME": "team@infrasity.com",
+        "DATAFORSEO_PASSWORD": "945bbe90b03f3fd8"
+      }
+    }
+  }
+}
