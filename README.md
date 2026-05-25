@@ -173,7 +173,7 @@ Get your DataForSEO credentials at [dataforseo.com](https://dataforseo.com).
 </p>
 
 <p align="center">
-  <img src="./assets/growth-report-gif-cc.gif" width="100%" alt="Growth Report Claude Code"/>
+  <img src="./assets/growth-report-cc.gif" width="100%" alt="Growth Report Claude Code"/>
 </p>
 
 ---
