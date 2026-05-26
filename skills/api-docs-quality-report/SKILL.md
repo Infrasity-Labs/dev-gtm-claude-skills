@@ -1,5 +1,5 @@
 ---
-name: api-docs-audit
+name: api-docs-quality-report
 description: >
   Audits any API documentation site by crawling every endpoint page and scoring each one
   across 5 checks: description quality, OpenAPI spec presence, body param descriptions,
