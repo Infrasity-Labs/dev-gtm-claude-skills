@@ -40,7 +40,7 @@ Supports two modes:
 
 ### Step 2 — Resolve the sitemap URL (per domain)
 
-- If the user provides a **sitemap URL** directly → attempt to parse it in Step 3b. If the response is binary or unreadable, fall back to Step 3a (listing page scraping) — do not stop.
+- If the user provides a **sitemap URL** directly → attempt to parse it in Step 3a. If the response is binary or unreadable, fall back to Step 3b (listing page scraping) — do not stop.
 - If the user provides only a **domain or company name** → try these sitemap paths in order using `web_fetch`, stopping as soon as one returns readable XML:
   1. `https://<domain>/sitemap.xml`
   2. `https://<domain>/sitemap_index.xml` ← underscore
@@ -50,9 +50,9 @@ Supports two modes:
   6. `https://www.<domain>/sitemap-index.xml`
 
   Once readable XML is found, check what type it is before proceeding:
-  - **Flat sitemap** (contains `<url>` / `<loc>` entries directly) → parse it in Step 3b as-is. No child fetching needed.
-  - **Sitemap index** (contains `<sitemap>` entries pointing to child sitemaps) → fetch every child sitemap in Step 3b and union all `<loc>` URLs.
-  - If none of the 6 paths return readable XML → fall back to Step 3a (listing page scraping).
+  - **Flat sitemap** (contains <url> / <loc> entries directly) → parse it in Step 3a as-is. No child fetching needed.
+  - **Sitemap index** (contains <sitemap> entries pointing to child sitemaps) → fetch every child sitemap in Step 3a and union all <loc> URLs.
+  - If none of the 6 paths return readable XML → fall back to Step 3b (listing page scraping).
 
 ---
 
@@ -193,7 +193,7 @@ If the user provides multiple domains/companies **without** designating target v
 - **Sitemap is the authoritative source** — it lists every published URL. Use the targeted blog-path prompt to avoid summarization of large flat sitemaps.
 - **DataForSEO `relevant_pages` is a cross-check, not a last resort** — run it whenever DataForSEO is available, even if the sitemap already returned results. It catches posts missed by gzip sitemaps or JS-rendered listing pages and provides an independent floor count.
 - **Gzip-compressed / binary sitemaps** — try all 6 sitemap path variants before giving up. Different variants (e.g. `www.` prefix, `sitemap-index.xml` vs `sitemap_index.xml`) may be served uncompressed even when the primary path is gzip. Only fall to Step 3c after all 6 have failed.
-- **JS-rendered listing pages** — `web_fetch` cannot execute JavaScript. If a blog listing page returns no post links, it is JS-rendered. Skip to sitemap (Step 3b) or DataForSEO (Step 3c) rather than retrying the listing page with different prompts.
+- **JS-rendered listing pages** — web_fetch cannot execute JavaScript. If a blog listing page returns no post links, it is JS-rendered. Skip to sitemap (Step 3a) or DataForSEO (Step 3c) rather than retrying the listing page with different prompts.
 - If a site has multiple blog sections (e.g. `/blog/` and `/insights/`), report each separately and sum for the total.
 - In competitor comparison mode, process all domains before presenting output — do not show partial results mid-way.
 - Do not mention internal tool names to the user — just present results cleanly.
