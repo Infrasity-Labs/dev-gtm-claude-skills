@@ -78,14 +78,14 @@ Stop and report all validation errors before proceeding.
 
 Call `web_fetch` on `sitemap_url`.
 
-- **Readable XML** (response contains `<loc>` tags) → extract up to **20** page URLs. If the response is a Sitemap Index (URLs ending in `.xml`), fetch the most relevant sub-sitemap (e.g., `post-sitemap.xml`) to find actual page URLs.
+- **Readable XML** (response contains `<loc>` tags) → extract every `<loc>` URL. These are your site URLs.
 - **Binary / compressed** (unreadable response) → fall back: call `dataforseo:serp_organic_live_advanced` with `keyword="site:{domain_hostname}"` (e.g. `site:firefly.ai`) to get all indexed URLs.
 
-Cap at **10 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
+Cap at **20 URLs**. If more exist, prioritise: homepage → product/use-case pages → blog/resource pages.
 
 #### 3b — Read full page content
 
-For each URL from 3a (cap at **5–10** URLs to ensure efficiency and avoid context limits), call `dataforseo:on_page_content_parsing` with `enable_javascript: true`.
+For each URL from 3a, call `dataforseo:on_page_content_parsing` with `enable_javascript: true`.
 
 This returns fully rendered page text — headings, body copy, product descriptions, etc. Collect all output.
 
@@ -93,7 +93,7 @@ If a page fails (bot protection, timeout), skip it and continue — do not abort
 
 #### 3c — Extract meta title and description
 
-From the **homepage** content (the URL matching `domain_url`) parsed in 3b, extract:
+From the **homepage** content parsed in 3b, extract:
 - Page `<title>` → `meta_title`
 - `<meta name="description">` content → `meta_description`
 
@@ -132,15 +132,16 @@ If multiple seem to fit, use the defaults from `section-rules.md`. If still uncl
 
 ### Step 5 — Generate keyword volumes
 
-Fetch USA monthly search volumes for the focus keyword and each secondary keyword from Ahrefs.
+Fetch USA monthly search volumes for the focus keyword and each secondary keyword using DataForSEO.
 
-**Critical: Ahrefs tools are deferred — you must load them before calling them.**
+**DataForSEO tools are deferred — load them before calling.**
 
-1. Call `tool_search(query="keyword search volume Ahrefs")` to load the Ahrefs keyword tools. Do NOT skip this step. The tools won't appear in your tool list until you load them.
-2. For each keyword (focus + secondaries), call `Ahrefs:keywords-explorer-volume-by-country` with `keyword=<the keyword>` and `limit=1`. The response contains a `countries` array; take the `volume` field where `country == "us"`.
-3. Format each volume as a thousands-separated string (e.g. `3400` → `"3,400"`). Volumes under 1,000 stay as plain digits (e.g. `"500"`, `"30"`). Volume of `0` should be rendered as `"0"`, not `"N/A"` — it's a real datapoint.
-4. If a specific keyword call fails or returns no data, set that keyword's volume to `"N/A"` and continue. Don't abort the whole run.
-5. If `tool_search` returns no Ahrefs tools at all (the connector isn't installed in this session), set every volume to `"N/A"` and surface a one-line warning to the user: *"Ahrefs connector not available — keyword volumes set to N/A."*
+1. Call `tool_search(query="keyword search volume google ads")` to load the DataForSEO keyword tools.
+2. Call `dataforseo:kw_data_google_ads_search_volume` with the full list of keywords (focus + all secondaries) in a single call. Use `location_code` for the USA (`2840`).
+3. From the response, extract the `search_volume` field for each keyword.
+4. Format each volume as a thousands-separated string (e.g. `3400` → `"3,400"`). Volumes under 1,000 stay as plain digits (e.g. `"500"`, `"30"`). Volume of `0` should be rendered as `"0"`, not `"N/A"` — it's a real datapoint.
+5. If a keyword returns no data, set its volume to `"N/A"` and continue. Don't abort the whole run.
+6. If `tool_search` returns no DataForSEO tools (connector not installed), set every volume to `"N/A"` and surface a one-line warning: *"DataForSEO connector not available — keyword volumes set to N/A."*
 
 **Never omit the volume field on any keyword.** Every row must have one.
 
