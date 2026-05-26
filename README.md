@@ -159,11 +159,11 @@ Get your DataForSEO credentials at [dataforseo.com](https://dataforseo.com).
 
 | Command | Description |
 |---|---|
-| `/dev-gtm docs-auditor <docs-url>` | Run the full 33-check developer docs audit and return a scored report. |
-| `/dev-gtm api-docs-quality-report <docs-url>` | Crawl every endpoint page and score each across 5 quality checks. |
-| `/growth-report <target> vs <competitors>` | Generate a 3-month SEO performance HTML report with traffic, keywords, and competitive positioning. |
-| `/blog-post-counter <domain>` | Count unique blog posts for one domain, or compare a target vs competitors. |
-| `/brief-outline-generator-v2 <topic>` | Generate an SEO content outline and export it as a formatted `.docx`. |
+| `/dev-gtm docs-audit <docs-url>` | Run the full 33-check developer docs audit and return a scored report. |
+| `/dev-gtm api-audit <docs-url>` | Crawl every endpoint page and score each across 5 quality checks. |
+| `/dev-gtm growth-report <target> vs <competitors>` | Generate a 3-month SEO performance HTML report with traffic, keywords, and competitive positioning. |
+| `/dev-gtm blog-count <domain>` | Count unique blog posts for one domain, or compare a target vs competitors. |
+| `/dev-gtm brief-outline <topic>` | Generate an SEO content outline and export it as a formatted `.docx`. |
 
 ---
 ## Sample Outputs
