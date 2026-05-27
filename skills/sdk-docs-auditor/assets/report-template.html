@@ -320,7 +320,6 @@ sections.forEach(sec=>{
 });
 // totals row
 const totalRow = document.createElement('tr');
-const avgScore = Math.round(sections.reduce((a,s)=>a+s.score,0)/sections.length);
 totalRow.innerHTML=`
   <td>Total / Average</td>
   <td style="text-align:left!important">—</td>

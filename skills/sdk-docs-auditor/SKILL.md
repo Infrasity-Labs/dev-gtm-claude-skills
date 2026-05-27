@@ -256,7 +256,7 @@ Fill these placeholders:
       "name": "Installation Guide",
       "rating": "Good",
       "score": 74,
-      "strengths": ["string", ...],
+      "strengths": ["string"],
       "gaps": [
         {
           "text": "Description of the gap",
