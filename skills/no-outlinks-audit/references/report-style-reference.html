@@ -11,7 +11,7 @@
   DESIGN REFERENCE, Dead-End Pages / No Outgoing Internal Links Audit Report
   ══════════════════════════════════════════════════════════════════════
   This file is the single source of truth for every report generated
-  by the orphan-pages-internal-linking-opportunities skill.
+  by the no-outlinks-audit skill.
 
   HOW TO USE THIS FILE
   ────────────────────
@@ -419,8 +419,8 @@ const CC = {
 };
 
 // D2. DATA ARRAY
-// Each object = one orphan page.
-// url     , full URL of orphan
+// Each object = one dead-end page.
+// url     , full URL of dead-end page
 // title   , display title
 // kw      , top keyword string (or "")
 // tr      , monthly traffic integer, or null
@@ -443,7 +443,7 @@ const D = [
       { from: "How Do You Get Karma on Reddit", fromUrl: "https://www.example.com/blog/how-do-you-get-karma-on-reddit", anchor: "karma farming vs building real credibility", place: "After the section on karma-earning tactics, as a cautionary contrast" }
     ]
   }
-  // … all other orphan objects
+  // … all other dead-end objects
 ];
 
 // D3. SIDEBAR + SECTION BUILDER, copy verbatim
@@ -473,7 +473,7 @@ clusters.forEach(cl => {
 
   items.forEach(b => {
     const domain = new URL(b.url).hostname.replace('www.','');
-    const slug   = b.url.split('/blog/')[1] || b.url;
+    const slug   = new URL(b.url).pathname.replace(/^\//, '');
     const cc     = CC[b.cluster] || 'c-other';
     let trHtml;
     if (b.tr===null||b.tr===undefined) trHtml='<span class="kw-traffic">, </span>';
@@ -483,12 +483,12 @@ clusters.forEach(cl => {
 
     const sugsHtml = b.s.map((s,i) => {
       const sDomain = new URL(s.fromUrl).hostname.replace('www.','');
-      const sSlug   = s.fromUrl.split('/blog/')[1] || s.fromUrl;
+      const sSlug   = new URL(s.fromUrl).pathname.replace(/^\//, '');
       return `<div class="sug-cell">
         <div class="sug-num">Suggestion ${i+1}</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Link To</div>
         <div class="sug-from-title">${s.from}</div>
-        <a class="sug-from-url" href="${s.fromUrl}" target="_blank">${sDomain}/blog/${sSlug}</a>
+        <a class="sug-from-url" href="${s.fromUrl}" target="_blank">${sDomain}/${sSlug}</a>
         <div class="sug-divider"></div>
         <div class="sug-anchor-label">Anchor Text</div>
         <div class="sug-anchor">"${s.anchor}"</div>
@@ -509,7 +509,7 @@ clusters.forEach(cl => {
       <div class="blog-header" onclick="this.closest('.blog-card').classList.toggle('open')">
         <div class="blog-title-col">
           <div class="blog-name">${b.title}</div>
-          <a class="blog-url" href="${b.url}" target="_blank" onclick="event.stopPropagation()">${domain}/blog/${slug}</a>
+          <a class="blog-url" href="${b.url}" target="_blank" onclick="event.stopPropagation()">${domain}/${slug}</a>
         </div>
         <div class="blog-kw-col">
           <span class="kw-pill">${b.kw||', '}</span>

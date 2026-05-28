@@ -188,10 +188,13 @@ def get_outgoing_links(url):
         return None  # Fetch failed — flag for manual review
 
     # Extract all paths pointing to the same domain
+    # Extract both absolute domain links and relative paths starting with /
+    # (excluding protocol-relative links starting with //)
     raw = re.findall(
-        rf'(?:https?://)?(?:www\.)?{re.escape(domain)}(/[^\s"\'\\),\]]+)',
+        rf'(?:(?:https?://)?(?:www\\.)?{re.escape(domain)}|(?<!/))/(?!/)([^\\s\"\\\'\\\\),\\]]+)',
         data
     )
+    raw = ['/' + r for r in raw]
 
     clean = set()
     for l in raw:
@@ -287,7 +290,7 @@ def get_outgoing_links(url):
     if not content:
         content = html
 
-    hrefs = re.findall(r'<a\s+[^>]*href=["\']([^"\'\ ]+)["\']', content, re.IGNORECASE)
+    hrefs = re.findall(r'<a\\s+[^>]*href\\s*=\\s*["\']([^"\'\\ ]+)["\']', content, re.IGNORECASE)
 
     clean = set()
     for href in hrefs:
