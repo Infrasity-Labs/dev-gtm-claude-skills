@@ -41,6 +41,8 @@ Run the following curl commands using `bash_tool`. Use `-L` to follow redirects,
 
 ```bash
 DOMAIN="<normalised-domain>"
+# Ensure files exist to prevent "No such file or directory" errors if curl fails
+touch /tmp/robots.txt /tmp/llms.txt /tmp/llms-full.txt
 
 # Fetch robots.txt
 curl -L -s -o /tmp/robots.txt -w "%{http_code}" --max-time 10 "https://$DOMAIN/robots.txt" > /tmp/robots_status.txt
@@ -71,12 +73,17 @@ Interpret the HTTP status codes:
 After the curl commands complete, read the saved files:
 
 ```bash
-cat /tmp/robots.txt
-cat /tmp/llms.txt
-# For llms-full.txt, show first 200 lines only to avoid flooding context:
-head -200 /tmp/llms-full.txt
-wc -l /tmp/llms-full.txt   # get total line count
-wc -c /tmp/llms-full.txt   # get total byte size
+if [ "$(cat /tmp/robots_status.txt)" = "200" ]; then
+  cat /tmp/robots.txt
+fi
+if [ "$(cat /tmp/llms_status.txt)" = "200" ]; then
+  cat /tmp/llms.txt
+fi
+if [ "$(cat /tmp/llms_full_status.txt)" = "200" ]; then
+  head -200 /tmp/llms-full.txt
+  wc -l /tmp/llms-full.txt   # get total line count
+  wc -c /tmp/llms-full.txt   # get total byte size
+fi
 ```
 
 **Case A — Both `llms.txt` (200) AND `llms-full.txt` (200)**
