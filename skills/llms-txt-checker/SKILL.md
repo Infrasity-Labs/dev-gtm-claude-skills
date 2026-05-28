@@ -1,65 +1,104 @@
 ---
 name: llms-txt-checker
 description: >
-  Checks whether a documentation site properly surfaces llms.txt and llms-full.txt for AI agents.
-  Use this skill whenever a user provides a URL and wants to know if llms.txt or llms-full.txt is
+  Audits any domain's AI-readiness by using curl to directly probe robots.txt, llms.txt, and
+  llms-full.txt, then scores each file against a structured checklist and delivers a formatted
+  report with pass/warn/fail findings and actionable fixes.
+  Use this skill whenever a user provides a domain or URL and wants to know if llms.txt or llms-full.txt is
   available, discoverable, or properly structured. Trigger on phrases like "check llms.txt for",
   "does this site have llms.txt", "find llms.txt", "check llms for this url", "audit llms.txt",
-  "is llms-full.txt available", or any time a user shares a docs URL and wants AI-readiness checked.
+  "is llms-full.txt available", or any time a user shares a domain/docs URL and wants AI-readiness checked.
   Also trigger when the user wants to verify GEO/AEO readiness of a documentation site.
 ---
 
 # LLMs.txt Checker Skill
 
-Check whether a given documentation URL properly surfaces `llms.txt` and `llms-full.txt` for AI agents, then audit the content for structural completeness.
+Audits any domain's AI-readiness by using `curl` to directly probe `robots.txt`, `llms.txt`, and `llms-full.txt`, then scores each file against a structured checklist and delivers a formatted report with pass/warn/fail findings and actionable fixes.
+
+The user provides **only a domain** (e.g. `anthropic.com` or `docs.example.com`). Claude uses `bash_tool` with `curl` commands to directly probe the domain — no guessing, no page-scraping required.
 
 ---
 
 ## How it works
 
-The core insight (learned from real behavior): Claude's fetch tool only allows fetching URLs that have either been **directly provided by the user** or have **appeared in a prior fetch/search result**. This means:
+Instead of relying on web_fetch and hoping links surface organically, this skill uses **curl via bash_tool** to directly request the well-known paths for `robots.txt`, `llms.txt`, and `llms-full.txt`. This is reliable, fast, and works regardless of how the site is built.
 
-- `llms.txt` must be discoverable from the provided URL (linked in page content, footer, `.md` response, or page metadata)
-- `llms-full.txt` must be discoverable from either the page OR from within `llms.txt` itself
-- If neither surfaces organically, Claude cannot fetch them — and that itself is the finding
+The curl commands follow HTTP redirects, capture response codes, and save content to temp files for auditing.
 
 ---
 
 ## Step-by-Step Workflow
 
-### Step 1: Fetch the provided URL
+### Step 1: Normalise the domain
 
-Fetch the user-provided URL with `html_extraction_method: markdown`. Look for any of the following signals that surface `llms.txt`:
-
-- Direct link in footer (e.g. `LLM usage: llms.txt`)
-- Blockquote or banner at top of page (e.g. `Fetch the complete documentation index at: https://...llms.txt`)
-- `<meta>` tags or HTTP headers referencing llms.txt
-- `.md` version of the page (try appending `.md` to the URL) — Mintlify and some other platforms serve a markdown version that includes the llms.txt pointer in a blockquote at the top
-- Sitemap or robots.txt link (only if URL surfaces organically)
-
-**If the fetch is blocked by robots.txt**: Note this clearly — it means the site is actively disallowing crawlers, which is itself a GEO/AEO red flag. Tell the user.
+Take the user-provided input and strip any trailing slashes, `http://`, `https://`, or path segments to get a clean base domain (e.g. `docs.anthropic.com`). If the user provides a full URL like `https://docs.anthropic.com/en/home`, extract just `docs.anthropic.com`.
 
 ---
 
-### Step 2: Determine what surfaced
+### Step 2: Fetch all three files via curl
 
-**Case A — Both `llms.txt` AND `llms-full.txt` surfaced**
-- Fetch both files completely
-- Proceed to the Audit Checklist (Step 3)
+Run the following curl commands using `bash_tool`. Use `-L` to follow redirects, `-s` for silent mode, `-o` to save content, `-w` to capture HTTP status codes, and a reasonable timeout (`--max-time 10`).
 
-**Case B — Only `llms.txt` surfaced**
-- Fetch `llms.txt` completely
-- Scan its content for any mention of `llms-full.txt` (look in "Documentation Sets", links, or any section listing companion files)
-- If found → fetch `llms-full.txt` and proceed to the Audit Checklist (Step 3)
-- If not found → report that `llms-full.txt` is not referenced anywhere, and proceed to audit `llms.txt` alone
+```bash
+DOMAIN="<normalised-domain>"
 
-**Case C — Neither surfaced**
-- Do not attempt to guess or construct the URL
+# Fetch robots.txt
+curl -L -s -o /tmp/robots.txt -w "%{http_code}" --max-time 10 "https://$DOMAIN/robots.txt" > /tmp/robots_status.txt
+
+# Fetch llms.txt
+curl -L -s -o /tmp/llms.txt -w "%{http_code}" --max-time 10 "https://$DOMAIN/llms.txt" > /tmp/llms_status.txt
+
+# Fetch llms-full.txt
+curl -L -s -o /tmp/llms-full.txt -w "%{http_code}" --max-time 10 "https://$DOMAIN/llms-full.txt" > /tmp/llms_full_status.txt
+
+# Print status codes and file sizes for inspection
+echo "robots.txt: $(cat /tmp/robots_status.txt) | $(wc -c < /tmp/robots.txt) bytes"
+echo "llms.txt:   $(cat /tmp/llms_status.txt) | $(wc -c < /tmp/llms.txt) bytes"
+echo "llms-full.txt: $(cat /tmp/llms_full_status.txt) | $(wc -c < /tmp/llms-full.txt) bytes"
+```
+
+Interpret the HTTP status codes:
+- **200** → file exists, read and audit the content
+- **301/302** → followed automatically by `-L`; final destination counts
+- **404** → file does not exist at this path
+- **403/429/5xx** → server-side block or error; note it explicitly
+- **000** → connection failed (domain unreachable or timeout)
+
+---
+
+### Step 3: Read and classify results
+
+After the curl commands complete, read the saved files:
+
+```bash
+cat /tmp/robots.txt
+cat /tmp/llms.txt
+# For llms-full.txt, show first 200 lines only to avoid flooding context:
+head -200 /tmp/llms-full.txt
+wc -l /tmp/llms-full.txt   # get total line count
+wc -c /tmp/llms-full.txt   # get total byte size
+```
+
+**Case A — Both `llms.txt` (200) AND `llms-full.txt` (200)**
+- Both files fetched successfully; proceed to the Audit Checklist (Step 4)
+
+**Case B — Only `llms.txt` (200), `llms-full.txt` returned 404**
+- Audit `llms.txt`
+- Scan its content for any internal reference to `llms-full.txt` (it may be hosted at a non-standard path)
+- If a custom path is found → curl that path and audit it
+- If not found → report `llms-full.txt` as absent and not referenced
+
+**Case C — `llms.txt` returned 404**
+- Report that neither file is present at the standard paths
+- Note whether `robots.txt` gave any hints (some sites reference llms.txt inside robots.txt)
 - Report clearly to the user (see Response Templates section below)
 
+**robots.txt (always check regardless of Case)**
+- Even if `llms.txt` is missing, always read and audit `robots.txt` for AI-access signals
+
 ---
 
-### Step 3: Audit the files
+### Step 4: Audit the files
 
 #### `llms.txt` Audit
 
@@ -106,7 +145,7 @@ If robots.txt was surfaced during the process:
 
 ---
 
-### Step 4: Deliver the report
+### Step 5: Deliver the report
 
 Structure the output as:
 
