@@ -43,7 +43,7 @@ If found:
 If llms.txt is unavailable or returns no useful URLs, run a bash curl command to fetch the sitemap:
 
 ```bash
-curl -s <docs_url>/sitemap.xml | grep -oP '(?<=<loc>)[^<]+'
+curl -s <docs_url>/sitemap.xml | python3 -c "import sys, re; print('\n'.join(re.findall(r'<loc>(.*?)</loc>', sys.stdin.read())))"
 ```
 
 If the sitemap returns URLs:
@@ -59,7 +59,7 @@ Also check for a sitemap index (multiple sitemaps) by looking for `<sitemapindex
 If both llms.txt and sitemap.xml fail, fetch the docs homepage (`<docs_url>`) and extract all links from the nav sidebar or sitemap structure, filtering using the same keyword list.
 - Note in the report: "Discovery method: homepage nav crawl (llms.txt and sitemap.xml unavailable)"
 
-### 1b. Identify section mapping
+### 1d. Identify section mapping
 
 From the discovered pages, identify which pages map to the six audit targets:
 
@@ -91,15 +91,15 @@ Use this pattern for each page URL:
 
 ```bash
 curl -s "https://docs.example.com/sdk/some-page" -L | python3 -c "
-import sys, re
+import sys, re, html
 content = sys.stdin.read()
 content = re.sub(r'<script[^>]*>.*?</script>', '', content, flags=re.DOTALL)
 content = re.sub(r'<style[^>]*>.*?</style>', '', content, flags=re.DOTALL)
 text = re.sub(r'<[^>]+>', ' ', content)
+text = html.unescape(text)
 text = re.sub(r'\s+', ' ', text).strip()
 print(text[:6000])
 "
-```
 
 Batch multiple pages in a single bash call using a loop to minimise round-trips:
 
@@ -107,11 +107,12 @@ Batch multiple pages in a single bash call using a loop to minimise round-trips:
 for page in installation quick-start error-handling troubleshooting examples best-practices overview api-reference; do
   echo "=== PAGE: $page ==="
   curl -s "https://docs.example.com/sdk/$page" -L | python3 -c "
-import sys, re
+import sys, re, html
 content = sys.stdin.read()
 content = re.sub(r'<script[^>]*>.*?</script>', '', content, flags=re.DOTALL)
 content = re.sub(r'<style[^>]*>.*?</style>', '', content, flags=re.DOTALL)
 text = re.sub(r'<[^>]+>', ' ', content)
+text = html.unescape(text)
 text = re.sub(r'\s+', ' ', text).strip()
 print(text[:6000])
 "
