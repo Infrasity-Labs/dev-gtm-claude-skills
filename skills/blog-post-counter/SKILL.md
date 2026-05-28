@@ -34,10 +34,10 @@ If no sitemap is in robots.txt, try these fallbacks in order:
 Fetch the sitemap and count URLs that are blog posts. Use this bash pattern:
 
 ```bash
-curl -sL "https://example.com/sitemap.xml" \
+curl -sL -A "Mozilla/5.0" "https://example.com/sitemap.xml" \
   | grep -o '<loc>[^<]*</loc>' \
   | grep -iE '/blog/|/posts?/|/articles?/|/news/' \
-  | grep -v -E '^<loc>https://[^/]+/blog/?</loc>$' \  # exclude index page
+  | grep -v -E '^<loc>https://[^/]+/blog/?</loc>$' \
   | wc -l
 ```
 
@@ -45,7 +45,7 @@ curl -sL "https://example.com/sitemap.xml" \
 
 **Sitemap index handling:** If the sitemap is an index (contains `<sitemap>` tags rather than `<url>` tags), extract the sub-sitemap URLs and fetch the blog-specific one:
 ```bash
-curl -sL "https://example.com/sitemap-index.xml" \
+curl -sL -A "Mozilla/5.0" "https://example.com/sitemap-index.xml" \
   | grep -o '<loc>[^<]*</loc>' \
   | grep -i 'blog'
 # Then fetch that sub-sitemap and count
