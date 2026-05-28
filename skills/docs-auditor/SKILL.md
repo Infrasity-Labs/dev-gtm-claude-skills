@@ -170,17 +170,22 @@ Final score = sum across all 7 categories, rounded to nearest integer out of 100
 
 ## Step 3 — Render the Report
 
-Render the audit as a visual widget using the `show_widget` tool (call `read_me` first with
-`["mockup", "data_viz"]`). The widget must include:
+Generate a standalone HTML report file:
 
-1. **Score hero** — large score out of 100, domain name, pass/warn/fail summary counts
-2. **Legend** — green dot = Pass, amber dot = Warn, red dot = Fail
-3. **Category sections** — one block per category with:
-   - Category name and score (e.g. "3/5")
-   - Pill badges: "X pass", "X warn", "X fail"
-   - Each check row with icon (✓ / ! / ✗), label, and a short evidence note
-
-See `references/widget-template.md` for the full HTML/CSS template to use.
+- Use the HTML/CSS/JS template in `references/widget-template.md` as the design reference.
+- Write the completed report to a file named `{domain}-docs-audit.html` in the current working
+  directory (e.g. `supabase-docs-audit.html`).
+- The report must include:
+  1. **Score hero** — large score out of 100, domain name, pass/warn/fail summary counts
+  2. **Legend** — green dot = Pass, amber dot = Warn, red dot = Fail
+  3. **Category sections** — one block per category with:
+     - Category name and score (e.g. "3/5")
+     - Pill badges: "X pass", "X warn", "X fail"
+     - Each check row with icon (✓ / ! / ✗), label, and a short evidence note
+- Substitute all audit data (score, counts, category scores, check statuses, evidence notes)
+  directly into the template — do not leave any placeholder values unfilled.
+- The file must be fully self-contained (no external dependencies) so it opens correctly in
+  any browser without a server.
 
 ---
 

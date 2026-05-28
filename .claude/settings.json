@@ -7,6 +7,21 @@
         "DATAFORSEO_USERNAME": "YOUR_DATAFORSEO_USERNAME",
         "DATAFORSEO_PASSWORD": "YOUR_DATAFORSEO_PASSWORD"
       }
+    },
+    "Ahrefs": {
+      "command": "npx",
+      "args": ["-y", "ahrefs-mcp"],
+      "env": {
+        "AHREFS_API_KEY": "YOUR_API_KEY"
+      }
     }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(curl*)",
+      "Bash(python3*)",
+      "Bash(grep*)",
+      "Bash(gunzip*)"
+    ]
   }
 }
