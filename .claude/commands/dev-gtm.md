@@ -9,6 +9,10 @@ Route to the correct skill based on the subcommand:
 - **`blog-count <company or domain>`** — Invoke the `blog-post-counter` skill. Pass the company name or domain.
 - **`brief-outline <keyword or title>`** — Invoke the `brief-outline-generator` skill. Pass the keyword or blog title.
 - **`growth-report <target_domain> [competitor1] [competitor2] ...`** — Invoke the `growth-report` skill. Pass the target domain and any competitor domains.
+- **`llms-check <domain>`** — Invoke the `llms-txt-checker` skill. Pass the domain to audit for AI-readiness (robots.txt, llms.txt, llms-full.txt).
+- **`orphan-pages <domain>`** — Invoke the `orphan-pages-internal-linking-opportunities` skill. Pass the domain to find orphan pages with zero incoming internal links.
+- **`dead-end-pages <domain>`** — Invoke the `dead-end-pages-interlinking-opportunities` skill. Pass the domain to find dead-end pages with zero outgoing internal links.
+- **`sdk-audit <url>`** — Invoke the `sdk-docs-auditor` skill. Pass the URL as the SDK docs site to audit.
 
 If no subcommand is given or the subcommand is unrecognised, display this help:
 
@@ -20,4 +24,8 @@ Available commands:
   /dev-gtm blog-count <company or domain>           Count blog posts for any company
   /dev-gtm brief-outline <keyword or title>         Generate SEO content outline as .docx
   /dev-gtm growth-report <domain> [competitors...]  3-month SEO performance report
+  /dev-gtm llms-check <domain>                      Audit AI-readiness — robots.txt, llms.txt, llms-full.txt
+  /dev-gtm orphan-pages <domain>                    Find pages with zero incoming internal links
+  /dev-gtm dead-end-pages <domain>                  Find pages with zero outgoing internal links
+  /dev-gtm sdk-audit <url>                          Audit SDK docs — scored HTML report
 ```
