@@ -9,7 +9,7 @@ Produces a comprehensive, cross-referenced audit of any SDK documentation site w
 
 ## What this skill does
 
-1. Discovers all SDK pages via `llms.txt` first, falling back to homepage nav crawl
+1. Discovers all SDK pages via `llms.txt` first, falling back to `sitemap.xml` (using curl), then homepage nav crawl
 2. Fetches and reads every relevant SDK page
 3. Audits six fixed sections: Installation, Quick Start, Error Handling, Troubleshooting, Examples, Best Practices
 4. Cross-references every gap across ALL other SDK pages — never flag something as missing if it exists elsewhere
@@ -20,9 +20,15 @@ Produces a comprehensive, cross-referenced audit of any SDK documentation site w
 
 ## Step 1 — Discover all SDK pages
 
-### 1a. Try llms.txt first
+Use a three-tier discovery strategy, trying each method in order until one succeeds.
 
-Fetch `<docs_url>/llms.txt`.
+### 1a. Try llms.txt first (preferred)
+
+Run a bash curl command to fetch llms.txt:
+
+```bash
+curl -s <docs_url>/llms.txt
+```
 
 If found:
 - Extract every URL from lines matching the pattern `- [Page Title](URL): description`
@@ -30,13 +36,28 @@ If found:
   `sdk`, `installation`, `quickstart`, `quick-start`, `error`, `troubleshoot`, `example`, `best-practice`, `getting-started`, `reference`, `api-reference`, `overview`, `client`, `service`, `memory`, `search`, `worker`, `job`, `policy`, `agent`, `team`
 - Exclude: marketing pages, changelog, blog, legal, community/forum pages
 - Store as `SDK_PAGES[]` — list of `{title, url, description}`
+- Note in the report: "Discovery method: llms.txt"
 
-If not found or returns an error:
-- Fetch the docs homepage (`<docs_url>`)
-- Extract all links from the nav sidebar or sitemap structure
+### 1b. Fallback — Try sitemap.xml
+
+If llms.txt is unavailable or returns no useful URLs, run a bash curl command to fetch the sitemap:
+
+```bash
+curl -s <docs_url>/sitemap.xml | grep -oP '(?<=<loc>)[^<]+'
+```
+
+If the sitemap returns URLs:
+- Parse every `<loc>` entry to get the full URL list
 - Filter using the same keyword list above
-- Extract all SDK-relevant page URLs from the nav structure
-- Note in the report that llms.txt was unavailable and nav crawl was used instead
+- Store as `SDK_PAGES[]` — list of `{title, url}`
+- Note in the report: "Discovery method: sitemap.xml — N total URLs found, M SDK-relevant kept"
+
+Also check for a sitemap index (multiple sitemaps) by looking for `<sitemapindex>` in the response. If found, curl each child sitemap and aggregate all URLs before filtering.
+
+### 1c. Final fallback — Homepage nav crawl
+
+If both llms.txt and sitemap.xml fail, fetch the docs homepage (`<docs_url>`) and extract all links from the nav sidebar or sitemap structure, filtering using the same keyword list.
+- Note in the report: "Discovery method: homepage nav crawl (llms.txt and sitemap.xml unavailable)"
 
 ### 1b. Identify section mapping
 
@@ -58,13 +79,45 @@ If a dedicated page is not found for a section, note it — the absence itself i
 All discovered pages form the **page corpus** used for both section auditing and cross-referencing.
 
 Report discovery summary:
-> Found N pages. llms.txt [found / not found — used nav crawl]. Fetching now...
+> Found N pages via [sitemap.xml / llms.txt / nav crawl]. Kept M SDK-relevant pages. Fetching now...
 
 ---
 
 ## Step 2 — Fetch every page in the corpus
 
-Fetch each page using `web_fetch`. Store the full text content for cross-referencing.
+Fetch each page using `bash_tool` with `curl`, stripping HTML tags via Python to extract plain text. Do NOT use `web_fetch` for corpus pages — curl is more reliable and avoids permission errors.
+
+Use this pattern for each page URL:
+
+```bash
+curl -s "https://docs.example.com/sdk/some-page" -L | python3 -c "
+import sys, re
+content = sys.stdin.read()
+content = re.sub(r'<script[^>]*>.*?</script>', '', content, flags=re.DOTALL)
+content = re.sub(r'<style[^>]*>.*?</style>', '', content, flags=re.DOTALL)
+text = re.sub(r'<[^>]+>', ' ', content)
+text = re.sub(r'\s+', ' ', text).strip()
+print(text[:6000])
+"
+```
+
+Batch multiple pages in a single bash call using a loop to minimise round-trips:
+
+```bash
+for page in installation quick-start error-handling troubleshooting examples best-practices overview api-reference; do
+  echo "=== PAGE: $page ==="
+  curl -s "https://docs.example.com/sdk/$page" -L | python3 -c "
+import sys, re
+content = sys.stdin.read()
+content = re.sub(r'<script[^>]*>.*?</script>', '', content, flags=re.DOTALL)
+content = re.sub(r'<style[^>]*>.*?</style>', '', content, flags=re.DOTALL)
+text = re.sub(r'<[^>]+>', ' ', content)
+text = re.sub(r'\s+', ' ', text).strip()
+print(text[:6000])
+"
+  echo ""
+done
+```
 
 For large sites (>30 pages), prioritise in this order:
 1. The six target section pages (installation, quick-start, error-handling, troubleshooting, examples, best-practices)
@@ -256,7 +309,7 @@ Fill these placeholders:
       "name": "Installation Guide",
       "rating": "Good",
       "score": 74,
-      "strengths": ["string"],
+      "strengths": ["string", ...],
       "gaps": [
         {
           "text": "Description of the gap",
