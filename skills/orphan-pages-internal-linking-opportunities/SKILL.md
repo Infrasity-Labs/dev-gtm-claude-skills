@@ -120,7 +120,7 @@ specified (e.g. /blog/, /articles/, /resources/):
 ```bash
 curl -s https://example.com/sitemap.xml \
   | grep -oP '(?<=<loc>)[^<]+' \
-  | grep "example.com/blog/"
+  | grep "example.com/blog/" > urls.txt
 ```
 
 SUBSTEP 1D — VALIDATE EACH URL (OPTIONAL BUT RECOMMENDED)

@@ -154,6 +154,7 @@ select{background:var(--bg);border:1px solid var(--border);color:var(--text2);fo
 .sug-anchor{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--pass);background:var(--pass-bg);border:1px solid var(--pass-border);padding:3px 8px;border-radius:3px;display:inline-block;margin-bottom:10px}
 .sug-place-label{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
 .sug-place{font-size:12px;color:var(--text2);line-height:1.5}
+.sug-copy{font-size:12px;color:var(--text2);line-height:1.6;background:var(--surface2);border-left:2px solid var(--accent2);padding:7px 10px;border-radius:0 3px 3px 0;margin-top:2px}.sug-copy a{color:var(--accent2);text-decoration:underline}
 
 /* CLUSTER TAGS */
 .ctag{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 9px;border-radius:3px;border:1px solid;white-space:nowrap;letter-spacing:.03em}
@@ -430,9 +431,9 @@ const D = [
     tr: null,
     cluster: "Reddit Marketing",
     s: [
-      { from: "Dos and Don'ts of Reddit Marketing", fromUrl: "https://www.example.com/blog/reddit-marketing", anchor: "karma farming on Reddit", place: "In the 'What to Avoid' section when listing bad Reddit practices" },
-      { from: "Best Subreddits to Join for B2B SaaS Startups", fromUrl: "https://www.example.com/blog/best-subreddits", anchor: "karma vs credibility debate", place: "In the intro when explaining why genuine participation matters" },
-      { from: "How Do You Get Karma on Reddit", fromUrl: "https://www.example.com/blog/how-do-you-get-karma-on-reddit", anchor: "karma farming vs building real credibility", place: "After the section on karma-earning tactics, as a cautionary contrast" }
+      { from: "Dos and Don'ts of Reddit Marketing", fromUrl: "https://www.example.com/blog/reddit-marketing", anchor: "karma farming on Reddit", place: "In the 'What to Avoid' section when listing bad Reddit practices", copy: "Avoid <a href=\"https://www.example.com/blog/reddit-karma-farming-vs-credibility\">karma farming on Reddit</a>, which signals inauthenticity to both algorithms and community moderators." },
+      { from: "Best Subreddits to Join for B2B SaaS Startups", fromUrl: "https://www.example.com/blog/best-subreddits", anchor: "karma vs credibility debate", place: "In the intro when explaining why genuine participation matters", copy: "Before diving into subreddit selection, it helps to understand the <a href=\"https://www.example.com/blog/reddit-karma-farming-vs-credibility\">karma vs credibility debate</a> so your team starts with the right priorities." },
+      { from: "How Do You Get Karma on Reddit", fromUrl: "https://www.example.com/blog/how-do-you-get-karma-on-reddit", anchor: "karma farming vs building real credibility", place: "After the section on karma-earning tactics, as a cautionary contrast", copy: "If you want lasting influence rather than just a high score, read our take on <a href=\"https://www.example.com/blog/reddit-karma-farming-vs-credibility\">karma farming vs building real credibility</a> before optimising for points alone." }
     ]
   }
   // … all other orphan objects
@@ -465,7 +466,7 @@ clusters.forEach(cl => {
 
   items.forEach(b => {
     const domain = new URL(b.url).hostname.replace('www.','');
-    const slug   = b.url.split('/blog/')[1] || b.url;
+    const slug   = new URL(b.url).pathname.replace(/^\//, '');
     const cc     = CC[b.cluster] || 'c-other';
     let trHtml;
     if (b.tr===null||b.tr===undefined) trHtml='<span class="kw-traffic">—</span>';
@@ -475,30 +476,31 @@ clusters.forEach(cl => {
 
     const sugsHtml = b.s.map((s,i) => {
       const sDomain = new URL(s.fromUrl).hostname.replace('www.','');
-      const sSlug   = s.fromUrl.split('/blog/')[1] || s.fromUrl;
+      const sPath   = new URL(s.fromUrl).pathname.replace(/^\//, '');
       return `<div class="sug-cell">
         <div class="sug-num">Suggestion ${i+1}</div>
         <div class="sug-from-title">${s.from}</div>
-        <a class="sug-from-url" href="${s.fromUrl}" target="_blank">${sDomain}/blog/${sSlug}</a>
+        <a class="sug-from-url" href="${s.fromUrl}" target="_blank">${sDomain}/${sPath}</a>
         <div class="sug-divider"></div>
         <div class="sug-anchor-label">Anchor Text</div>
         <div class="sug-anchor">"${s.anchor}"</div>
         <div class="sug-place-label">Where to Place</div>
         <div class="sug-place">${s.place}</div>
+        ${s.copy ? `<div class="sug-divider"></div><div class="sug-anchor-label">Suggested Context Copy</div><div class="sug-copy">${s.copy}</div>` : ''}
       </div>`;
     }).join('');
 
     const card = document.createElement('div');
     card.className = 'blog-card';
     card.dataset.title   = b.title.toLowerCase();
-    card.dataset.url     = slug.toLowerCase();
+    card.dataset.url     = new URL(b.url).pathname.toLowerCase();
     card.dataset.kw      = (b.kw||'').toLowerCase();
     card.dataset.cluster = b.cluster;
     card.innerHTML = `
       <div class="blog-header" onclick="this.closest('.blog-card').classList.toggle('open')">
         <div class="blog-title-col">
           <div class="blog-name">${b.title}</div>
-          <a class="blog-url" href="${b.url}" target="_blank" onclick="event.stopPropagation()">${domain}/blog/${slug}</a>
+          <a class="blog-url" href="${b.url}" target="_blank" onclick="event.stopPropagation()">${domain}/${slug}</a>
         </div>
         <div class="blog-kw-col">
           <span class="kw-pill">${b.kw||'—'}</span>
