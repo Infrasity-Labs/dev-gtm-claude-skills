@@ -45,8 +45,8 @@ Or describe what you want. Claude activates the skill when you provide a domain 
 4. Zip this skill folder and upload it:
 
 ```bash
-cd dev-gtm-claude-skills/skills
-zip -r orphan-pages-internal-linking-opportunities.zip orphan-pages-internal-linking-opportunities/
+cd dev-gtm-claude-skills/skills/orphan-pages-internal-linking-opportunities
+zip -r ../orphan-pages-internal-linking-opportunities.zip .
 ```
 
 Upload `orphan-pages-internal-linking-opportunities.zip` and toggle it on.

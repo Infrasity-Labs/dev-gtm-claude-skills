@@ -42,14 +42,14 @@ Or just describe what you want. Claude activates the skill when you provide a do
 3. Click **+** → **Create skill** → **Upload a skill**
 4. Zip this skill folder and upload it:
 
-```bash
-cd dev-gtm-claude-skills/skills
+cd dev-gtm-claude-skills/skills/llms-txt-checker
+zip -r ../llms-txt-checker.zip .
 zip -r llms-txt-checker.zip llms-txt-checker/
 ```
 
 Upload `llms-txt-checker.zip` and toggle it on.
 
-> **Egress network required.** This skill uses `curl` to make outbound HTTP requests. In Claude Code, go to **Settings → Capabilities** and enable **Allow Egress Network**. In Claude Web, code execution (enabled above) covers this automatically.
+> **Egress network required.** This skill uses curl to make outbound HTTP requests. In Claude Code, you will be prompted to allow network access when the skill runs. In Claude Web, code execution (enabled above) covers this automatically.
 
 ---
 

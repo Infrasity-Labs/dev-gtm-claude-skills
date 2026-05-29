@@ -48,8 +48,8 @@ Or describe what you want. Claude activates the skill when you provide a domain 
 3. Click **+** → **Create skill** → **Upload a skill**
 4. Zip this skill folder and upload it:
 
-```bash
-cd dev-gtm-claude-skills/skills
+cd dev-gtm-claude-skills/skills/no-outlinks-audit
+zip -r ../no-outlinks-audit.zip .
 zip -r no-outlinks-audit.zip no-outlinks-audit/
 ```
 
@@ -178,8 +178,8 @@ const D = [
     cluster: "Documentation",
     s: [
       {
-        from:    "OAuth 2.0 Implementation Guide",             // target page to link OUT TO
-        fromUrl: "https://www.example.com/blog/oauth2-guide", // target page URL
+        to:      "OAuth 2.0 Implementation Guide",             // target page to link OUT TO
+        toUrl:   "https://www.example.com/blog/oauth2-guide", // target page URL
         anchor:  "oauth 2.0 implementation",                  // target page's top keyword
         place:   "After the section on token storage, when recommending secure auth flows",
         copy:    "For teams implementing token-based auth, a detailed look at <a href=\"https://www.example.com/blog/oauth2-guide\">oauth 2.0 implementation</a> covers the handshake flow and scoping patterns that prevent over-permissioning."
@@ -190,7 +190,7 @@ const D = [
 ];
 ```
 
-> **Note on field direction:** `from` and `fromUrl` refer to the **target page** (the page being linked TO from the dead-end page), not the dead-end page itself. The suggestion card labels this "Link To", not "Source Page".
+> **Note on field direction:** to and toUrl refer to the **target page** (the page being linked TO from the dead-end page), not the dead-end page itself. The suggestion card labels this "Link To", not "Source Page".
 
 ---
 
