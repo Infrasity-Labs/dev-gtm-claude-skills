@@ -144,10 +144,14 @@ Get your DataForSEO credentials at [dataforseo.com](https://dataforseo.com).
 | Skill | What it does | Example trigger |
 |---|---|---|
 | [`docs-auditor`](./skills/docs-auditor/) | Audits any developer docs site across 33 checks in 7 categories. Produces a scored report (out of 100) with pass/warn/fail per check covering AI discoverability, structure, content quality, SEO, and more. | `Audit the docs at docs.stripe.com` |
+| [`sdk-docs-auditor`](./skills/sdk-docs-auditor/) | Audits any SDK documentation site across 6 sections (Installation, Quick Start, Error Handling, Troubleshooting, Examples, Best Practices). Scores each section 0–100, cross-references gaps across all pages, and produces a downloadable HTML report. | `Audit the SDK docs at docs.example.com` |
 | [`api-docs-quality-report`](./skills/api-docs-quality-report/) | Crawls every endpoint page of an API docs site and scores each across 5 checks. Outputs an interactive HTML report with a scorecard, pattern analysis, top issues, and per-endpoint fix guidance. | `Run an API docs audit on docs.company.com` |
 | [`growth-report`](./skills/growth-report/) | Generates a 3-month SEO performance HTML report for any domain vs competitors using live DataForSEO data: traffic trends, keyword rankings, top content clusters, and competitive positioning. | `Generate SEO report for firefly.ai vs spacelift.io, env0.com` |
 | [`blog-post-counter`](./skills/blog-post-counter/) | Counts unique blog posts for any company from its sitemap or listing page. Supports competitor comparison mode to benchmark content volume across multiple domains. | `How many blogs does hackmamba.io have vs infrasity.com` |
 | [`brief-outline-generator-v2`](./skills/brief-outline-generator-v2/) | Generates a fully structured SEO content outline and exports it as a formatted `.docx` Word document with section headings, topic prompts, and angles for a writer to fill in. | `Generate a content brief for "developer marketing strategy"` |
+| [`llms-txt-checker`](./skills/llms-txt-checker/) | Audits any domain's AI-readiness by probing `robots.txt`, `llms.txt`, and `llms-full.txt` via curl. Scores each file against a structured checklist and delivers a pass/warn/fail report with actionable fixes. | `Check if stripe.com has llms.txt` |
+| [`orphan-pages-internal-linking-opportunities`](./skills/orphan-pages-internal-linking-opportunities/) | Discovers all orphan pages (zero incoming internal links) on a site using Ahrefs. Clusters pages by topic and generates 3 linking suggestions per orphan with anchor text and placement guidance. Outputs a styled HTML report. | `Run an orphan page audit on example.com/blog/` |
+| [`no-outlinks-audit`](./skills/no-outlinks-audit/) | Finds every blog/content page on a site with zero outgoing internal links (dead-end pages). Generates 3 outgoing link suggestions per dead-end with anchor text, placement guidance, and ready-to-paste copy. Outputs a styled HTML report. | `Find pages with no outgoing links on example.com` |
 
 ---
 
@@ -160,10 +164,14 @@ Get your DataForSEO credentials at [dataforseo.com](https://dataforseo.com).
 | Command | Description |
 |---|---|
 | `/dev-gtm docs-audit <docs-url>` | Run the full 33-check developer docs audit and return a scored report. |
+| `/dev-gtm sdk-audit <docs-url>` | Audit SDK documentation across 6 sections and produce a scored, downloadable HTML report. |
 | `/dev-gtm api-audit <docs-url>` | Crawl every endpoint page and score each across 5 quality checks. |
 | `/dev-gtm growth-report <target> vs <competitors>` | Generate a 3-month SEO performance HTML report with traffic, keywords, and competitive positioning. |
 | `/dev-gtm blog-count <domain>` | Count unique blog posts for one domain, or compare a target vs competitors. |
 | `/dev-gtm brief-outline <topic>` | Generate an SEO content outline and export it as a formatted `.docx`. |
+| `/dev-gtm llms-check <domain>` | Audit a domain's AI-readiness: probe robots.txt, llms.txt, and llms-full.txt and return a scored pass/warn/fail report. |
+| `/dev-gtm orphan-audit <domain>` | Discover all orphan pages (zero incoming internal links) and generate 3 linking suggestions per orphan. |
+| `/dev-gtm dead-ends <domain>` | Find all dead-end blog pages (zero outgoing internal links) and generate 3 outgoing link suggestions per page. |
 
 ---
 ## Sample Outputs
@@ -197,11 +205,14 @@ dev-gtm-claude-skills/
 │   │   ├── SKILL.md                 # Agent instructions (Claude reads this)
 │   │   ├── README.md                # Human-facing usage docs
 │   │   └── references/              # Scoring guide, widget template, fetch strategy
+│   ├── sdk-docs-auditor/
 │   ├── api-docs-quality-report/
 │   ├── growth-report/
 │   ├── blog-post-counter/
 │   ├── brief-outline-generator-v2/
-│   └── docx-to-md/
+│   ├── llms-txt-checker/
+│   ├── orphan-pages-internal-linking-opportunities/
+│   └── no-outlinks-audit/
 └── README.md
 ```
 
