@@ -83,7 +83,7 @@ duration_display = floor(secs / 60) + "m " + (secs % 60 | 0) + "s"
 ```
 total_sessions_cur  = sum of channels[].sessions
 total_sessions_prev = sum of channels[].previous_sessions
-total_sessions_pct  = round((total_sessions_cur - total_sessions_prev) / total_sessions_prev * 100, 1) + "%"
+total_sessions_pct  = total_sessions_prev > 0 ? round((total_sessions_cur - total_sessions_prev) / total_sessions_prev * 100, 1) + "%" : "N/A"
 (same for users and pageviews)
 ```
 
@@ -151,7 +151,7 @@ total_sessions_pct  = round((total_sessions_cur - total_sessions_prev) / total_s
 | Conversions | `overview.conversions.current` | `overview.conversions.previous` | `overview.conversions.change` |
 | Engagement rate | `overview.engagement_rate_pct.current` + "%" | `overview.engagement_rate_pct.previous` + "%" | `overview.engagement_rate_pct.change` |
 | Bounce rate | `overview.bounce_rate_pct.current` + "%" | `overview.bounce_rate_pct.previous` + "%" | computed in 2a (inverted) |
-| Avg duration | `duration_display` from 2a | `avg_session_duration_secs.previous` → same conversion | `overview.avg_session_duration_secs.change` |
+| Avg duration | `duration_display` from 2a | `overview.avg_session_duration_secs.previous` → same conversion | `overview.avg_session_duration_secs.change` |
 
 #### GA4 channels table (all rows from channels[])
 | Column | Field path | Format |
