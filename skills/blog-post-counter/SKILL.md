@@ -117,7 +117,7 @@ for u in urls:
     lastmod = re.search(r'<lastmod>(.*?)</lastmod>', u)
     if loc and lastmod:
         l = loc.group(1)
-        if re.search(r'/blog/|/posts?/|/articles?/|/news/', l) and not re.match(r'https://[^/]+/blog/?$', l):
+        if re.search(r'/blog/|/posts?/|/articles?/|/news/', l) and not re.match(r'https?://[^/]+/(blog|posts?|articles?|news)/?$', l):
             print(lastmod.group(1), l)
 "
 ```
@@ -132,7 +132,9 @@ from datetime import datetime, timezone
 dates = [...]  # all lastmod values for blog posts
 
 unique_dates = set(d[:10] for d in dates)  # compare date part only
-if len(unique_dates) <= 3:
+if not dates:
+    stamp_type = "UNKNOWN"
+elif len(unique_dates) <= 3:
     # Likely build-time stamps — flag as unreliable
     stamp_type = "BUILD-TIME"
 else:
@@ -165,6 +167,8 @@ buckets = {"<30d": 0, "30-90d": 0, "91-180d": 0, "181-365d": 0, ">365d": 0}
 
 for date_str in lastmod_dates:
     dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
     days = (today - dt).days
     if days < 30: buckets["<30d"] += 1
     elif days < 90: buckets["30-90d"] += 1
