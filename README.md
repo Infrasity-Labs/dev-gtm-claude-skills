@@ -10,6 +10,11 @@
 
 [Skills](#skills) · [Install](#installation) · [Commands](#commands) · [Who it's for](#who-its-for) · [FAQ](#faq) · [Website](https://www.infrasity.com/claude-skills)
 
+
+<p align="center">
+  <img src="./assets/dev-gtm-claude-skills.png" width="100%" alt="dev-gtm-claude-skills"/>
+</p>
+
 </div>
 
 ---
