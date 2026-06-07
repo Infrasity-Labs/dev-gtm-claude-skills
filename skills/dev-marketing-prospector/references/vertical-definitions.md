@@ -231,7 +231,7 @@ Adjacent and excluded:
 - AI agent toolbox / integration connectors (Composio) → adjacent, that is
   the connectivity layer for agents, not the orchestration engine itself
 
-Exact-fit examples: CrewAI, Dify.ai, Vellum, Inngest, deepset (Haystack),
+Exact-fit examples: CrewAI, Dify.ai, Vellum, deepset (Haystack),
 Orkes (Conductor)
 
 ---

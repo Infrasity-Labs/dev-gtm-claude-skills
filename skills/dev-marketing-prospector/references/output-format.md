@@ -62,8 +62,8 @@ Always show filter tags below the header bar. Standard tags:
 | Pain Point | 195px |
 | Pain Point Sources | 145px |
 
-Total: ~1073px minimum. Set `min-width: 1320px` on the table and wrap in a
-horizontally scrollable `<div class="wrap">`.
+Total: ~1073px minimum. Set min-width: 1073px on the table and wrap in a
+horizontally scrollable <div class="wrap">.
 
 ---
 
