@@ -120,7 +120,35 @@ Detailed scoring templates, example models by business type, and calibration gui
 
 ---
 
+## Combining Fit and Engagement (MQL Qualification Rule)
+
+**A total score alone must never qualify an MQL.** Summing fit and engagement into one number and comparing it to a single threshold lets a high-engagement, zero-fit lead qualify — e.g. a student on a personal email who completes onboarding (+20), uses a core feature 3+ times (+25), and invites a teammate (+25) scores 70 (60 after the −10 personal-email penalty) and clears a 60-point bar, despite having **no fit at all**. This violates the core principle in `SKILL.md`: *neither fit nor engagement alone is sufficient* ("a student downloading every ebook isn't an MQL").
+
+Enforce it with one of these two approaches:
+
+**Approach A — Dual gate (recommended).** A lead becomes an MQL only when it clears **three** bars: a minimum fit score, a minimum engagement score, **and** the total threshold. Score fit and engagement on separate axes; both must pass on their own before the total matters.
+
+```
+MQL  IF  fit_score >= fit_min  AND  engagement_score >= engagement_min  AND  total >= threshold
+```
+
+**Approach B — Multiplicative.** Multiply the two axes so either one being near zero kills the result:
+
+```
+MQL score = Fit Score × Engagement Score   (qualify above a combined threshold)
+```
+
+A zero (or negative) fit score zeroes out the product no matter how high engagement climbs, so engagement can never compensate for the absence of fit.
+
+Apply the negative signals (competitor domain, student/intern title, personal email, etc.) to the **fit axis** so they suppress fit directly, rather than netting against engagement points.
+
+> Worked example (Model 1, dual gate): the student above has fit = 0 (no company-size, industry, or role points) and fails `fit_min`, so they are **not** an MQL regardless of their 60 engagement points. Under the multiplicative model, `0 × 60 = 0` — same outcome.
+
+---
+
 ## Example Scoring Models
+
+Each model below lists the total MQL threshold **plus a minimum fit and minimum engagement score** (Approach A). All three bars must be cleared.
 
 ### Model 1: PLG SaaS (ACV $500-$5K)
 
@@ -145,7 +173,8 @@ Detailed scoring templates, example models by business type, and calibration gui
 - No login in 14 days: -15
 - Competitor domain: -50
 
-**MQL threshold: 60 points**
+**MQL threshold: 60 points total — and minimum fit 15, minimum engagement 35**
+(All three must be met. A lead with strong usage but <15 fit — e.g. a student or personal-email signup with no company/role fit — is not an MQL.)
 **Recalibration: Monthly** (fast feedback loop with high volume)
 
 ---
@@ -174,7 +203,8 @@ Detailed scoring templates, example models by business type, and calibration gui
 - Individual contributor only: -15
 - Competitor domain: -50
 
-**MQL threshold: 75 points**
+**MQL threshold: 75 points total — and minimum fit 40, minimum engagement 25**
+(Fit is critical at this ACV: no amount of webinar/demo activity qualifies a lead that can't clear the fit floor.)
 **Recalibration: Quarterly** (longer sales cycles, smaller sample size)
 
 ---
@@ -204,7 +234,8 @@ Detailed scoring templates, example models by business type, and calibration gui
 - Competitor domain: -50
 - Student/intern title: -25
 
-**MQL threshold: 65 points**
+**MQL threshold: 65 points total — and minimum fit 25, minimum engagement 25**
+(Balanced model: both axes must clear their floor before the total counts.)
 **Recalibration: Quarterly**
 
 ---

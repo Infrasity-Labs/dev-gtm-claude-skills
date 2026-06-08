@@ -79,14 +79,22 @@ Real-world examples of successful referral programs.
 
 **Calculate your maximum incentive:**
 ```
-Max Referral Reward = (Customer LTV × Gross Margin) - Target CAC
+Max Referral Reward = (Customer LTV × Gross Margin) - Minimum Desired Profit
 ```
+
+This is the most you can pay out per referral while still clearing your minimum profit per customer. Subtract the profit you want to keep — not your CAC — from the gross profit.
 
 **Example:**
 - LTV: $1,200
-- Gross margin: 70%
+- Gross margin: 70% → gross profit = $840
+- Minimum desired profit: $500
+- Max reward: ($1,200 × 0.70) - $500 = $340
+
+**Then sanity-check against your Target CAC.** Referrals should be at least as cheap as your paid channels, so cap the reward at or below what you'd otherwise pay to acquire a customer:
 - Target CAC: $200
-- Max reward: ($1,200 × 0.70) - $200 = $640
+- Effective reward cap: min($340, $200) = **$200**
+
+Pay more than your Target CAC only if referred customers demonstrably retain longer or convert better than paid-acquired ones.
 
 **Typical referral rewards:**
 - B2C: $10-50 or 10-25% of first purchase
