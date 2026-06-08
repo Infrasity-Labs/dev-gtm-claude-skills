@@ -63,7 +63,7 @@ Most skills need **no API keys**; the SEO skills that pull live search data use 
 Install every skill in this repo with one command — no cloning, no copying:
 
 ```bash
-npx skills add infrasity-labs/dev-gtm-claude-skills
+npx skills add Infrasity-Labs/dev-gtm-claude-skills
 ```
 
 This pulls the latest skills straight into your Claude Code skills directory. Re-run it any time to update. Prefer to install manually or use Claude Desktop / Claude.ai? Use one of the methods below.
@@ -247,18 +247,18 @@ If you've installed the command pack, every skill is also a slash subcommand. Th
 | `/marketing free-tools <product or idea>` | Plan a free marketing tool. |
 | `/marketing ads <product or goal>` | Paid campaign strategy & targeting. |
 | `/marketing ad-creative <product or offer>` | Generate ad copy variations at scale. |
-| `/marketing ab-test <what to test>` | Design an A/B test or experiment. |
+| `/marketing ab-testing <what to test>` | Design an A/B test or experiment. |
 | `/marketing cro <page url>` | Improve conversion rate. |
 | `/marketing launch <product or feature>` | Plan a product/feature launch. |
 | `/marketing marketing-ideas <product>` | Brainstorm growth ideas. |
 | `/marketing referrals <product>` | Design a referral/affiliate program. |
-| `/marketing community <product or goal>` | Plan community-led growth. |
+| `/marketing community-marketing <product or goal>` | Plan community-led growth. |
 | `/marketing emails <sequence type>` | Build a lifecycle/drip email flow. |
 | `/marketing cold-email <target or offer>` | Write cold outreach sequences. |
 | `/marketing onboarding <product>` | Optimize post-signup activation. |
-| `/marketing churn <context>` | Reduce churn & build retention flows. |
+| `/marketing churn-prevention <context>` | Reduce churn & build retention flows. |
 | `/marketing customer-research <source or topic>` | Conduct or analyze customer research. |
-| `/marketing competitor-profile <competitor URLs>` | Produce structured competitor profiles. |
+| `/marketing competitor-profiling <competitor URLs>` | Produce structured competitor profiles. |
 | `/marketing competitors <you vs competitor>` | Create comparison/alternative pages. |
 | `/marketing analytics <what to track>` | Set up or audit measurement. |
 | `/marketing pricing <product or context>` | Pricing & packaging strategy. |
