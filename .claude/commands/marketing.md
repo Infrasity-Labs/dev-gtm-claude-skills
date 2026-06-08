@@ -23,24 +23,24 @@ Route to the correct skill based on the subcommand:
 
 - **`ads <product or goal>`** — Invoke the `ads` skill. Pass the product or goal for paid campaign strategy and targeting.
 - **`ad-creative <product or offer>`** — Invoke the `ad-creative` skill. Pass the product or offer to generate ad copy variations at scale.
-- **`ab-test <what to test>`** — Invoke the `ab-testing` skill. Pass what you want to test to design an experiment.
+- **`ab-testing <what to test>`** — Invoke the `ab-testing` skill. Pass what you want to test to design an experiment.
 - **`cro <page url>`** — Invoke the `cro` skill. Pass the page URL to improve conversion rate.
 - **`launch <product or feature>`** — Invoke the `launch` skill. Pass the product or feature to plan a launch.
 - **`marketing-ideas <product>`** — Invoke the `marketing-ideas` skill. Pass the product to brainstorm growth ideas.
 - **`referrals <product>`** — Invoke the `referrals` skill. Pass the product to design a referral/affiliate program.
-- **`community <product or goal>`** — Invoke the `community-marketing` skill. Pass the product or goal to plan community-led growth.
+- **`community-marketing <product or goal>`** — Invoke the `community-marketing` skill. Pass the product or goal to plan community-led growth.
 
 ### Lifecycle & retention
 
 - **`emails <sequence type>`** — Invoke the `emails` skill. Pass the sequence type to build a lifecycle/drip email flow.
 - **`cold-email <target or offer>`** — Invoke the `cold-email` skill. Pass the target or offer to write cold outreach sequences.
 - **`onboarding <product>`** — Invoke the `onboarding` skill. Pass the product to optimize post-signup activation.
-- **`churn <context>`** — Invoke the `churn-prevention` skill. Pass the context to reduce churn and build retention flows.
+- **`churn-prevention <context>`** — Invoke the `churn-prevention` skill. Pass the context to reduce churn and build retention flows.
 
 ### Research & competitive
 
 - **`customer-research <source or topic>`** — Invoke the `customer-research` skill. Pass the source or topic to conduct/analyze customer research.
-- **`competitor-profile <competitor URLs>`** — Invoke the `competitor-profiling` skill. Pass competitor URLs to produce structured profiles.
+- **`competitor-profiling <competitor URLs>`** — Invoke the `competitor-profiling` skill. Pass competitor URLs to produce structured profiles.
 - **`competitors <your product vs competitor>`** — Invoke the `competitors` skill. Pass the matchup to create comparison/alternative pages.
 - **`analytics <what to track>`** — Invoke the `analytics` skill. Pass what to track to set up or audit measurement.
 
@@ -69,22 +69,22 @@ Content & copy:
 Demand gen & growth:
   /marketing ads <product or goal>                  Paid campaign strategy & targeting
   /marketing ad-creative <product or offer>         Generate ad copy variations at scale
-  /marketing ab-test <what to test>                 Design an A/B test or experiment
+  /marketing ab-testing <what to test>             Design an A/B test or experiment
   /marketing cro <page url>                          Improve conversion rate
   /marketing launch <product or feature>            Plan a product/feature launch
   /marketing marketing-ideas <product>             Brainstorm growth ideas
   /marketing referrals <product>                    Design a referral/affiliate program
-  /marketing community <product or goal>            Plan community-led growth
+  /marketing community-marketing <product or goal>  Plan community-led growth
 
 Lifecycle & retention:
   /marketing emails <sequence type>                 Build a lifecycle/drip email flow
   /marketing cold-email <target or offer>           Write cold outreach sequences
   /marketing onboarding <product>                   Optimize post-signup activation
-  /marketing churn <context>                        Reduce churn & build retention flows
+  /marketing churn-prevention <context>             Reduce churn & build retention flows
 
 Research & competitive:
   /marketing customer-research <source or topic>    Conduct or analyze customer research
-  /marketing competitor-profile <competitor URLs>   Produce structured competitor profiles
+  /marketing competitor-profiling <competitor URLs> Produce structured competitor profiles
   /marketing competitors <you vs competitor>        Create comparison/alternative pages
   /marketing analytics <what to track>              Set up or audit measurement
 
