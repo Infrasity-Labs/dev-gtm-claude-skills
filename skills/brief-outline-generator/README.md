@@ -55,10 +55,10 @@ Or describe what you want naturally — Claude activates the skill when you prov
 
 ```bash
 cd dev-gtm-claude-skills/skills
-zip -r brief-outline-generator-v2.zip brief-outline-generator-v2/
+zip -r brief-outline-generator.zip brief-outline-generator/
 ```
 
-Upload `brief-outline-generator-v2.zip` and toggle it on.
+Upload `brief-outline-generator.zip` and toggle it on.
 
 ---
 
@@ -200,7 +200,7 @@ The JSON Claude assembles before calling the renderer:
 ## File structure
 
 ```
-brief-outline-generator-v2/
+brief-outline-generator/
 ├── SKILL.md                   # Skill instructions Claude follows
 ├── README.md                  # This file
 ├── references/

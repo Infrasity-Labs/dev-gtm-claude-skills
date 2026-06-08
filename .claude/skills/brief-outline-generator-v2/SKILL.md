@@ -1,1 +1,0 @@
-../../../skills/brief-outline-generator-v2/SKILL.md
