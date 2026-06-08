@@ -1,0 +1,56 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Docs & SEO Audits",
+      "description": "Audit and report tools for documentation, AI-readiness, and SEO.",
+      "skills": [
+        "api-docs-quality-report",
+        "docs-auditor",
+        "sdk-docs-auditor",
+        "llms-txt-checker",
+        "no-outlinks-audit",
+        "orphan-pages-internal-linking-opportunities",
+        "growth-report",
+        "blog-post-counter",
+        "brief-outline-generator",
+        "dev-marketing-prospector"
+      ]
+    },
+    {
+      "title": "Marketing",
+      "description": "Full-funnel growth, content, and demand-gen skills.",
+      "skills": [
+        "ab-testing",
+        "ad-creative",
+        "ads",
+        "ai-seo",
+        "analytics",
+        "churn-prevention",
+        "cold-email",
+        "community-marketing",
+        "competitor-profiling",
+        "competitors",
+        "content-strategy",
+        "copywriting",
+        "cro",
+        "customer-research",
+        "emails",
+        "free-tools",
+        "launch",
+        "lead-magnets",
+        "marketing-ideas",
+        "onboarding",
+        "pricing",
+        "programmatic-seo",
+        "referrals",
+        "revops",
+        "sales-enablement",
+        "schema",
+        "seo-audit",
+        "social"
+      ]
+    }
+  ]
+}
