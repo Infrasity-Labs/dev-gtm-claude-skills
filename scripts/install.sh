@@ -143,7 +143,7 @@ install_flat_rules_tool() {
       warn "Install cancelled for ${tool}"
       return
     fi
-    rm -rf "$dst_dir"
+    find "$dst_dir" -maxdepth 1 -type f -name "*${ext}" -exec rm -f {} +
   fi
 
   mkdir -p "$dst_dir"
@@ -195,7 +195,12 @@ install_skill_bundle_tool() {
       warn "Install cancelled for ${tool}"
       return
     fi
-    rm -rf "$dst_dir"
+    local skill_dir
+    for skill_dir in "$src_dir"/*; do
+      if [[ -d "$skill_dir" ]]; then
+        rm -rf "${dst_dir}/$(basename "$skill_dir")"
+      fi
+    done
   fi
 
   mkdir -p "$dst_dir"

@@ -82,12 +82,12 @@ list_skills() {
 
     if [[ -f "$CODEX_INDEX" ]] && command -v python3 &> /dev/null; then
         # Use Python to parse JSON and display nicely
-        python3 << 'EOF'
+        python3 - "$CODEX_INDEX" << 'EOF'
 import json
 import sys
 
 try:
-    with open('$CODEX_INDEX'.replace('$CODEX_INDEX', '''$CODEX_INDEX'''), 'r') as f:
+    with open(sys.argv[1], 'r') as f:
         index = json.load(f)
 
     print("Categories:")
@@ -179,13 +179,13 @@ install_category() {
     # Get skills for this category from index
     local skills
     skills=$(python3 -c "
-import json
-with open('$CODEX_INDEX', 'r') as f:
+import json, sys
+with open(sys.argv[1], 'r') as f:
     index = json.load(f)
 for skill in index.get('skills', []):
-    if skill['category'] == '$category':
+    if skill['category'] == sys.argv[2]:
         print(skill['name'])
-")
+" "$CODEX_INDEX" "$category")
 
     if [[ -z "$skills" ]]; then
         print_error "No skills found for category: $category"

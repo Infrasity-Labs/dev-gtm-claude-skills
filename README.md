@@ -45,7 +45,7 @@ Claude Code skills (also called agent skills or coding-agent plugins) are modula
 - **Python tools** — optional stdlib-only CLI scripts for the skills that crawl, score, or render reports
 - **Reference docs** — templates, scoring guides, and checklists the skill loads on demand
 
-Because every skill follows the open `SKILL.md` standard, it isn't locked to a single product. The same package runs in Claude Code, Claude Desktop, Claude.ai, and any other agent that reads the standard (see [Multi-Tool Support](#multi-tool-support-new)).
+Because every skill follows the open `SKILL.md` standard, it isn't locked to a single product. The same package runs in Claude Code, Claude Desktop, Claude.ai, and any other agent that reads the standard (see [Multi-Tool Support](#multi-tool-support)).
 
 ### Skills vs Agents
 
@@ -62,7 +62,7 @@ This repo ships both: the SEO/GEO/docs **skills** under [`skills/`](skills/), th
 ## Table of contents
 
 - [What Are Claude Code Skills & Agent Plugins?](#what-are-claude-code-skills--agent-plugins)
-- [Multi-Tool Support](#multi-tool-support-new)
+- [Multi-Tool Support](#multi-tool-support)
 - [Installation](#installation)
 - [Skills](#skills)
 - [Marketing skills](#marketing-skills)

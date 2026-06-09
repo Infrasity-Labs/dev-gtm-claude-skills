@@ -59,10 +59,10 @@ is_valid_tool() {
 
 yaml_unquote() {
   local value="$1"
-  value="${value#\"}"
-  value="${value%\"}"
-  value="${value#\'}"
-  value="${value%\'}"
+  if [[ "$value" =~ ^\".*\"$ ]] || [[ "$value" =~ ^\'.*\'$ ]]; then
+    value="${value#?}"
+    value="${value%?}"
+  fi
   printf '%s' "$value"
 }
 
@@ -429,6 +429,7 @@ if [[ "$TOOL" != "all" ]]; then
 fi
 
 SKILLS_TMP="$(mktemp)"
+trap 'rm -f "$SKILLS_TMP"' EXIT
 (
   cd "$REPO_ROOT"
   # Source-of-truth skill directories for this repo. The .claude/skills/ mirror,
