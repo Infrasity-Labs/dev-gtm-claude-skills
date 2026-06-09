@@ -279,7 +279,7 @@ def analyze_images(content: str) -> dict[str, Any]:
         })
 
     for src in html_images:
-        alt_match = re.search(r'alt=["\']([^"\']*)["\']', content[content.find(src) - 200:content.find(src) + len(src)])
+        alt_match = re.search(r'alt=["\']([^"\']*)["\']', content[max(0, content.find(src) - 200):content.find(src) + len(src)])
         has_alt = bool(alt_match and alt_match.group(1).strip()) if alt_match else False
         ext = Path(src.split('?')[0]).suffix.lower()
         images.append({

@@ -302,7 +302,12 @@ def _read_md_safely(path: Path) -> str:
     root files so a caller cannot redirect the renderer at an attacker-
     chosen target via symlink."""
     try:
-        fd = os.open(str(path), os.O_RDONLY | os.O_NOFOLLOW)
+        flags = os.O_RDONLY
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        elif path.is_symlink():
+            raise ValueError(f"refusing to follow symlink: {path}")
+        fd = os.open(str(path), flags)
     except OSError as e:
         if e.errno in (errno.ELOOP, errno.EMLINK):
             raise ValueError(f"refusing to follow symlink: {path}")

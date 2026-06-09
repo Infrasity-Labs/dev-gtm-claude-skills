@@ -188,7 +188,7 @@ def _http_get(url: str, headers: Optional[dict] = None, timeout: int = HTTP_TIME
         return None
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with _NO_REDIRECT_OPENER.open(req, timeout=timeout) as resp:
             # Read at most MAX_IMAGE_BYTES + 1 to detect oversize.
             data = resp.read(MAX_IMAGE_BYTES + 1)
             if len(data) > MAX_IMAGE_BYTES:

@@ -723,7 +723,7 @@ def generate_report(report_type, data, domain, output_dir, output_format="pdf"):
 
     if output_format in ("html", "both"):
         html_path = _safe_path(f"{base_name}.html")
-        with open(html_path, "w") as f:
+        with open(html_path, "w", encoding="utf-8") as f:
             f.write(html_content)
         result["files"].append(str(html_path))
 

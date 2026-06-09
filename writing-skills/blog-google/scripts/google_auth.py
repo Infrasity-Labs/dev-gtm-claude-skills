@@ -60,7 +60,8 @@ def _write_secret_atomic(path: str, content: str) -> None:
     os.makedirs(parent, mode=0o700, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=parent, prefix=".tmp-")
     try:
-        os.fchmod(fd, 0o600)
+        if hasattr(os, "fchmod"):
+            os.fchmod(fd, 0o600)
         with os.fdopen(fd, "w") as f:
             f.write(content)
         os.replace(tmp, path)

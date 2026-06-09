@@ -66,7 +66,9 @@ class SkillEnvironment:
             print("Dependencies installed")
             return True
         except subprocess.CalledProcessError as e:
-            print(f"Failed to install dependencies: {e}")
+            print(f"Failed to install dependencies: {e}", file=sys.stderr)
+            if e.stderr:
+                print(e.stderr, file=sys.stderr)
             return False
 
     def is_in_skill_venv(self) -> bool:
