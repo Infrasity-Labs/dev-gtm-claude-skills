@@ -10,6 +10,7 @@
 
 [Skills](#skills) · [Install](#installation) · [Commands](#commands) · [Who it's for](#who-its-for) · [FAQ](#faq) · [Website](https://www.infrasity.com/claude-skills)
 
+**Works with:** Claude Code · OpenAI Codex · Gemini CLI · OpenClaw · Hermes Agent[^hermes] · Mistral Vibe[^vibe] · Cursor · Aider · Windsurf · Kilo Code · OpenCode · Augment · Antigravity
 
 <p align="center">
   <img src="./assets/dev-gtm-claude-skills.png" width="100%" alt="dev-gtm-claude-skills"/>
@@ -19,8 +20,6 @@
 
 ---
 
-## What this is
-
 `dev-gtm-claude-skills` is a collection of open-source **Claude Code skills** for **SEO**, **GEO (Generative Engine Optimization)**, **AI discoverability**, and **developer marketing**. Each skill is a self-contained package — a `SKILL.md` that tells Claude when and how to use it, optional Python tooling, and a README with full usage docs. Install once, then run from Claude Code, Claude Desktop, or Claude.ai with a plain-language prompt.
 
 These skills are built for **developer-focused companies** — DevTools, AI-agent platforms, observability, and B2B SaaS — that need their documentation and content to be **cited by AI systems like ChatGPT, Claude, Perplexity, and Gemini**, not just indexed by Google.
@@ -29,17 +28,41 @@ These skills are built for **developer-focused companies** — DevTools, AI-agen
 
 ### What you can do in one prompt
 
-- 📊 **Audit developer docs** for SEO and AI discoverability — 33 checks, scored 0–100
-- 🔌 **Score API & SDK documentation** quality, endpoint by endpoint
-- 🤖 **Check AI-readiness** — `robots.txt`, `llms.txt`, and `llms-full.txt` in one pass
-- 📈 **Generate 3-month SEO performance reports** vs competitors
-- 🔗 **Fix internal linking** — find orphan pages and dead-ends, get paste-ready suggestions
-- ✍️ **Produce SEO content briefs** as formatted `.docx` outlines
+- **Audit developer docs** for SEO and AI discoverability — 33 checks, scored 0–100
+- **Score API & SDK documentation** quality, endpoint by endpoint
+- **Check AI-readiness** — `robots.txt`, `llms.txt`, and `llms-full.txt` in one pass
+- **Generate 3-month SEO performance reports** vs competitors
+- **Fix internal linking** — find orphan pages and dead-ends, get paste-ready suggestions
+- **Produce SEO content briefs** as formatted `.docx` outlines
+
+---
+
+## What Are Claude Code Skills & Agent Plugins?
+
+Claude Code skills (also called agent skills or coding-agent plugins) are modular instruction packages that give AI coding agents domain expertise they don't have out of the box. Each skill in this repo includes:
+
+- **`SKILL.md`** — structured instructions, workflows, and decision frameworks that tell the agent when and how to act
+- **Python tools** — optional stdlib-only CLI scripts for the skills that crawl, score, or render reports
+- **Reference docs** — templates, scoring guides, and checklists the skill loads on demand
+
+Because every skill follows the open `SKILL.md` standard, it isn't locked to a single product. The same package runs in Claude Code, Claude Desktop, Claude.ai, and any other agent that reads the standard (see [Multi-Tool Support](#multi-tool-support)).
+
+### Skills vs Agents
+
+|  | Skills | Agents |
+| --- | --- | --- |
+| **Purpose** | _How_ to execute a task | _What_ task to do |
+| **Scope** | A single, well-defined workflow | An end-to-end job, often composing skills |
+| **Example** | "Follow these 33 checks to audit docs" | "Research, write, and review this blog post" |
+
+This repo ships both: the SEO/GEO/docs **skills** under [`skills/`](skills/), the full-funnel marketing **skills** under [`marketing-skills/`](marketing-skills/), and a set of blog-production **agents** under [`agents/`](agents/).
 
 ---
 
 ## Table of contents
 
+- [What Are Claude Code Skills & Agent Plugins?](#what-are-claude-code-skills--agent-plugins)
+- [Multi-Tool Support](#multi-tool-support)
 - [Installation](#installation)
 - [Skills](#skills)
 - [Marketing skills](#marketing-skills)
@@ -51,6 +74,47 @@ These skills are built for **developer-focused companies** — DevTools, AI-agen
 - [FAQ](#faq)
 - [Contributing](#contributing)
 - [License](#license)
+
+---
+
+## Multi-Tool Support
+
+Every skill here is written to the open `SKILL.md` standard, so it isn't tied to a single agent. **Claude Code**, **Claude Desktop**, and **Claude.ai** read the skills natively (see [Installation](#installation)). For every other tool, the repo ships converter and installer scripts under [`scripts/`](scripts/) — clone the repo, then run the one-liner for your tool.
+
+```bash
+git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
+cd dev-gtm-claude-skills
+```
+
+Each script discovers all skills under `skills/`, `marketing-skills/`, and `writing-skills/` and installs them in the format that tool expects.
+
+| Tool | Format | Install command |
+| --- | --- | --- |
+| **Claude Code** | Native `SKILL.md` | `npx skills add Infrasity-Labs/dev-gtm-claude-skills` |
+| **Claude Desktop / Claude.ai** | ZIP upload | See [Installation](#claude-desktop--claudeai) |
+| **OpenAI Codex** | `~/.codex/skills/` | `python3 scripts/sync-codex-skills.py && ./scripts/codex-install.sh` |
+| **Gemini CLI** | `.gemini/skills/` | `./scripts/gemini-install.sh` |
+| **OpenClaw** | `~/.openclaw/workspace/skills/` | `./scripts/openclaw-install.sh` |
+| **Hermes Agent**[^hermes] | `~/.hermes/skills/` | `python3 scripts/sync-hermes-skills.py --verbose` |
+| **Mistral Vibe**[^vibe] | `~/.vibe/skills/` | `./scripts/vibe-install.sh` |
+| **Cursor** | `.cursor/rules/*.mdc` | `./scripts/convert.sh --tool cursor && ./scripts/install.sh --tool cursor --target .` |
+| **Aider** | `CONVENTIONS.md` | `./scripts/convert.sh --tool aider && ./scripts/install.sh --tool aider --target .` |
+| **Windsurf** | `.windsurf/skills/` | `./scripts/convert.sh --tool windsurf && ./scripts/install.sh --tool windsurf --target .` |
+| **Kilo Code** | `.kilocode/rules/` | `./scripts/convert.sh --tool kilocode && ./scripts/install.sh --tool kilocode --target .` |
+| **OpenCode** | `.opencode/skills/` | `./scripts/convert.sh --tool opencode && ./scripts/install.sh --tool opencode --target .` |
+| **Augment** | `.augment/skills/` | `./scripts/convert.sh --tool augment && ./scripts/install.sh --tool augment --target .` |
+| **Antigravity** | `~/.gemini/antigravity/skills/` | `./scripts/convert.sh --tool antigravity && ./scripts/install.sh --tool antigravity` |
+
+**How the scripts work:**
+
+- **`convert.sh --tool <name>`** rewrites each `SKILL.md` into the target tool's format (Cursor `.mdc` rules, Aider `CONVENTIONS.md`, Kilo Code markdown rules, or `SKILL.md` bundles for Windsurf/OpenCode/Augment/Antigravity) and writes the result to `integrations/<tool>/`. Use `--tool all` to build every format at once.
+- **`install.sh --tool <name> [--target <dir>]`** copies the converted output from `integrations/<tool>/` into the right place — a project directory (`--target .`) for the rule-based tools, or your home directory for Antigravity. Re-run with `--force` to overwrite.
+- **`sync-codex-skills.py`**, **`sync-gemini-skills.py`**, **`sync-hermes-skills.py`**, and **`sync-vibe-skills.py`** symlink (or `--copy`) the skills straight into each tool's directory — no conversion needed, since those tools read the agentskills.io `SKILL.md` standard directly. Pass `--dry-run` to preview.
+
+The Python tooling that ships with the live-data skills is stdlib-only, so it runs anywhere Python runs.
+
+[^hermes]: **Hermes Agent** is BYO-sync: run `python3 scripts/sync-hermes-skills.py` once to install into `~/.hermes/skills/`. Uses the same agentskills.io `SKILL.md` standard — no format conversion.
+[^vibe]: **Mistral Vibe** is also BYO-sync: run `./scripts/vibe-install.sh` once to install into `~/.vibe/skills/`. Same agentskills.io `SKILL.md` standard — no conversion. Docs: <https://docs.mistral.ai/mistral-vibe/agents-skills>.
 
 ---
 
