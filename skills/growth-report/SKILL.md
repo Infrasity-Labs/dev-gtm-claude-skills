@@ -3,7 +3,8 @@ name: growth-report
 description: >
   Generates a 3-month SEO performance HTML report for any domain using DataForSEO data.
   Fetches baseline vs current traffic, keyword rankings, top content pages, and competitive
-  landscape, then outputs a polished dark-theme HTML report styled like an executive briefing.
+  landscape, then outputs a report styled with the Infrasity brand design system:
+  #0D0A1A background, #8157F2 purple accent, Instrument Sans + DM Sans + DM Mono typography.
   Use this skill whenever a user provides a target domain and a list of competitor URLs and asks
   for an SEO report, performance report, SEO analysis, competitive SEO comparison, traffic report,
   ranking report, or 3-month SEO summary. Also trigger when the user says "generate SEO report for
@@ -16,15 +17,16 @@ argument-hint: "[target_domain] [competitor1] [competitor2] ..."
 license: MIT
 metadata:
   author: Infrasity
-  version: "1.2.1"
+  version: "1.3.0"
   category: seo
+  design: infrasity-brand-v1
 ---
 
 # SEO Performance Report Skill
 
 Generates a comprehensive 3-month SEO performance HTML report using live DataForSEO data.
 The report covers traffic trends, keyword rankings, top content clusters, competitive positioning,
-strategic priorities, and an executive summary — all in a dark-theme executive-ready HTML file.
+strategic priorities, and an executive summary — all in the Infrasity brand design system.
 
 ---
 
@@ -316,6 +318,14 @@ Where the last label is:
 
 Read `references/html-template.md` for the complete HTML structure, CSS, and variable map.
 
+The template uses the **Infrasity brand design system** exclusively:
+- Background: `#0D0A1A` (Blackish-Violet) — never white, never any other dark
+- Primary accent: `#8157F2` — the only accent colour; never substitute blue or green
+- Fonts: `Instrument Sans` for all headings / KPI values / section numbers,
+  `DM Sans` for all body / labels / UI text, `DM Mono` for paths / code / data values
+- Status colours: `#5DCEA6` (positive delta), `#F07070` (negative delta)
+
+Do **not** alter, override, or mix in any other colour palette or font stack.
 Fill every `{{VARIABLE}}` with real data. Output the file to:
 ```
 /mnt/user-data/outputs/{TARGET_DOMAIN}_seo_report.html
@@ -352,5 +362,7 @@ Then call `present_files` to deliver it to the user.
 
 ## REFERENCE FILES
 
-- `references/html-template.md` — Full HTML template with CSS, all section markup, and complete
-  variable substitution map. **Always read this file before writing any HTML.**
+- `references/html-template.md` — Full Infrasity-branded HTML template with CSS design system,
+  all section markup, competitive table row patterns, and complete variable substitution map.
+  **Always read this file before writing any HTML. The Infrasity design is the only permitted
+  output design — do not use any other colour palette, font stack, or layout.**

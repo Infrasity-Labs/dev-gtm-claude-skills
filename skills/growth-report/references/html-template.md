@@ -1,7 +1,10 @@
-# HTML Report Template Reference
+# HTML Report Template Reference — Infrasity Brand Design
 
-This file contains the complete annotated HTML template for the SEO Performance Report.
+This file contains the complete Infrasity-branded HTML template for the SEO Performance Report.
 Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API calls.
+
+**Design system:** Infrasity brand v1 — `#0D0A1A` background · `#8157F2` purple accent ·
+Instrument Sans + DM Sans + DM Mono. No other colour palette or font stack is permitted.
 
 ---
 
@@ -10,8 +13,8 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | Variable | Source |
 |---|---|
 | `{{TARGET_DOMAIN}}` | User input |
-| `{{START_DATE}}` | User input (e.g. Feb 15, 2026) |
-| `{{END_DATE}}` | User input (e.g. May 15, 2026) |
+| `{{START_DATE}}` | User input (e.g. Feb 20, 2026) |
+| `{{END_DATE}}` | User input (e.g. May 20, 2026) |
 | `{{BASELINE_TRAFFIC}}` | Step 1: historical etv, formatted with commas |
 | `{{BASELINE_KEYWORDS}}` | Step 1: historical count, formatted with commas |
 | `{{BASELINE_TOP3}}` | Step 1: pos_1 + pos_2_3, formatted with commas |
@@ -28,11 +31,11 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | `{{KEYWORDS_CHANGE_CLASS}}` | "pos" or "neg" |
 | `{{TOP3_GROWTH_PCT}}` | Step 2 calc: e.g. "+28.9%" |
 | `{{TOP3_GROWTH_CLASS}}` | "pos" or "neg" |
-| `{{TARGET_GOAL_TRAFFIC}}` | Step 6 derived target |
-| `{{TARGET_GOAL_KEYWORDS}}` | Step 6 derived target |
-| `{{TARGET_GOAL_TOP3}}` | Step 6 derived target |
+| `{{TARGET_GOAL_TRAFFIC}}` | Step 5 derived target |
+| `{{TARGET_GOAL_KEYWORDS}}` | Step 5 derived target |
+| `{{TARGET_GOAL_TOP3}}` | Step 5 derived target |
 | `{{TARGET_BADGE_TEXT}}` | e.g. "Challenge #2" or "Maintain #1" |
-| `{{COMP_TABLE_ROWS}}` | Step 3: HTML `<tr>` rows for all 8 domains |
+| `{{COMP_TABLE_ROWS}}` | Step 3: HTML `<tr>` rows for all domains |
 | `{{MARKET_INSIGHT_TEXT}}` | Step 3: 2–3 sentence market insight paragraph |
 | `{{BIG_STAT_VAL}}` | e.g. "+36.2%" — the hero traffic growth number |
 | `{{BIG_STAT_CLASS}}` | "green" if positive, "red" if negative |
@@ -57,7 +60,7 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | `{{KW_POS_4_10}}` | Step 2: pos_4_10 count |
 | `{{KW_POS_11_20}}` | Step 2: pos_11_20 count |
 | `{{KW_POS_21_100}}` | Step 2: sum pos_21_30 through pos_91_100 |
-| `{{PAGE1_URL}}` | Step 4: top page address (shorten if needed) |
+| `{{PAGE1_URL}}` | Step 4: top page address (strip https://www.) |
 | `{{PAGE1_ETV}}` | Step 4: top page etv |
 | `{{PAGE1_KW}}` | Step 4: top page keyword count |
 | `{{PAGE2_URL}}` | Step 4: second page address |
@@ -66,16 +69,22 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | `{{PAGE3_URL}}` | Step 4: third page address |
 | `{{PAGE3_ETV}}` | Step 4: third page etv |
 | `{{PAGE3_KW}}` | Step 4: third page keyword count |
+| `{{STRAT_1_NUM_LABEL}}` | Label for strategy card 1 (e.g. "Close Gap") |
 | `{{STRAT_1_TITLE}}` | Strategic priority 1 title |
 | `{{STRAT_1_DESC}}` | Strategic priority 1 description |
+| `{{STRAT_2_NUM_LABEL}}` | Label for strategy card 2 |
 | `{{STRAT_2_TITLE}}` | Strategic priority 2 title |
 | `{{STRAT_2_DESC}}` | Strategic priority 2 description |
+| `{{STRAT_3_NUM_LABEL}}` | Label for strategy card 3 |
 | `{{STRAT_3_TITLE}}` | Strategic priority 3 title |
 | `{{STRAT_3_DESC}}` | Strategic priority 3 description |
+| `{{STRAT_4_NUM_LABEL}}` | Label for strategy card 4 |
 | `{{STRAT_4_TITLE}}` | Strategic priority 4 title |
 | `{{STRAT_4_DESC}}` | Strategic priority 4 description |
+| `{{STRAT_5_NUM_LABEL}}` | Label for strategy card 5 |
 | `{{STRAT_5_TITLE}}` | Strategic priority 5 title |
 | `{{STRAT_5_DESC}}` | Strategic priority 5 description |
+| `{{STRAT_6_NUM_LABEL}}` | Label for strategy card 6 |
 | `{{STRAT_6_TITLE}}` | Strategic priority 6 title |
 | `{{STRAT_6_DESC}}` | Strategic priority 6 description |
 | `{{EXEC_PARA_1}}` | Executive summary paragraph 1 |
@@ -84,51 +93,68 @@ Replace all `{{VARIABLE}}` placeholders with real data from the DataForSEO API c
 | `{{EXEC_PARA_4}}` | Executive summary paragraph 4 |
 | `{{EXEC_BADGE_TEXT}}` | Summary badge text |
 | `{{COMP_TABLE_LABEL}}` | "X of Y" competitive position label |
-| `{{FASTEST_GROWING_COLOR}}` | CSS color for the fastest growing label |
+| `{{FASTEST_GROWING_COLOR}}` | CSS colour for fastest growing label (`var(--up)` or `var(--text-3)`) |
 | `{{FASTEST_GROWING_LABEL}}` | Text label for the fastest growing domain |
 | `{{RANK_ABOVE}}` | Rank number of the competitor immediately above |
-| `{{STRAT_1_NUM_LABEL}}` | Label for strategy card 1 (e.g., "Close Gap") |
 | `{{COMP_DOMAIN_LIST}}` | Comma-separated list of all domains in the set |
 
 ---
 
 ## Trend Bar Width Calculation
 
-To compute bar widths (so bars fill proportionally):
 ```
-max_etv = highest ETV value across the 4 monthly data points
-width_pct_N = round((etv_N / max_etv) * 100)
+max_etv       = highest ETV value across the 4 monthly data points
+width_pct_N   = round((etv_N / max_etv) * 100)
 ```
-Minimum width = 10% (so labels are always visible).
+Minimum width = 10% so labels are always visible.
 
 ---
 
 ## Competitive Table Row Template
 
-For each domain in the sorted list, generate one `<tr>`:
+CSS classes used in the table rows — match exactly:
 
 ```html
 <!-- Target domain row (highlighted): -->
-<tr class="highlight">
+<tr class="hl">
   <td><span class="rank-badge rank-N">N</span></td>
-  <td><span class="company-name hl">🔥 {{TARGET_DOMAIN}}</span></td>
-  <td>{{ETV_FORMATTED}}</td>
-  <td>{{KW_COUNT_FORMATTED}}</td>
-  <td><span class="trend-badge trend-up">↑ +XX%</span></td>
+  <td><span class="dname me">🔥 {{TARGET_DOMAIN}}</span></td>
+  <td><span class="mono">{{ETV_FORMATTED}}</span></td>
+  <td><span class="mono">{{KW_COUNT_FORMATTED}}</span></td>
+  <td><span class="tbadge t-up">↑ +XX%</span></td>
 </tr>
 
 <!-- Competitor row: -->
 <tr>
   <td><span class="rank-badge rank-N">N</span></td>
-  <td><span class="company-name">{{DOMAIN}}</span></td>
-  <td>{{ETV_FORMATTED}}</td>
-  <td>{{KW_COUNT_FORMATTED}}</td>
-  <td><span class="trend-badge trend-stable">Stable</span></td>
+  <td><span class="dname">{{DOMAIN}}</span></td>
+  <td><span class="mono">{{ETV_FORMATTED}}</span></td>
+  <td><span class="mono">{{KW_COUNT_FORMATTED}}</span></td>
+  <td><span class="tbadge t-stable">→ Stable</span></td>
 </tr>
 ```
 
-Rank badge classes: `rank-1` (red), `rank-2` (orange/gold), `rank-3` (blue), `rank-other` (gray).
-Trend badge classes: `trend-up` (green), `trend-down` (red), `trend-stable` (gray).
+**Rank badge classes:** `rank-1` (red), `rank-2` (gold), `rank-3` (purple), `rank-other` (gray).
+**Trend badge classes:** `t-up` (green `#5DCEA6`), `t-dn` (red `#F07070`), `t-stable` (muted gray).
+
+---
+
+## Infrasity Design Pre-fill Checklist
+
+Before writing the HTML, confirm every item:
+
+- [ ] Background is `#0D0A1A` — not black, not navy, not any other dark
+- [ ] Primary accent is `#8157F2` only — never blue, teal, or any other colour
+- [ ] `Instrument Sans` on all headings, KPI values, section numbers, badges
+- [ ] `DM Sans` on all body copy, table cells, descriptions, labels
+- [ ] `DM Mono` on all URL paths, ETV values in bars, footer data note
+- [ ] All cards use `border-radius: 12px` and `var(--surface)` background
+- [ ] Purple `rgba(129,87,242,0.35)` border appears on card hover
+- [ ] Status chips: `#5DCEA6` (up/positive), `#F07070` (down/negative)
+- [ ] Trend bars use `rgba(129,87,242,0.75)` fill; target domain bar uses `#8157F2`
+- [ ] Table header: `rgba(129,87,242,0.06)` background · `rgba(129,87,242,0.80)` text
+- [ ] No light-mode styles — this is a dark-only output
+- [ ] Google Fonts loaded: Instrument Sans + DM Sans + DM Mono
 
 ---
 
@@ -140,199 +166,282 @@ Trend badge classes: `trend-up` (green), `trend-down` (red), `trend-stable` (gra
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{TARGET_DOMAIN}} — Q1 2026 Strategic Performance Report</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>{{TARGET_DOMAIN}} — SEO Performance Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.page-wrapper{max-width:900px;margin:0 auto;padding:32px 20px 60px}
+:root{
+  --bg:#0D0A1A;
+  --purple:#8157F2;
+  --purple-deep:#6B3FD4;
+  --purple-light:#EFE0FF;
+  --surface:rgba(255,255,255,0.04);
+  --surface-2:rgba(255,255,255,0.07);
+  --surface-3:rgba(255,255,255,0.10);
+  --border:rgba(255,255,255,0.08);
+  --border-2:rgba(255,255,255,0.15);
+  --border-purple:rgba(129,87,242,0.35);
+  --text-1:#FFFFFF;
+  --text-2:rgba(255,255,255,0.60);
+  --text-3:rgba(255,255,255,0.30);
+  --up:#5DCEA6;
+  --up-bg:rgba(93,206,166,0.10);
+  --dn:#F07070;
+  --dn-bg:rgba(240,112,112,0.10);
+  --head:'Instrument Sans',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+body{font-family:var(--body);background:var(--bg);color:var(--text-1);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.page{max-width:940px;margin:0 auto;padding:48px 28px 88px}
 
-/* HEADER */
-.header{text-align:center;padding:32px 0 24px}
-.header-logo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#94a3b8;margin-bottom:20px}
-.header-logo span{color:#fff}
-.header h1{font-size:clamp(26px,4vw,38px);font-weight:800;line-height:1.15;margin-bottom:8px}
-.header h1 em{font-style:normal;background:linear-gradient(135deg,#3b82f6,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.header-sub{color:#64748b;font-size:13px;font-weight:500}
+/* ── HEADER ─────────────────────────────────────── */
+.hdr{text-align:center;padding:44px 0 40px}
+.hdr-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(129,87,242,0.08);border:1px solid rgba(129,87,242,0.22);border-radius:100px;padding:5px 16px;font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple-light);margin-bottom:22px}
+.hdr-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);box-shadow:0 0 8px var(--purple);flex-shrink:0}
+.hdr-title{font-family:var(--head);font-size:clamp(30px,4.5vw,46px);font-weight:700;line-height:1.12;margin-bottom:8px;letter-spacing:-.01em}
+.hdr-title em{font-style:normal;color:var(--purple)}
+.hdr-sub{color:var(--text-3);font-size:12px;font-family:var(--mono);letter-spacing:.02em}
+.hdr-divider{width:64px;height:1px;background:rgba(129,87,242,0.30);margin:18px auto 0}
 
-/* SECTION TITLES */
-.section-title{font-size:22px;font-weight:800;text-align:center;margin:40px 0 20px;color:#f1f5f9}
+/* ── SECTION HEADER ─────────────────────────────── */
+.sec-hdr{display:flex;align-items:center;gap:10px;margin:48px 0 18px}
+.sec-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 7px var(--purple);flex-shrink:0}
+.sec-num{font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+.sec-label{font-family:var(--head);font-size:19px;font-weight:600;color:var(--text-1)}
 
-/* TIMELINE */
-.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;margin-bottom:40px}
-.timeline::before{content:'';position:absolute;top:50%;left:calc(33.33% - 6px);width:calc(33.33% + 12px);height:2px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);z-index:0;transform:translateY(-50%)}
-.tcard{background:#111827;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:22px 18px;position:relative;z-index:1}
-.tcard.active{background:linear-gradient(145deg,#1e3a8a,#1d4ed8);border-color:#3b82f6;box-shadow:0 0 30px rgba(59,130,246,0.25)}
-.tcard-date{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:4px}
-.tcard.active .tcard-date{color:#93c5fd}
-.tcard-label{font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:14px}
-.tcard.active .tcard-label{color:#bfdbfe}
-.tcard-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.tcard-row:last-of-type{border-bottom:none}
-.tcard-row-label{font-size:11px;color:#64748b;font-weight:500}
-.tcard.active .tcard-row-label{color:#93c5fd}
-.tcard-row-val{font-size:13px;font-weight:700;color:#f1f5f9}
-.tcard.active .tcard-row-val{color:#fff}
-.delta{font-size:10px;font-weight:600;margin-left:4px}
-.delta.neg{color:#f87171}
-.delta.pos{color:#34d399}
-.tcard-badge{display:inline-block;margin-top:14px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,0.08);color:#94a3b8}
-.tcard.active .tcard-badge{background:rgba(255,255,255,0.15);color:#fff}
-.tcard-badge.green{background:#064e3b;color:#34d399}
+/* ── TIMELINE ───────────────────────────────────── */
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px;position:relative}
+.timeline::before{content:'';position:absolute;top:44px;left:calc(33.33% - 4px);width:calc(33.33% + 8px);height:1px;background:rgba(129,87,242,0.25);z-index:0}
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 20px;position:relative;z-index:1;transition:border-color .2s}
+.tc:hover{border-color:var(--border-purple)}
+.tc.live{background:rgba(129,87,242,0.07);border-color:var(--border-purple)}
+.tc.live::after{content:'';position:absolute;inset:0;border-radius:12px;box-shadow:0 0 28px rgba(129,87,242,0.10);pointer-events:none}
+.tc-top-bar{position:absolute;top:0;left:0;right:0;height:2px;border-radius:12px 12px 0 0;background:var(--purple);opacity:0}
+.tc.live .tc-top-bar{opacity:1}
+.tc-label{font-family:var(--head);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.tc-period{font-family:var(--head);font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:16px}
+.tc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.tc-row:last-of-type{border-bottom:none}
+.tc-row-l{font-size:11px;color:var(--text-3);font-family:var(--body)}
+.tc-row-v{font-family:var(--head);font-size:13px;font-weight:600;color:var(--text-1);display:flex;align-items:center;gap:5px}
+.tc-badge{margin-top:14px;padding:5px 11px;border-radius:100px;font-size:10px;font-weight:700;font-family:var(--head);letter-spacing:.04em;text-align:center;border:1px solid rgba(129,87,242,0.22);background:rgba(129,87,242,0.08);color:var(--purple-light)}
+.tc-badge.green{background:var(--up-bg);color:var(--up);border-color:rgba(93,206,166,0.22)}
+.tc-badge.dim{background:rgba(255,255,255,0.03);color:var(--text-3);border-color:var(--border)}
+/* delta chips inside tc-row-v */
+.delta{font-size:10px;font-weight:600;padding:2px 7px;border-radius:100px;font-family:var(--head)}
+.delta.pos{background:var(--up-bg);color:var(--up)}
+.delta.neg{background:var(--dn-bg);color:var(--dn)}
+.delta.na{background:rgba(255,255,255,0.04);color:var(--text-3);border:1px solid var(--border)}
 
-/* COMPETITIVE TABLE */
-.comp-section{background:#111827;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;margin-bottom:40px}
-.comp-table{width:100%;border-collapse:collapse}
-.comp-table thead tr{background:#0d1526}
-.comp-table th{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#475569;padding:12px 16px;text-align:left}
-.comp-table th:not(:first-child){text-align:center}
-.comp-table td{padding:13px 16px;border-top:1px solid rgba(255,255,255,0.04);font-size:13px;color:#cbd5e1}
-.comp-table td:not(:first-child){text-align:center}
-.comp-table tr.highlight{background:linear-gradient(90deg,rgba(29,78,216,0.35),rgba(29,78,216,0.18))}
-.comp-table tr.highlight td{color:#fff}
-.comp-table tr:not(.highlight):hover{background:rgba(255,255,255,0.03);transition:background .15s}
-.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:800}
-.rank-1{background:#7f1d1d;color:#fca5a5}
-.rank-2{background:#78350f;color:#fcd34d}
-.rank-3{background:#1e3a8a;color:#93c5fd}
-.rank-other{background:#1e293b;color:#64748b}
-.company-name{font-weight:600;color:#f1f5f9}
-.company-name.hl{color:#fff;font-weight:700}
-.trend-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px}
-.trend-up{background:#064e3b;color:#34d399}
-.trend-down{background:#450a0a;color:#f87171}
-.trend-stable{background:#1c1917;color:#a8a29e}
-.market-insight{padding:16px 20px;background:rgba(29,78,216,0.1);border-top:1px solid rgba(29,78,216,0.2)}
-.market-insight p{font-size:12px;color:#94a3b8;line-height:1.6}
-.market-insight strong{color:#60a5fa}
+/* ── COMPETITIVE TABLE ──────────────────────────── */
+.comp-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:48px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:rgba(129,87,242,0.06)}
+th{padding:11px 18px;text-align:left;font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(129,87,242,0.80);border-bottom:1px solid var(--border)}
+td{padding:14px 18px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text-2);font-family:var(--body)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(129,87,242,0.03)}
+tr.hl td{background:rgba(129,87,242,0.05)}
+/* rank badges */
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-family:var(--head);font-size:11px;font-weight:700}
+.rank-1{background:rgba(240,112,112,0.12);color:var(--dn)}
+.rank-2{background:rgba(255,185,50,0.10);color:#FFB932}
+.rank-3{background:rgba(129,87,242,0.15);color:var(--purple-light)}
+.rank-other{background:rgba(255,255,255,0.06);color:var(--text-3)}
+/* domain names */
+.dname{font-family:var(--head);font-size:13px;font-weight:600;color:var(--text-1)}
+.dname.me{color:var(--purple)}
+.mono{font-family:var(--mono);font-size:12px;color:var(--text-2)}
+/* trend badges */
+.tbadge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:10px;font-weight:700;font-family:var(--head);letter-spacing:.03em}
+.t-up{background:var(--up-bg);color:var(--up)}
+.t-dn{background:var(--dn-bg);color:var(--dn)}
+.t-stable{background:rgba(255,255,255,0.05);color:var(--text-3);border:1px solid var(--border)}
+.mkt-note{padding:16px 20px;border-top:1px solid var(--border);background:rgba(129,87,242,0.03)}
+.mkt-note p{font-size:12px;color:var(--text-2);line-height:1.65}
 
-/* TWO-COL */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
-.col-card{background:#111827;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:22px 18px}
-.col-card-title{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#475569;margin-bottom:16px}
-.big-stat{margin-bottom:16px}
-.big-stat-val{font-size:40px;font-weight:800;line-height:1;margin-bottom:4px}
-.big-stat-val.green{color:#34d399}
-.big-stat-val.red{color:#f87171}
-.big-stat-label{font-size:11px;color:#64748b;font-weight:500}
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:6px}
-.stat-row-label{font-size:12px;color:#94a3b8;font-weight:500}
-.stat-row-val{font-size:13px;font-weight:700;color:#f1f5f9}
-.content-cluster{padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:6px;border-left:3px solid #1d4ed8}
-.cc-url{font-size:11px;color:#60a5fa;font-weight:600;margin-bottom:4px;word-break:break-all}
-.cc-meta{display:flex;gap:12px}
-.cc-meta span{font-size:10px;color:#64748b;font-weight:500}
-.cc-meta strong{color:#94a3b8}
+/* ── TWO-COL ─────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:48px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 20px;transition:border-color .2s}
+.card:hover{border-color:var(--border-purple)}
+.card-ttl{font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px}
+/* hero stat */
+.big-stat-val{font-family:var(--head);font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
+.big-stat-val.green{color:var(--up)}
+.big-stat-val.red{color:var(--dn)}
+.big-stat-val.na{color:var(--text-3)}
+.big-stat-label{font-size:11px;color:var(--text-3);font-family:var(--body);margin-bottom:18px;line-height:1.4}
+/* stat rows */
+.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.srow:last-of-type{border-bottom:none}
+.srow-l{font-size:12px;color:var(--text-3)}
+.srow-v{font-family:var(--head);font-size:13px;font-weight:600;color:var(--text-1)}
+/* content clusters */
+.cluster{padding:10px 0;border-bottom:1px solid var(--border)}
+.cluster:last-child{border-bottom:none}
+.cluster-url{font-family:var(--mono);font-size:11px;color:var(--purple-light);margin-bottom:4px;word-break:break-all}
+.cluster-meta{display:flex;gap:14px;font-size:11px;color:var(--text-3)}
+.cluster-meta strong{color:var(--text-2);font-weight:500}
+/* monthly trend bars */
+.trend-row{margin-bottom:12px}
+.trend-row:last-child{margin-bottom:0}
+.trend-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.trend-month{font-family:var(--head);font-size:11px;font-weight:600;color:var(--text-2)}
+.trend-etv{font-family:var(--mono);font-size:11px;color:var(--text-3)}
+.trend-track{height:10px;background:rgba(255,255,255,0.05);border-radius:100px;overflow:hidden}
+.trend-bar{height:100%;border-radius:100px;background:rgba(129,87,242,0.55)}
+/* keyword distribution */
+.kw-dist{margin-top:2px}
+.kw-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.kw-row:last-child{border-bottom:none}
+.kw-label{font-size:12px;color:var(--text-3)}
+.kw-val{font-family:var(--head);font-size:13px;font-weight:600;color:var(--text-1)}
+.kw-val.hot{color:var(--up)}
+.kw-val.warm{color:var(--purple-light)}
 
-/* TREND BARS */
-.trend-months{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.trend-month-row{display:flex;align-items:center;gap:10px}
-.trend-month-label{font-size:11px;color:#64748b;font-weight:600;width:60px;flex-shrink:0}
-.trend-bar-wrap{flex:1;background:rgba(255,255,255,0.05);border-radius:4px;height:22px;overflow:hidden}
-.trend-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:#fff;background:linear-gradient(90deg,#1d4ed8,#3b82f6)}
-.trend-kw-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px}
-.trend-kw-label{color:#64748b}
-.trend-kw-val{color:#f1f5f9;font-weight:600}
+/* ── STRATEGIC PRIORITIES ───────────────────────── */
+.strat-shell{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px 24px;margin-bottom:48px}
+.strat-shell-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.strat-shell-ttl{font-family:var(--head);font-size:15px;font-weight:600;color:var(--text-1)}
+.strat-period-chip{font-family:var(--head);font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;background:rgba(129,87,242,0.08);color:var(--purple-light);border:1px solid rgba(129,87,242,0.22);letter-spacing:.04em}
+.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sc{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:18px 16px;transition:border-color .2s,background .2s}
+.sc:hover{border-color:var(--border-purple);background:rgba(129,87,242,0.04)}
+.sc-num{font-family:var(--head);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:7px}
+.sc-title{font-family:var(--head);font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:9px;line-height:1.3}
+.sc-desc{font-size:12px;color:var(--text-2);line-height:1.6}
 
-/* STRATEGIC PRIORITIES */
-.strat-section{background:#0d1117;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 22px;margin-bottom:40px}
-.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
-.strat-card{background:#111827;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px 14px}
-.strat-num{font-size:11px;font-weight:800;color:#1d4ed8;margin-bottom:6px}
-.strat-title{font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:6px;line-height:1.3}
-.strat-desc{font-size:11px;color:#64748b;line-height:1.55}
+/* ── EXECUTIVE SUMMARY ──────────────────────────── */
+.exec{background:rgba(129,87,242,0.05);border:1px solid rgba(129,87,242,0.18);border-radius:12px;padding:30px 28px;margin-bottom:48px}
+.exec-title{display:flex;align-items:center;gap:9px;font-family:var(--head);font-size:15px;font-weight:600;color:var(--purple-light);margin-bottom:20px}
+.exec-title::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 7px var(--purple);flex-shrink:0}
+.exec p{font-size:13px;color:var(--text-2);line-height:1.75;margin-bottom:14px}
+.exec p:last-of-type{margin-bottom:22px}
+.exec-badge{display:inline-block;background:rgba(129,87,242,0.10);border:1px solid rgba(129,87,242,0.28);border-radius:100px;padding:8px 20px;font-family:var(--head);font-size:11px;font-weight:700;color:var(--purple-light);letter-spacing:.04em}
 
-/* EXECUTIVE SUMMARY */
-.exec-section{background:linear-gradient(135deg,#78350f,#92400e,#b45309);border-radius:16px;padding:30px 26px;margin-bottom:24px}
-.exec-section h2{font-size:20px;font-weight:800;color:#fff;margin-bottom:18px}
-.exec-section p{font-size:13px;color:#fde68a;line-height:1.7;margin-bottom:12px}
-.exec-section p:last-of-type{margin-bottom:0}
-.exec-badge{display:inline-block;margin-top:18px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:7px 18px;font-size:11px;font-weight:700;color:#fff;letter-spacing:.04em}
+/* ── FOOTER ─────────────────────────────────────── */
+.footer{border-top:1px solid var(--border);padding:20px 0 0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-3);line-height:1.7}
 
-/* FOOTER */
-.footer{text-align:center;font-size:11px;color:#1e293b;padding-top:12px;line-height:1.6}
-
-/* RESPONSIVE */
-@media(max-width:680px){
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media(max-width:700px){
   .timeline{grid-template-columns:1fr}
   .timeline::before{display:none}
   .two-col{grid-template-columns:1fr}
   .strat-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-width:420px){.strat-grid{grid-template-columns:1fr}}
-@media print{
-  body{background:#fff;color:#000}
-  .tcard,.comp-section,.col-card,.strat-section,.exec-section{border:1px solid #ccc!important;background:#fff!important;box-shadow:none!important}
-}
+@media(max-width:460px){.strat-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="page-wrapper">
+<div class="page">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-logo"><span>✦ INFRASITY</span></div>
-    <h1>Strategic <em>Performance Report</em></h1>
-    <p class="header-sub">Growth Journey &amp; Competitive Analysis: {{START_DATE}} → {{END_DATE}}</p>
+  <!-- ── HEADER ─────────────────────────────────── -->
+  <div class="hdr">
+    <div class="hdr-pill">
+      <span class="hdr-pill-dot"></span>
+      Infrasity &nbsp;·&nbsp; SEO Performance Report
+    </div>
+    <div class="hdr-title">Strategic Performance<br><em>{{TARGET_DOMAIN}}</em></div>
+    <div class="hdr-sub">{{START_DATE}} → {{END_DATE}} &nbsp;·&nbsp; United States &nbsp;·&nbsp; Competitive Set: {{COMP_DOMAIN_LIST}}</div>
+    <div class="hdr-divider"></div>
   </div>
 
-  <!-- TIMELINE -->
-  <div class="section-title">Our 90-Day Growth Journey</div>
+  <!-- ── 01 PERFORMANCE TIMELINE ─────────────────── -->
+  <div class="sec-hdr">
+    <span class="sec-dot"></span>
+    <span class="sec-num">01</span>
+    <span class="sec-label">Performance Timeline</span>
+  </div>
   <div class="timeline">
 
-    <div class="tcard">
-      <div class="tcard-date">{{START_DATE}}</div>
-      <div class="tcard-label">Where We Were</div>
-      <div class="tcard-row"><span class="tcard-row-label">Monthly Traffic</span><span class="tcard-row-val">{{BASELINE_TRAFFIC}}</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Organic Keywords</span><span class="tcard-row-val">{{BASELINE_KEYWORDS}}</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Top 3 Keywords</span><span class="tcard-row-val">{{BASELINE_TOP3}}</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Competitive Rank</span><span class="tcard-row-val">#{{BASELINE_RANK}} of {{TOTAL_COMPETITORS}}</span></div>
-      <div class="tcard-badge">Starting Position</div>
+    <!-- Baseline card -->
+    <div class="tc">
+      <div class="tc-top-bar"></div>
+      <div class="tc-label">Baseline</div>
+      <div class="tc-period">{{START_DATE}}</div>
+      <div class="tc-row">
+        <span class="tc-row-l">Monthly Traffic</span>
+        <span class="tc-row-v">{{BASELINE_TRAFFIC}}</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Organic Keywords</span>
+        <span class="tc-row-v">{{BASELINE_KEYWORDS}}</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Top 3 Keywords</span>
+        <span class="tc-row-v">{{BASELINE_TOP3}}</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Competitive Rank</span>
+        <span class="tc-row-v">#{{BASELINE_RANK}}</span>
+      </div>
+      <div class="tc-badge dim">Baseline · {{START_DATE}}</div>
     </div>
 
-    <div class="tcard active">
-      <div class="tcard-date">{{END_DATE}}</div>
-      <div class="tcard-label">Where We Are</div>
-      <div class="tcard-row">
-        <span class="tcard-row-label">Monthly Traffic</span>
-        <span class="tcard-row-val">{{CURRENT_TRAFFIC}} <span class="delta {{TRAFFIC_GROWTH_CLASS}}">{{TRAFFIC_GROWTH_PCT}}</span></span>
+    <!-- Current card (active / highlighted) -->
+    <div class="tc live">
+      <div class="tc-top-bar"></div>
+      <div class="tc-label">Current State</div>
+      <div class="tc-period">{{END_DATE}}</div>
+      <div class="tc-row">
+        <span class="tc-row-l">Monthly Traffic</span>
+        <span class="tc-row-v">{{CURRENT_TRAFFIC}} <span class="delta {{TRAFFIC_GROWTH_CLASS}}">{{TRAFFIC_GROWTH_PCT}}</span></span>
       </div>
-      <div class="tcard-row">
-        <span class="tcard-row-label">Organic Keywords</span>
-        <span class="tcard-row-val">{{CURRENT_KEYWORDS}} <span class="delta {{KEYWORDS_CHANGE_CLASS}}">{{KEYWORDS_CHANGE_PCT}}</span></span>
+      <div class="tc-row">
+        <span class="tc-row-l">Organic Keywords</span>
+        <span class="tc-row-v">{{CURRENT_KEYWORDS}} <span class="delta {{KEYWORDS_CHANGE_CLASS}}">{{KEYWORDS_CHANGE_PCT}}</span></span>
       </div>
-      <div class="tcard-row">
-        <span class="tcard-row-label">Top 3 Keywords</span>
-        <span class="tcard-row-val">{{CURRENT_TOP3}} <span class="delta {{TOP3_GROWTH_CLASS}}">{{TOP3_GROWTH_PCT}}</span></span>
+      <div class="tc-row">
+        <span class="tc-row-l">Top 3 Keywords</span>
+        <span class="tc-row-v">{{CURRENT_TOP3}} <span class="delta {{TOP3_GROWTH_CLASS}}">{{TOP3_GROWTH_PCT}}</span></span>
       </div>
-      <div class="tcard-row">
-        <span class="tcard-row-label">Competitive Rank</span>
-        <span class="tcard-row-val">#{{CURRENT_COMP_RANK}} of {{TOTAL_COMPETITORS}}</span>
+      <div class="tc-row">
+        <span class="tc-row-l">Competitive Rank</span>
+        <span class="tc-row-v">#{{CURRENT_COMP_RANK}} of {{TOTAL_COMPETITORS}}</span>
       </div>
-      <div class="tcard-badge">Rank #{{CURRENT_COMP_RANK}} Overall</div>
+      <div class="tc-badge">Rank #{{CURRENT_COMP_RANK}} Overall</div>
     </div>
 
-    <div class="tcard">
-      <div class="tcard-date">Q2 2026 Target</div>
-      <div class="tcard-label">Where We're Going</div>
-      <div class="tcard-row"><span class="tcard-row-label">Monthly Traffic</span><span class="tcard-row-val">{{TARGET_GOAL_TRAFFIC}}+</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Organic Keywords</span><span class="tcard-row-val">{{TARGET_GOAL_KEYWORDS}}+</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Top 3 Keywords</span><span class="tcard-row-val">{{TARGET_GOAL_TOP3}}+</span></div>
-      <div class="tcard-row"><span class="tcard-row-label">Target Position</span><span class="tcard-row-val">{{TARGET_BADGE_TEXT}}</span></div>
-      <div class="tcard-badge green">Target: {{TARGET_BADGE_TEXT}}</div>
+    <!-- Q2 target card -->
+    <div class="tc">
+      <div class="tc-top-bar"></div>
+      <div class="tc-label">Q2 Target</div>
+      <div class="tc-period">Where We're Going</div>
+      <div class="tc-row">
+        <span class="tc-row-l">Monthly Traffic</span>
+        <span class="tc-row-v">{{TARGET_GOAL_TRAFFIC}}+</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Organic Keywords</span>
+        <span class="tc-row-v">{{TARGET_GOAL_KEYWORDS}}+</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Top 3 Keywords</span>
+        <span class="tc-row-v">{{TARGET_GOAL_TOP3}}+</span>
+      </div>
+      <div class="tc-row">
+        <span class="tc-row-l">Target Position</span>
+        <span class="tc-row-v">{{TARGET_BADGE_TEXT}}</span>
+      </div>
+      <div class="tc-badge green">Target: {{TARGET_BADGE_TEXT}}</div>
     </div>
 
   </div>
 
-  <!-- COMPETITIVE LANDSCAPE -->
-  <div class="section-title">Competitive Landscape</div>
-  <div class="comp-section">
-    <table class="comp-table">
+  <!-- ── 02 COMPETITIVE LANDSCAPE ─────────────────── -->
+  <div class="sec-hdr">
+    <span class="sec-dot"></span>
+    <span class="sec-num">02</span>
+    <span class="sec-label">Competitive Landscape</span>
+  </div>
+  <div class="comp-wrap">
+    <table>
       <thead>
         <tr>
           <th>Rank</th>
-          <th>Company</th>
+          <th>Domain</th>
           <th>Monthly Traffic</th>
           <th>Keywords</th>
           <th>Q1 Trend</th>
@@ -342,117 +451,165 @@ body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;font-size:1
         {{COMP_TABLE_ROWS}}
       </tbody>
     </table>
-    <div class="market-insight">
+    <div class="mkt-note">
       <p>{{MARKET_INSIGHT_TEXT}}</p>
     </div>
   </div>
 
-  <!-- TWO-COL -->
+  <!-- ── 03 TRAFFIC & CONTENT ──────────────────────── -->
+  <div class="sec-hdr">
+    <span class="sec-dot"></span>
+    <span class="sec-num">03</span>
+    <span class="sec-label">Traffic &amp; Content</span>
+  </div>
   <div class="two-col">
 
-    <div class="col-card">
-      <div class="col-card-title">Business Impact</div>
-      <div class="big-stat">
-        <div class="big-stat-val {{BIG_STAT_CLASS}}">{{TRAFFIC_GROWTH_PCT}}</div>
-        <div class="big-stat-label">Traffic change {{START_DATE}} → {{END_DATE}}</div>
+    <!-- Left: Business Impact + Content Clusters -->
+    <div class="card">
+      <div class="card-ttl">Business Impact</div>
+      <div class="big-stat-val {{BIG_STAT_CLASS}}">{{BIG_STAT_VAL}}</div>
+      <div class="big-stat-label">Traffic change {{START_DATE}} → {{END_DATE}}</div>
+
+      <div class="srow">
+        <span class="srow-l">Competitive Position</span>
+        <span class="srow-v">#{{CURRENT_COMP_RANK}} of {{TOTAL_COMPETITORS}}</span>
       </div>
-      <div class="stat-row">
-        <span class="stat-row-label">Competitive Position</span>
-        <span class="stat-row-val">#{{CURRENT_COMP_RANK}} of {{TOTAL_COMPETITORS}}</span>
+      <div class="srow">
+        <span class="srow-l">Fastest Growing in Set</span>
+        <span class="srow-v" style="color:{{FASTEST_GROWING_COLOR}}">{{FASTEST_GROWING_LABEL}}</span>
       </div>
-      <div class="stat-row">
-        <span class="stat-row-label">Fastest Growing in Set</span>
-        <span class="stat-row-val" style="color:{{FASTEST_GROWING_COLOR}}">{{FASTEST_GROWING_LABEL}}</span>
+      <div class="srow" style="margin-bottom:20px">
+        <span class="srow-l">Gap to Close (#{{RANK_ABOVE}})</span>
+        <span class="srow-v" style="color:var(--dn)">{{GAP_TO_NEXT}} ETV</span>
       </div>
-      <div class="stat-row" style="margin-bottom:16px">
-        <span class="stat-row-label">Gap to Close (#{{RANK_ABOVE}})</span>
-        <span class="stat-row-val">{{GAP_TO_NEXT}} ETV</span>
+
+      <div class="card-ttl" style="margin-top:2px">Top Content Clusters</div>
+      <div class="cluster">
+        <div class="cluster-url">{{PAGE1_URL}}</div>
+        <div class="cluster-meta"><span>ETV: <strong>{{PAGE1_ETV}}</strong></span><span>Keywords: <strong>{{PAGE1_KW}}</strong></span></div>
       </div>
-      <div class="col-card-title" style="margin-top:4px">Top Content Clusters</div>
-      <div class="content-cluster">
-        <div class="cc-url">{{PAGE1_URL}}</div>
-        <div class="cc-meta"><span>ETV: <strong>{{PAGE1_ETV}}</strong></span><span>Keywords: <strong>{{PAGE1_KW}}</strong></span></div>
+      <div class="cluster">
+        <div class="cluster-url">{{PAGE2_URL}}</div>
+        <div class="cluster-meta"><span>ETV: <strong>{{PAGE2_ETV}}</strong></span><span>Keywords: <strong>{{PAGE2_KW}}</strong></span></div>
       </div>
-      <div class="content-cluster">
-        <div class="cc-url">{{PAGE2_URL}}</div>
-        <div class="cc-meta"><span>ETV: <strong>{{PAGE2_ETV}}</strong></span><span>Keywords: <strong>{{PAGE2_KW}}</strong></span></div>
-      </div>
-      <div class="content-cluster">
-        <div class="cc-url">{{PAGE3_URL}}</div>
-        <div class="cc-meta"><span>ETV: <strong>{{PAGE3_ETV}}</strong></span><span>Keywords: <strong>{{PAGE3_KW}}</strong></span></div>
+      <div class="cluster">
+        <div class="cluster-url">{{PAGE3_URL}}</div>
+        <div class="cluster-meta"><span>ETV: <strong>{{PAGE3_ETV}}</strong></span><span>Keywords: <strong>{{PAGE3_KW}}</strong></span></div>
       </div>
     </div>
 
-    <div class="col-card">
-      <div class="col-card-title">Monthly Traffic Trend</div>
-      <div class="trend-months">
-        <div class="trend-month-row">
-          <span class="trend-month-label">{{TREND_LABEL_1}}</span>
-          <div class="trend-bar-wrap"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_1}}%">{{TREND_ETV_1}}</div></div>
+    <!-- Right: Monthly Trend Bars + Keyword Distribution -->
+    <div class="card">
+      <div class="card-ttl">Monthly Traffic Trend</div>
+      <div class="trend-row">
+        <div class="trend-meta">
+          <span class="trend-month">{{TREND_LABEL_1}}</span>
+          <span class="trend-etv">{{TREND_ETV_1}}</span>
         </div>
-        <div class="trend-month-row">
-          <span class="trend-month-label">{{TREND_LABEL_2}}</span>
-          <div class="trend-bar-wrap"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_2}}%">{{TREND_ETV_2}}</div></div>
+        <div class="trend-track"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_1}}%"></div></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-meta">
+          <span class="trend-month">{{TREND_LABEL_2}}</span>
+          <span class="trend-etv">{{TREND_ETV_2}}</span>
         </div>
-        <div class="trend-month-row">
-          <span class="trend-month-label">{{TREND_LABEL_3}}</span>
-          <div class="trend-bar-wrap"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_3}}%">{{TREND_ETV_3}}</div></div>
+        <div class="trend-track"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_2}}%"></div></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-meta">
+          <span class="trend-month">{{TREND_LABEL_3}}</span>
+          <span class="trend-etv">{{TREND_ETV_3}}</span>
         </div>
-        <div class="trend-month-row">
-          <span class="trend-month-label">{{TREND_LABEL_4}}</span>
-          <div class="trend-bar-wrap"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_4}}%">{{TREND_ETV_4}}</div></div>
+        <div class="trend-track"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_3}}%"></div></div>
+      </div>
+      <div class="trend-row" style="margin-bottom:22px">
+        <div class="trend-meta">
+          <span class="trend-month">{{TREND_LABEL_4}}</span>
+          <span class="trend-etv">{{TREND_ETV_4}}</span>
+        </div>
+        <div class="trend-track"><div class="trend-bar" style="width:{{TREND_BAR_WIDTH_4}}%"></div></div>
+      </div>
+
+      <div class="card-ttl">Keyword Distribution (Current)</div>
+      <div class="kw-dist">
+        <div class="kw-row">
+          <span class="kw-label">Position 1</span>
+          <span class="kw-val">{{KW_POS_1}}</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-label">Position 2–3</span>
+          <span class="kw-val">{{KW_POS_2_3}}</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-label">Position 4–10</span>
+          <span class="kw-val hot">{{KW_POS_4_10}}</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-label">Position 11–20</span>
+          <span class="kw-val warm">{{KW_POS_11_20}}</span>
+        </div>
+        <div class="kw-row">
+          <span class="kw-label">Position 21–100</span>
+          <span class="kw-val">{{KW_POS_21_100}}</span>
         </div>
       </div>
-      <div class="col-card-title">Keyword Distribution (Current)</div>
-      <div class="trend-kw-row"><span class="trend-kw-label">Position 1</span><span class="trend-kw-val">{{KW_POS_1}}</span></div>
-      <div class="trend-kw-row"><span class="trend-kw-label">Position 2–3</span><span class="trend-kw-val">{{KW_POS_2_3}}</span></div>
-      <div class="trend-kw-row"><span class="trend-kw-label">Position 4–10</span><span class="trend-kw-val">{{KW_POS_4_10}}</span></div>
-      <div class="trend-kw-row"><span class="trend-kw-label">Position 11–20</span><span class="trend-kw-val">{{KW_POS_11_20}}</span></div>
-      <div class="trend-kw-row" style="border-bottom:none"><span class="trend-kw-label">Position 21–100</span><span class="trend-kw-val">{{KW_POS_21_100}}</span></div>
     </div>
 
   </div>
 
-  <!-- STRATEGIC PRIORITIES -->
-  <div class="strat-section">
-    <div class="section-title" style="margin-top:0;margin-bottom:18px;text-align:left;font-size:18px">Q2 2026 Strategic Priorities</div>
+  <!-- ── 04 STRATEGIC PRIORITIES ───────────────────── -->
+  <div class="sec-hdr">
+    <span class="sec-dot"></span>
+    <span class="sec-num">04</span>
+    <span class="sec-label">Q2 Strategic Priorities</span>
+  </div>
+  <div class="strat-shell">
+    <div class="strat-shell-hdr">
+      <div class="strat-shell-ttl">6 Data-Driven Actions</div>
+      <div class="strat-period-chip">Q2 · {{END_DATE}}</div>
+    </div>
     <div class="strat-grid">
-      <div class="strat-card">
-        <div class="strat-num">1. {{STRAT_1_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_1_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_1_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">1. {{STRAT_1_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_1_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_1_DESC}}</div>
       </div>
-      <div class="strat-card">
-        <div class="strat-num">2. {{STRAT_2_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_2_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_2_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">2. {{STRAT_2_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_2_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_2_DESC}}</div>
       </div>
-      <div class="strat-card">
-        <div class="strat-num">3. {{STRAT_3_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_3_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_3_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">3. {{STRAT_3_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_3_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_3_DESC}}</div>
       </div>
-      <div class="strat-card">
-        <div class="strat-num">4. {{STRAT_4_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_4_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_4_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">4. {{STRAT_4_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_4_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_4_DESC}}</div>
       </div>
-      <div class="strat-card">
-        <div class="strat-num">5. {{STRAT_5_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_5_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_5_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">5. {{STRAT_5_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_5_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_5_DESC}}</div>
       </div>
-      <div class="strat-card">
-        <div class="strat-num">6. {{STRAT_6_NUM_LABEL}}</div>
-        <div class="strat-title">{{STRAT_6_TITLE}}</div>
-        <div class="strat-desc">{{STRAT_6_DESC}}</div>
+      <div class="sc">
+        <div class="sc-num">6. {{STRAT_6_NUM_LABEL}}</div>
+        <div class="sc-title">{{STRAT_6_TITLE}}</div>
+        <div class="sc-desc">{{STRAT_6_DESC}}</div>
       </div>
     </div>
   </div>
 
-  <!-- EXECUTIVE SUMMARY -->
-  <div class="exec-section">
-    <h2>Infrasity's Notes</h2>
+  <!-- ── 05 INFRASITY'S NOTES ───────────────────────── -->
+  <div class="sec-hdr">
+    <span class="sec-dot"></span>
+    <span class="sec-num">05</span>
+    <span class="sec-label">Infrasity's Notes</span>
+  </div>
+  <div class="exec">
+    <div class="exec-title">Strategic Overview</div>
     <p>{{EXEC_PARA_1}}</p>
     <p>{{EXEC_PARA_2}}</p>
     <p>{{EXEC_PARA_3}}</p>
@@ -460,10 +617,10 @@ body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#e2e8f0;font-size:1
     <div class="exec-badge">{{EXEC_BADGE_TEXT}}</div>
   </div>
 
-  <!-- FOOTER -->
+  <!-- ── FOOTER ─────────────────────────────────────── -->
   <div class="footer">
-    Data sourced from DataForSEO (ignore_synonyms: false). Traffic figures represent estimated organic traffic value (ETV).<br>
-    Competitive set: {{COMP_DOMAIN_LIST}}. Report period: {{START_DATE}} – {{END_DATE}}.
+    Data sourced from DataForSEO (ignore_synonyms: false) · Traffic figures represent estimated organic traffic value (ETV)<br>
+    Competitive set: {{COMP_DOMAIN_LIST}} · Report period: {{START_DATE}} – {{END_DATE}} · Generated by Infrasity
   </div>
 
 </div>
