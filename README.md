@@ -66,6 +66,7 @@ This repo ships both: the SEO/GEO/docs **skills** under [`skills/`](skills/), th
 - [Installation](#installation)
 - [Skills](#skills)
 - [Marketing skills](#marketing-skills)
+- [Writing skills](#writing-skills)
 - [Commands](#commands)
 - [Who it's for](#who-its-for)
 - [Requirements](#requirements)
@@ -131,6 +132,20 @@ npx skills add Infrasity-Labs/dev-gtm-claude-skills
 ```
 
 This pulls the latest skills straight into your Claude Code skills directory. Re-run it any time to update. Prefer to install manually or use Claude Desktop / Claude.ai? Use one of the methods below.
+
+### Blog skills runtime (agents + scripts)
+
+The [writing skills](#writing-skills) add a `/blog` content engine built from 30 sub-skills, **5 subagents**, and **shared Python scripts**. `npx skills add` installs the skill instructions, but the subagents and shared scripts need one extra step so the `/blog write` pipeline (research → write → SEO → review) runs end-to-end:
+
+```bash
+# Clone the repository to access the installer
+git clone https://github.com/Infrasity-Labs/dev-gtm-claude-skills.git
+cd dev-gtm-claude-skills
+./scripts/claude-blog-install.sh                  # agents → ~/.claude/agents, scripts → ~/.claude/scripts
+pip install -r writing-skills/requirements.txt    # textstat + beautifulsoup4
+```
+
+Use `--project` to install into the current project's `./.claude/` instead of `~/.claude/` (make sure to run the script from your project's root directory, e.g., `path/to/cloned-repo/scripts/claude-blog-install.sh --project`), and `--dry-run` to preview. A few sub-skills need their own credentials — `blog-google` (Google API OAuth), `blog-audio` / `blog-image` (`GOOGLE_AI_API_KEY` + nanobanana MCP), `blog-notebooklm` (browser login) — and all degrade gracefully when unconfigured.
 
 ### Claude Code (manual)
 
@@ -273,6 +288,58 @@ A full-funnel pack of **28 developer-marketing skills** under [`marketing-skills
 
 ---
 
+## Writing skills
+
+A full **blog content engine** under [`writing-skills/`](writing-skills/) — **30 sub-skills** routed by a `blog` orchestrator, plus 5 production subagents ([`agents/`](agents/)) and shared Python tooling ([`scripts/`](scripts/)). Dual-optimized for Google rankings (E-E-A-T, Dec 2025 Core Update) and AI citations (GEO/AEO). Invoke everything through `/blog <subcommand>` — see the [`/blog` command table](#blog--blog-content-engine). The same folder also ships **4 standalone writing skills** for copy, social, and prose quality.
+
+These need one extra setup step beyond `npx skills add` — see [Blog skills runtime](#blog-skills-runtime-agents--scripts).
+
+| Skill | Claude skill for… |
+| --- | --- |
+| **`blog`** | Orchestrator — routes `/blog <subcommand>` to the right sub-skill |
+| **`blog-write`** | Writing new articles from scratch (research → write → SEO → review pipeline) |
+| **`blog-rewrite`** | Optimizing/refreshing existing posts with anti-AI-detection patterns |
+| **`blog-analyze`** | 5-category 100-point quality audit with AI-content detection |
+| **`blog-brief`** | Content briefs with template recommendation and distribution plan |
+| **`blog-outline`** | SERP-informed outlines with competitive gap analysis |
+| **`blog-strategy`** | Positioning, topic clusters, and AI-citation surface strategy |
+| **`blog-calendar`** | Editorial calendars with decay detection and 60/30/10 content mix |
+| **`blog-cluster`** | Semantic topic-cluster planning + execution (hub-and-spoke) |
+| **`blog-seo-check`** | Post-writing SEO validation (title, meta, headings, links, OG) |
+| **`blog-schema`** | JSON-LD schema (BlogPosting, Person, FAQ, Breadcrumb) |
+| **`blog-geo`** | AI-citation readiness audit with a 0–100 GEO score |
+| **`blog-audit`** | Full-site blog health assessment across all posts |
+| **`blog-factcheck`** | Verifying statistics against their cited sources |
+| **`blog-cannibalization`** | Keyword-overlap / cannibalization detection across posts |
+| **`blog-repurpose`** | Cross-platform repurposing (social, email, YouTube, Reddit) |
+| **`blog-persona`** | Writing-voice and persona management (NNGroup framework) |
+| **`blog-brand`** | Generating BRAND.md + VOICE.md context auto-loaded by all sub-skills |
+| **`blog-discourse`** | Last-30-days discourse research (API-free via WebSearch) |
+| **`blog-taxonomy`** | Tag/category management across CMS platforms |
+| **`blog-chart`** | Inline SVG data-viz charts (internal-only, called by write/rewrite) |
+| **`blog-image`** | AI image generation/editing via Gemini (nanobanana MCP) |
+| **`blog-audio`** | Audio narration via Gemini TTS (summary/full/dialogue) |
+| **`blog-notebooklm`** | Source-grounded research from your NotebookLM documents |
+| **`blog-google`** | Google API data: PSI, CrUX, GSC, GA4, NLP, YouTube, Keywords |
+| **`blog-flow`** | FLOW framework prompts (evidence-led, find/optimize/win) |
+| **`blog-multilingual`** | One-command international publishing (write + translate + localize + hreflang) |
+| **`blog-translate`** | SEO-optimized translation with format preservation |
+| **`blog-localize`** | Cultural deep-adaptation per locale (DACH, FR, ES, JA, custom) |
+| **`blog-locale-audit`** | Multilingual content QA (completeness, hreflang, parity, freshness) |
+
+### Standalone writing skills
+
+Beyond the `/blog` engine, [`writing-skills/`](writing-skills/) ships **4 standalone craft skills** for copy, social, and prose quality — usable on their own, no runtime setup required.
+
+| Skill | Claude skill for… |
+| --- | --- |
+| **`ogilvy-copywriting`** | Sales-driven copy, headlines, and landing pages using David Ogilvy's advertising principles |
+| **`social-media-posts`** | Platform-specific posts for LinkedIn, Facebook, Instagram & Reddit (limits, hooks, hashtags) |
+| **`reddit-comments`** | Drafting on-brand Reddit comments from a domain + thread, with voice derived from the site |
+| **`stop-slop`** | Stripping predictable AI writing tells from prose for more human-like output |
+
+---
+
 ## Commands
 
 If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`.
@@ -328,6 +395,42 @@ If you've installed the command pack, every skill is also a slash subcommand. Th
 | `/marketing pricing <product or context>` | Pricing & packaging strategy. |
 | `/marketing revops <context>` | Lead lifecycle & marketing-to-sales handoff. |
 | `/marketing sales-enablement <asset type>` | Create sales collateral. |
+
+### `/blog` — blog content engine
+
+Single entry point for all 30 writing skills. Requires the [Blog skills runtime](#blog-skills-runtime-agents--scripts) step.
+
+| Command | Description |
+| --- | --- |
+| `/blog write <topic>` | Write a new post from scratch (research → write → SEO → review). |
+| `/blog rewrite <file>` | Rewrite/optimize an existing post. |
+| `/blog update <file>` | Update an existing post with fresh statistics (routes to rewrite). |
+| `/blog analyze <file-or-url>` | Audit quality with a 0–100 score. |
+| `/blog brief <topic>` | Generate a detailed content brief. |
+| `/blog outline <topic>` | SERP-informed content outline. |
+| `/blog strategy <niche>` | Blog strategy and topic ideation. |
+| `/blog calendar [monthly\|quarterly]` | Generate an editorial calendar. |
+| `/blog cluster [plan\|execute] <seed>` | Semantic topic-cluster planning + execution. |
+| `/blog seo-check <file>` | Post-writing SEO validation checklist. |
+| `/blog schema <file>` | Generate JSON-LD schema markup. |
+| `/blog geo <file>` | AI-citation readiness audit. |
+| `/blog audit [directory]` | Full-site blog health assessment. |
+| `/blog factcheck <file>` | Verify statistics against cited sources. |
+| `/blog cannibalization [dir]` | Detect keyword cannibalization across posts. |
+| `/blog repurpose <file>` | Repurpose content for other platforms. |
+| `/blog persona [create\|list\|use\|show]` | Manage writing personas and voice profiles. |
+| `/blog brand [init\|show\|update]` | Generate BRAND.md + VOICE.md context files. |
+| `/blog discourse <topic>` | Research what people said in the last 30 days. |
+| `/blog taxonomy [suggest\|sync\|audit]` | Tag/category management across CMS platforms. |
+| `/blog image [generate\|edit\|setup]` | AI image generation via Gemini. |
+| `/blog audio [generate\|voices\|setup]` | Generate audio narration of a post. |
+| `/blog notebooklm <question>` | Query NotebookLM for source-grounded research. |
+| `/blog google [command] [args]` | Google API data: PSI, CrUX, GSC, GA4, NLP, YouTube. |
+| `/blog flow [find\|optimize\|win\|prompts\|sync]` | FLOW framework prompts. |
+| `/blog multilingual <topic> --languages <codes>` | Write + translate + localize + hreflang. |
+| `/blog translate <file> --to <codes>` | SEO-optimized translation. |
+| `/blog localize <file> --locale <code>` | Cultural deep-adaptation. |
+| `/blog locale-audit <directory>` | Multilingual content QA. |
 
 ---
 
@@ -385,6 +488,17 @@ dev-gtm-claude-skills/
 │   ├── cro/
 │   ├── emails/
 │   └── …                            # ad-creative, ads, pricing, launch, and more
+├── writing-skills/                  # 30 blog/content-engine sub-skills (/blog) + 4 standalone
+│   ├── blog/                        # orchestrator
+│   ├── blog-write/
+│   ├── blog-analyze/
+│   ├── ogilvy-copywriting/          # standalone: sales-driven copy
+│   ├── social-media-posts/          # standalone: per-platform social posts
+│   ├── reddit-comments/             # standalone: on-brand Reddit replies
+│   ├── stop-slop/                   # standalone: strip AI writing tells
+│   └── …                            # rewrite, brief, schema, translate, and more
+├── agents/                          # 5 blog-production subagents (Task subagents)
+├── scripts/                         # shared blog scripts + multi-tool installers
 └── README.md
 ```
 
@@ -393,7 +507,7 @@ dev-gtm-claude-skills/
 ## FAQ
 
 **Are these Claude skills free?**
-Yes — every skill is free and MIT-licensed. No license fees, no paywalls.
+Yes, every skill is free and MIT-licensed. No license fees, no paywalls.
 
 **Do I need Claude Code?**
 No. Skills run in Claude Code, Claude Desktop, or Claude.ai. Desktop and web use the ZIP upload method above.
@@ -402,7 +516,7 @@ No. Skills run in Claude Code, Claude Desktop, or Claude.ai. Desktop and web use
 Most need none. Only the live-search skills (`growth-report`, `blog-post-counter`, `api-docs-quality-report`) use DataForSEO, and the internal-linking skills (`orphan-pages…`, `no-outlinks-audit`) use Ahrefs.
 
 **How is this different from a standard SEO audit tool?**
-Traditional tools optimize for Google crawlers. These skills are built for developer documentation and AI discoverability — they check whether your docs can be parsed, cited, and recommended by LLMs.
+Traditional tools optimize for Google crawlers. These skills are built for developer documentation and AI discoverability. They check whether your docs can be parsed, cited, and recommended by LLMs.
 
 **How often do new skills ship?**
 Regularly. Star or watch the repo to get notified.
