@@ -43,8 +43,8 @@ Or describe what you want naturally. Claude activates the skill when you name a 
 4. Zip this skill folder and upload it:
 
 ```bash
-cd dev-gtm-claude-skills/skills
-zip -r dev-marketing-prospector.zip dev-marketing-prospector/
+cd dev-gtm-claude-skills/skills/dev-marketing-prospector
+zip -r ../dev-marketing-prospector.zip *dev-marketing-prospector/
 ```
 
 Upload `dev-marketing-prospector.zip` and toggle it on.
@@ -95,7 +95,7 @@ Nine columns:
 
 | Column | What goes in it |
 |--------|-----------------|
-| Company | Name, funding badge, founded year, headcount |
+| Company | Name, funding badge, founded year, and optional phase descriptor |
 | URL | Website link |
 | LinkedIn | LinkedIn company page link |
 | Headcount | Employee count |
