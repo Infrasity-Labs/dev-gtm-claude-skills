@@ -138,12 +138,14 @@ This pulls the latest skills straight into your Claude Code skills directory. Re
 The [writing skills](#writing-skills) add a `/blog` content engine built from 30 sub-skills, **5 subagents**, and **shared Python scripts**. `npx skills add` installs the skill instructions, but the subagents and shared scripts need one extra step so the `/blog write` pipeline (research → write → SEO → review) runs end-to-end:
 
 ```bash
-# from a clone of the repo, after npx skills add
+# Clone the repository to access the installer
+git clone https://github.com/Infrasity-Labs/dev-gtm-claude-skills.git
+cd dev-gtm-claude-skills
 ./scripts/claude-blog-install.sh                  # agents → ~/.claude/agents, scripts → ~/.claude/scripts
 pip install -r writing-skills/requirements.txt    # textstat + beautifulsoup4
 ```
 
-Use `--project` to install into the current project's `./.claude/` instead of `~/.claude/`, and `--dry-run` to preview. A few sub-skills need their own credentials — `blog-google` (Google API OAuth), `blog-audio` / `blog-image` (`GOOGLE_AI_API_KEY` + nanobanana MCP), `blog-notebooklm` (browser login) — and all degrade gracefully when unconfigured.
+Use `--project` to install into the current project's `./.claude/` instead of `~/.claude/` (make sure to run the script from your project's root directory, e.g., `path/to/cloned-repo/scripts/claude-blog-install.sh --project`), and `--dry-run` to preview. A few sub-skills need their own credentials — `blog-google` (Google API OAuth), `blog-audio` / `blog-image` (`GOOGLE_AI_API_KEY` + nanobanana MCP), `blog-notebooklm` (browser login) — and all degrade gracefully when unconfigured.
 
 ### Claude Code (manual)
 
