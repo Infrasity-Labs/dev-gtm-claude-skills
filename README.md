@@ -404,6 +404,7 @@ Single entry point for all 30 writing skills. Requires the [Blog skills runtime]
 | --- | --- |
 | `/blog write <topic>` | Write a new post from scratch (research → write → SEO → review). |
 | `/blog rewrite <file>` | Rewrite/optimize an existing post. |
+| `/blog update <file>` | Update an existing post with fresh statistics (routes to rewrite). |
 | `/blog analyze <file-or-url>` | Audit quality with a 0–100 score. |
 | `/blog brief <topic>` | Generate a detailed content brief. |
 | `/blog outline <topic>` | SERP-informed content outline. |
@@ -417,7 +418,7 @@ Single entry point for all 30 writing skills. Requires the [Blog skills runtime]
 | `/blog factcheck <file>` | Verify statistics against cited sources. |
 | `/blog cannibalization [dir]` | Detect keyword cannibalization across posts. |
 | `/blog repurpose <file>` | Repurpose content for other platforms. |
-| `/blog persona [create\|list\|use]` | Manage writing personas and voice profiles. |
+| `/blog persona [create\|list\|use\|show]` | Manage writing personas and voice profiles. |
 | `/blog brand [init\|show\|update]` | Generate BRAND.md + VOICE.md context files. |
 | `/blog discourse <topic>` | Research what people said in the last 30 days. |
 | `/blog taxonomy [suggest\|sync\|audit]` | Tag/category management across CMS platforms. |
@@ -425,7 +426,7 @@ Single entry point for all 30 writing skills. Requires the [Blog skills runtime]
 | `/blog audio [generate\|voices\|setup]` | Generate audio narration of a post. |
 | `/blog notebooklm <question>` | Query NotebookLM for source-grounded research. |
 | `/blog google [command] [args]` | Google API data: PSI, CrUX, GSC, GA4, NLP, YouTube. |
-| `/blog flow [find\|optimize\|win\|sync]` | FLOW framework prompts. |
+| `/blog flow [find\|optimize\|win\|prompts\|sync]` | FLOW framework prompts. |
 | `/blog multilingual <topic> --languages <codes>` | Write + translate + localize + hreflang. |
 | `/blog translate <file> --to <codes>` | SEO-optimized translation. |
 | `/blog localize <file> --locale <code>` | Cultural deep-adaptation. |
