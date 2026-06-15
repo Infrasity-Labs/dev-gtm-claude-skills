@@ -153,7 +153,7 @@ def fetch_page_data(url: str) -> dict:
     fetch_script = os.path.join(SCRIPTS_DIR, "fetch_page.py")
     try:
         proc = subprocess.run(
-            [sys.executable, fetch_script, url, "--output", "/dev/stdout"],
+            [sys.executable, fetch_script, url],
             capture_output=True,
             text=True,
             timeout=60,

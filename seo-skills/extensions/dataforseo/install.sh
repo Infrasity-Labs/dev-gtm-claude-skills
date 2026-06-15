@@ -109,13 +109,12 @@ main() {
     echo "→ Configuring MCP server..."
     FIELD_CONFIG_PATH="${SEO_SKILL_DIR}/dataforseo-field-config.json"
 
-    python3 -c "
-import json, os, sys
+    python3 - "${SETTINGS_FILE}" "${DFSE_USERNAME}" "${DFSE_PASSWORD}" "${FIELD_CONFIG_PATH}" <<'PY' || {
+import json
+import os
+import sys
 
-settings_path = '${SETTINGS_FILE}'
-username = '''${DFSE_USERNAME}'''
-password = '''${DFSE_PASSWORD}'''
-field_config = '${FIELD_CONFIG_PATH}'
+settings_path, username, password, field_config = sys.argv[1:5]
 
 # Read existing settings or create new
 if os.path.exists(settings_path):
@@ -146,7 +145,7 @@ with open(settings_path, 'w') as f:
     json.dump(settings, f, indent=2)
 
 print('  ✓ MCP server configured in settings.json')
-" || {
+PY
         echo "  ⚠  Could not auto-configure MCP server."
         echo "  Add the dataforseo server manually to ~/.claude/settings.json"
         echo "  See: extensions/dataforseo/docs/DATAFORSEO-SETUP.md"

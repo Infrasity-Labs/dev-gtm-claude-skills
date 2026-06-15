@@ -238,7 +238,8 @@ def rule_11_cwv_regressed(baseline: dict, current_cwv: dict | None) -> dict:
         if old_val is not None and new_val is not None and old_val > 0:
             pct_change = (new_val - old_val) / old_val
             if pct_change > 0.20:  # >20% worse (higher is worse for all these)
-                regressions.append(f"{metric_id}: {old_val:.0f} -> {new_val:.0f} (+{pct_change:.0%})")
+                fmt = ".3f" if metric_id == "cumulative-layout-shift" else ".0f"
+                regressions.append(f"{metric_id}: {old_val:{fmt}} -> {new_val:{fmt}} (+{pct_change:.0%})")
 
     triggered = len(regressions) > 0
     return _make_finding(

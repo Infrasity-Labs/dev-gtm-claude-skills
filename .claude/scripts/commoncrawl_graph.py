@@ -197,7 +197,7 @@ def _stream_gz_chunked(url: str, target_domain: str, timeout: int = 120,
                     continue
                 fields = line.split("\t")
                 for field in fields:
-                    if field == target_domain or field.endswith(f".{target_domain}"):
+                    if field == target_domain or field.startswith(f"{target_domain}."):
                         matches.append(fields)
                         break
                 if max_lines and len(matches) >= max_lines:

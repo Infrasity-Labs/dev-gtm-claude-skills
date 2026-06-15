@@ -135,6 +135,9 @@ def main() -> int:
         except URLSafetyError as exc:
             print(f"Error: url_safety: {exc}", file=sys.stderr)
             return 2
+        except Exception as exc:
+            print(f"Error: fetch failed: {exc}", file=sys.stderr)
+            return 2
 
     result = scan(html)
 

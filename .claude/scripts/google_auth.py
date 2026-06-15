@@ -211,8 +211,8 @@ def _save_oauth_token(token_data: dict):
     # write succeeds or raises, so there is no fd-leak path here.
     try:
         os.fchmod(fd, 0o600)
-    except OSError:
-        pass  # FS may not support fchmod (e.g. some Windows filesystems)
+    except (OSError, AttributeError):
+        pass  # FS may not support fchmod (e.g. some Windows filesystems or os.fchmod unavailable)
     with os.fdopen(fd, "w") as f:
         json.dump(token_data, f, indent=2)
 
@@ -388,7 +388,9 @@ def run_oauth_flow(creds_path: str):
     except Exception:
         pass
 
-    server.handle_request()
+    start_time = time.time()
+    while auth_code[0] is None and time.time() - start_time < 300:
+        server.handle_request()
     server.server_close()
 
     if not auth_code[0]:

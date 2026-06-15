@@ -7,11 +7,15 @@ Usage:
 """
 
 import argparse
-import ipaddress
 import json
-import socket
 import sys
 from urllib.parse import ParseResult, urlparse
+
+from url_safety import (
+    URLSafetyError,
+    make_safe_playwright_route_handler,
+    validate_url_strict,
+)
 
 try:
     from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
@@ -69,22 +73,19 @@ def analyze_visual(url: str, timeout: int = 30000) -> dict:
         "error": None,
     }
 
+    # Normalize, then SSRF pre-flight via the canonical safety module.
     try:
-        url, parsed = normalize_url(url)
+        url, _parsed = normalize_url(url)
+        url, _pinned_ip = validate_url_strict(url)
         result["url"] = url
+    except URLSafetyError as e:
+        result["error"] = f"url_safety: {e}"
+        return result
     except ValueError as e:
         result["error"] = str(e)
         return result
 
-    # SSRF prevention: block private/internal IPs
-    try:
-        resolved_ip = socket.gethostbyname(parsed.hostname)
-        ip = ipaddress.ip_address(resolved_ip)
-        if ip.is_private or ip.is_loopback or ip.is_reserved:
-            result["error"] = f"Blocked: URL resolves to private/internal IP ({resolved_ip})"
-            return result
-    except socket.gaierror:
-        pass
+    route_handler = make_safe_playwright_route_handler()
 
     try:
         with sync_playwright() as p:
@@ -93,6 +94,7 @@ def analyze_visual(url: str, timeout: int = 30000) -> dict:
             # Desktop analysis
             desktop = browser.new_context(viewport={"width": 1920, "height": 1080})
             page = desktop.new_page()
+            page.route("**/*", route_handler)
             page.goto(url, wait_until="networkidle", timeout=timeout)
 
             # Check H1 visibility above fold
@@ -147,6 +149,7 @@ def analyze_visual(url: str, timeout: int = 30000) -> dict:
             # Mobile analysis
             mobile = browser.new_context(viewport={"width": 375, "height": 812})
             page = mobile.new_page()
+            page.route("**/*", route_handler)
             page.goto(url, wait_until="networkidle", timeout=timeout)
 
             # Check viewport meta
