@@ -55,7 +55,7 @@ Because every skill follows the open `SKILL.md` standard, it isn't locked to a s
 | **Scope** | A single, well-defined workflow | An end-to-end job, often composing skills |
 | **Example** | "Follow these 33 checks to audit docs" | "Research, write, and review this blog post" |
 
-This repo ships both: the SEO/GEO/docs **skills** under [`skills/`](skills/), the full-funnel marketing **skills** under [`marketing-skills/`](marketing-skills/), and a set of blog-production **agents** under [`agents/`](agents/).
+This repo ships several bundles: the SEO/GEO/docs **skills** under [`skills/`](skills/), the full-funnel marketing **skills** under [`marketing-skills/`](marketing-skills/), the blog content engine under [`writing-skills/`](writing-skills/), a comprehensive **SEO suite** under [`seo-skills/`](seo-skills/), and blog-production **agents** under [`agents/`](agents/).
 
 ---
 
@@ -67,6 +67,7 @@ This repo ships both: the SEO/GEO/docs **skills** under [`skills/`](skills/), th
 - [Skills](#skills)
 - [Marketing skills](#marketing-skills)
 - [Writing skills](#writing-skills)
+- [SEO skills](#seo-skills)
 - [Commands](#commands)
 - [Who it's for](#who-its-for)
 - [Requirements](#requirements)
@@ -340,9 +341,62 @@ Beyond the `/blog` engine, [`writing-skills/`](writing-skills/) ships **4 standa
 
 ---
 
+## SEO skills
+
+A comprehensive **SEO suite** under [`seo-skills/`](seo-skills/) — **25 sub-skills** routed by a `seo` orchestrator, plus **18 specialist subagents** ([`agents/`](agents/)), shared Python tooling ([`scripts/`](scripts/)), and **8 optional MCP extensions** ([`seo-skills/extensions/`](seo-skills/extensions/)). Dual-optimized for Google rankings (technical SEO, E-E-A-T, Core Web Vitals with INP) and AI visibility (GEO for AI Overviews/ChatGPT/Perplexity). Detects business type (SaaS, e-commerce, local, publisher, agency) and delegates to the right specialists. Invoke everything through `/seo <subcommand>` — see the [`/seo` command table](#seo--comprehensive-seo-suite).
+
+| Skill | Claude skill for… |
+| --- | --- |
+| **`seo`** | Orchestrator — routes `/seo <subcommand>` and runs full-audit delegation |
+| **`seo-audit-full`** | Full-site audit with parallel subagent delegation (up to 500 pages) |
+| **`seo-page`** | Deep single-page SEO analysis |
+| **`seo-technical`** | Technical SEO audit across 9 categories (crawl, index, CWV, JS rendering) |
+| **`seo-content`** | E-E-A-T and content-quality analysis with AI-citation readiness |
+| **`seo-content-brief`** | Competitive SEO content briefs with per-section word counts |
+| **`seo-schema`** | Schema.org detection, validation, and JSON-LD generation |
+| **`seo-sitemap`** | XML sitemap analysis and generation |
+| **`seo-images`** | Image SEO, image SERP, and file optimization (WebP/AVIF, IPTC) |
+| **`seo-geo`** | GEO for AI Overviews, ChatGPT, and Perplexity |
+| **`seo-plan`** | Strategic SEO planning with industry templates |
+| **`seo-programmatic`** | Programmatic SEO at scale with thin-content safeguards |
+| **`seo-competitor-pages`** | Comparison, "vs", and alternatives page generation |
+| **`seo-local`** | Local SEO — GBP, NAP, citations, reviews, map pack |
+| **`seo-maps`** | Maps intelligence — geo-grid rank tracking, GBP audit |
+| **`seo-hreflang`** | Hreflang and international SEO audit/generation |
+| **`seo-google`** | Google APIs — GSC, PageSpeed, CrUX, Indexing, GA4 |
+| **`seo-backlinks`** | Backlink profile analysis (free: Moz/Bing/Common Crawl) |
+| **`seo-cluster`** | SERP-based semantic topic clustering (hub-and-spoke) |
+| **`seo-sxo`** | Search Experience Optimization — page-type mismatch detection |
+| **`seo-drift`** | SEO drift monitoring — baseline, compare, history |
+| **`seo-ecommerce`** | E-commerce SEO — product schema, marketplace intelligence |
+| **`seo-dataforseo`** | Live SEO data via DataForSEO (extension) |
+| **`seo-image-gen`** | AI image generation for SEO assets via Gemini (extension) |
+| **`seo-flow`** | FLOW framework prompts (evidence-led: find/leverage/optimize/win) |
+
+### Standalone SEO skill
+
+Alongside the suite, [`seo-skills/`](seo-skills/) ships **`geo-seo-claude`** — a self-contained SEO/GEO/AEO optimizer (audit, schema generation, metadata validation, keyword/entity extraction, IndexNow) with its own bundled scripts and reference library.
+
+### SEO extensions
+
+**8 optional MCP extensions** under [`seo-skills/extensions/`](seo-skills/extensions/) add live data and AI-visibility coverage — each installed on demand via its own `install.sh`:
+
+| Extension skill | Adds |
+| --- | --- |
+| **`seo-dataforseo`** | Live SERP, keyword, backlink, and AI-visibility data (DataForSEO MCP) |
+| **`seo-image-gen`** | AI image generation via Gemini/nanobanana MCP |
+| **`seo-firecrawl`** | Full-site crawling and site mapping (Firecrawl MCP) |
+| **`seo-ahrefs`** | Referring domains, backlinks, and organic keywords (Ahrefs MCP) |
+| **`seo-bing`** | Bing Webmaster Tools + IndexNow submission |
+| **`seo-seranking`** | AI Share-of-Voice across ChatGPT, Gemini, Perplexity, AI Overviews, AI Mode |
+| **`seo-profound`** | Time-series LLM citation tracking |
+| **`seo-unlighthouse`** | Multi-page Lighthouse audits via the Unlighthouse CLI |
+
+---
+
 ## Commands
 
-If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`.
+If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; and the blog content engine runs under `/blog`.
 
 <p align="center">
   <img src="./assets/claude-commands.png" alt="Claude Commands" width="400"/>
@@ -432,6 +486,38 @@ Single entry point for all 30 writing skills. Requires the [Blog skills runtime]
 | `/blog localize <file> --locale <code>` | Cultural deep-adaptation. |
 | `/blog locale-audit <directory>` | Multilingual content QA. |
 
+### `/seo` — comprehensive SEO suite
+
+Single entry point for the SEO suite. The `seo` orchestrator detects business type and delegates to specialist subagents in parallel for full audits.
+
+| Command | Description |
+| --- | --- |
+| `/seo audit <url>` | Full website audit with parallel subagent delegation. |
+| `/seo page <url>` | Deep single-page SEO analysis. |
+| `/seo technical <url>` | Technical SEO audit (9 categories). |
+| `/seo content <url>` | E-E-A-T and content-quality analysis. |
+| `/seo content-brief <topic or url>` | Generate a competitive SEO content brief. |
+| `/seo schema <url>` | Detect, validate, and generate Schema.org markup. |
+| `/seo sitemap <url or generate>` | Analyze or generate XML sitemaps. |
+| `/seo images <url or optimize>` | Image SEO audit, SERP analysis, file optimization. |
+| `/seo geo <url>` | AI Overviews / Generative Engine Optimization. |
+| `/seo plan <business-type>` | Strategic SEO planning. |
+| `/seo programmatic [url\|plan]` | Programmatic SEO analysis and planning. |
+| `/seo competitor-pages [url\|generate]` | Competitor comparison page generation. |
+| `/seo local <url>` | Local SEO (GBP, citations, reviews, map pack). |
+| `/seo maps [command] [args]` | Maps intelligence (geo-grid, GBP audit, reviews). |
+| `/seo hreflang [url]` | Hreflang / i18n SEO audit and generation. |
+| `/seo google [command] [url]` | Google SEO APIs (GSC, PageSpeed, CrUX, Indexing, GA4). |
+| `/seo backlinks <url>` | Backlink profile analysis (free + DataForSEO). |
+| `/seo cluster <seed-keyword>` | SERP-based semantic clustering and content architecture. |
+| `/seo sxo <url>` | Search Experience Optimization — page-type and persona scoring. |
+| `/seo drift [baseline\|compare\|history] <url>` | Capture and track SEO changes over time. |
+| `/seo ecommerce <url>` | E-commerce SEO (product schema, marketplace intelligence). |
+| `/seo flow [stage] [url\|topic]` | FLOW framework prompts (find/leverage/optimize/win/local). |
+| `/seo dataforseo [command]` | Live SEO data via DataForSEO (extension). |
+| `/seo image-gen [use-case] <description>` | AI image generation for SEO assets (extension). |
+| `/seo firecrawl [command] <url>` | Full-site crawling and site mapping (extension). |
+
 ---
 
 ## Who it's for
@@ -497,8 +583,17 @@ dev-gtm-claude-skills/
 │   ├── reddit-comments/             # standalone: on-brand Reddit replies
 │   ├── stop-slop/                   # standalone: strip AI writing tells
 │   └── …                            # rewrite, brief, schema, translate, and more
-├── agents/                          # 5 blog-production subagents (Task subagents)
-├── scripts/                         # shared blog scripts + multi-tool installers
+├── seo-skills/                      # 25 SEO sub-skills (/seo) + geo-seo-claude + 8 extensions
+│   ├── seo/                         # orchestrator
+│   ├── seo-audit/                   # full-site audit (installs as seo-audit-full)
+│   ├── seo-technical/
+│   ├── seo-geo/
+│   ├── geo-seo-claude/              # standalone SEO/GEO/AEO optimizer (own scripts)
+│   ├── extensions/                  # 8 optional MCP extensions (dataforseo, firecrawl, …)
+│   └── …                            # schema, local, maps, backlinks, cluster, and more
+├── agents/                          # blog + 18 SEO specialist subagents (Task subagents)
+├── data/                            # shared data (e.g., google-updates.json)
+├── scripts/                         # shared blog + SEO scripts + multi-tool installers
 └── README.md
 ```
 

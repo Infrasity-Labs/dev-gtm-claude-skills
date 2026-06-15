@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "source_of_truth": "https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history",
+  "secondary_sources": [
+    "https://developers.google.com/search/blog",
+    "https://developers.google.com/search/updates",
+    "https://blog.google/products/search/"
+  ],
+  "last_verified": "2026-05-17",
+  "policy": "Every entry must cite a Google-owned URL. Third-party-only claims belong in unverified[]. Bump last_verified each time an entry is added or revised.",
+  "_schema_doc": {
+    "updates[]": {
+      "date": "ISO date YYYY-MM-DD (Google's announcement date).",
+      "name": "Short human-readable title.",
+      "kind": "One of: core | spam | core+spam | policy | qrg | product | schema | cwv.",
+      "source": "Required. Must resolve to a Google-owned domain (developers.google.com, web.dev, chrome.com, blog.google, support.google.com).",
+      "notes": "Optional. One-line summary of practitioner impact."
+    },
+    "unverified[]": {
+      "date": "ISO date or YYYY-MM-xx if exact date unconfirmed.",
+      "claim": "What third-party trackers reported.",
+      "third_party_sources": "Array of source URLs that originated the claim.",
+      "primary_source_check": "URL of the Google-owned page that would confirm or refute.",
+      "status": "Explicit recommendation. Audit scripts MUST NOT encode unverified claims until promoted to updates[]."
+    }
+  },
+  "updates": [
+    {
+      "date": "2024-03-05",
+      "name": "March 2024 Core Update + spam updates",
+      "kind": "core+spam",
+      "source": "https://developers.google.com/search/blog/2024/03/core-update-spam-policies",
+      "notes": "Helpful Content System merged into core ranking; new spam policies for scaled content, site reputation, and expired domain abuse."
+    },
+    {
+      "date": "2024-03-05",
+      "name": "INP replaces FID",
+      "kind": "cwv",
+      "source": "https://web.dev/articles/inp",
+      "notes": "INP becomes a stable Core Web Vital. FID dropped from CrUX/PSI 2024-09-09."
+    },
+    {
+      "date": "2024-05-05",
+      "name": "Site reputation abuse enforcement begins",
+      "kind": "policy",
+      "source": "https://developers.google.com/search/blog/2024/03/core-update-spam-policies",
+      "notes": "Manual actions phase begins. First wave hits Forbes Advisor, CNN Underscored, WSJ Buy Side."
+    },
+    {
+      "date": "2024-06-20",
+      "name": "June 2024 Spam Update",
+      "kind": "spam",
+      "source": "https://status.search.google.com/incidents/Rb4QyP3aKQ8RpVeQyMyA",
+      "notes": "Targeted policy-violating sites."
+    },
+    {
+      "date": "2024-08-15",
+      "name": "August 2024 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/blog/2024/08/august-2024-core-update",
+      "notes": "Google: 'designed to surface more useful content'. Partial Helpful Content recoveries reported."
+    },
+    {
+      "date": "2024-11-11",
+      "name": "November 2024 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "24-day rollout."
+    },
+    {
+      "date": "2024-11-19",
+      "name": "Site Reputation Abuse policy clarified",
+      "kind": "policy",
+      "source": "https://developers.google.com/search/blog/2024/11/site-reputation-abuse-update",
+      "notes": "No amount of first-party involvement changes the third-party nature. Section-level removals (CNN Underscored /reviews, Forbes /health) within hours."
+    },
+    {
+      "date": "2024-12-12",
+      "name": "December 2024 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "Tight rollout (~7 days)."
+    },
+    {
+      "date": "2024-12-19",
+      "name": "December 2024 Spam Update",
+      "kind": "spam",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "Cited as targeting scaled content abuse."
+    },
+    {
+      "date": "2025-01-23",
+      "name": "QRG update (Jan 2025)",
+      "kind": "qrg",
+      "source": "https://services.google.com/fh/files/misc/hsw-sqrg.pdf",
+      "notes": "Adds formal definition of generative AI (§2.1). Defines scaled content abuse, expired-domain abuse, filler content under §4.6 Spammy Webpages. Lowest rating triggered when all/almost all MC is copied, paraphrased, or AI-generated."
+    },
+    {
+      "date": "2025-03-05",
+      "name": "AI Mode experimental launch",
+      "kind": "product",
+      "source": "https://blog.google/products/search/ai-mode-search/",
+      "notes": "Initially Google One AI Premium / Labs (US). Gemini 2.0 backend. Query fan-out technique."
+    },
+    {
+      "date": "2025-03-13",
+      "name": "March 2025 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "14-day rollout."
+    },
+    {
+      "date": "2025-05-20",
+      "name": "AI Mode general rollout (US)",
+      "kind": "product",
+      "source": "https://blog.google/products/search/google-search-ai-mode-update/",
+      "notes": "No Labs sign-up required. Gemini 2.5 in AI Mode and AI Overviews."
+    },
+    {
+      "date": "2025-06-19",
+      "name": "Structured data deprecation",
+      "kind": "schema",
+      "source": "https://developers.google.com/search/blog/2025/06/simplifying-search-results",
+      "notes": "Phased out: Course Info, Claim Review, Estimated Salary, Learning Video, Special Announcement (carryover), Vehicle Listing."
+    },
+    {
+      "date": "2025-06-30",
+      "name": "June 2025 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "16-day rollout. Some Sep 2023 HCU partial recoveries."
+    },
+    {
+      "date": "2025-08-21",
+      "name": "AI Mode expands to 180+ countries",
+      "kind": "product",
+      "source": "https://blog.google/products/search/google-search-ai-mode-update/",
+      "notes": "English first. Robby Stein: 'active' AI Mode begins with dining reservations."
+    },
+    {
+      "date": "2025-09-11",
+      "name": "QRG update (Sept 2025)",
+      "kind": "qrg",
+      "source": "https://services.google.com/fh/files/misc/hsw-sqrg.pdf",
+      "notes": "Adds AI Overview rating examples. Expands YMYL to include political/social topics. Google: 'no change to rating guidance'."
+    },
+    {
+      "date": "2025-12-11",
+      "name": "December 2025 Core Update",
+      "kind": "core",
+      "source": "https://developers.google.com/search/updates/ranking-update-history",
+      "notes": "18-day rollout. Third core update of 2025. Reported eCommerce skew per Amsive analysis."
+    }
+  ],
+  "unverified": [
+    {
+      "date": "2026-03-xx",
+      "claim": "Third-party reports of a March 2026 core update exceeding December 2025 volatility",
+      "third_party_sources": [
+        "https://dataslayer.ai/",
+        "https://roastweb.com/"
+      ],
+      "primary_source_check": "https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history",
+      "status": "NOT confirmed against Google's primary source as of 2026-05-17. Do not encode in audit recommendations until confirmed."
+    }
+  ]
+}
