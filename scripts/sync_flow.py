@@ -245,7 +245,7 @@ def prompt_readme(rows):
     lines = [
         "# FLOW Prompt Index (Blog-Applicable)",
         "",
-        "Local-SEO prompts are excluded by design. See claude-seo for those.",
+        "Local-SEO prompts are excluded by design. See seo-skills for those.",
         "",
         "| Stage | Filename | Title | Description |",
         "|---|---|---|---|",
