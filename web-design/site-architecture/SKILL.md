@@ -226,15 +226,14 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph Header Nav
+    subgraph "Header Nav"
         HOME[Homepage]
         FEAT[Features]
         PRICE[Pricing]
         BLOG[Blog]
         CTA[Get Started]
     end
-
-    subgraph Footer Nav
+    subgraph "Footer Nav"
         ABOUT[About]
         CAREERS[Careers]
         CONTACT[Contact]
