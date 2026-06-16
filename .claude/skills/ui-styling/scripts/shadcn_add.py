@@ -52,7 +52,7 @@ class ShadcnInstaller:
             with open(self.components_json) as f:
                 config = json.load(f)
 
-            components_dir = self.project_root / config.get("aliases", {}).get(
+            components_dir = self.project_root / (config.get("aliases") or {}).get(
                 "components", "components"
             ).replace("@/", "")
             ui_dir = components_dir / "ui"

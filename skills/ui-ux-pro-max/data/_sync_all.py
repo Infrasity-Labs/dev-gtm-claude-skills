@@ -14,6 +14,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # ─── Color derivation helpers ────────────────────────────────────────────────
 def h2r(h):
     h = h.lstrip("#")
+    if len(h) == 3: h = "".join(c*2 for c in h)
     return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
 def r2h(r, g, b):

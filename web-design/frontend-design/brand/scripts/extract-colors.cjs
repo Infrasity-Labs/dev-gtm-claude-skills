@@ -236,7 +236,7 @@ function main() {
   const showPalette = args.includes("--palette");
   const brandFileIdx = args.indexOf("--brand-file");
   const brandFile =
-    brandFileIdx !== -1 ? args[brandFileIdx + 1] : DEFAULT_GUIDELINES_PATH;
+    (brandFileIdx !== -1 && brandFileIdx + 1 < args.length) ? args[brandFileIdx + 1] : DEFAULT_GUIDELINES_PATH;
   const brandFileValue = brandFileIdx !== -1 ? args[brandFileIdx + 1] : null;
   const imagePath = args.find(
     (a) => !a.startsWith("--") && a !== brandFileValue

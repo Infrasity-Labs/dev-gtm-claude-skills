@@ -39,16 +39,16 @@ function extractColorsFromTable(content) {
 
   // Find color tables
   const primaryMatch = content.match(
-    /### Primary Colors[\s\S]*?\|[\s\S]*?(?=###|$)/i
+    /### Primary Colors[\s\S]*?\|[\s\S]*?(?=###|##|$)/i
   );
   const secondaryMatch = content.match(
-    /### Secondary Colors[\s\S]*?\|[\s\S]*?(?=###|$)/i
+    /### Secondary Colors[\s\S]*?\|[\s\S]*?(?=###|##|$)/i
   );
   const neutralMatch = content.match(
-    /### Neutral[\s\S]*?\|[\s\S]*?(?=###|$)/i
+    /### Neutral[\s\S]*?\|[\s\S]*?(?=###|##|$)/i
   );
   const semanticMatch = content.match(
-    /### Semantic[\s\S]*?\|[\s\S]*?(?=###|$)/i
+    /### Semantic[\s\S]*?\|[\s\S]*?(?=###|##|$)/i
   );
 
   if (primaryMatch) colors.primary = extractHexColors(primaryMatch[0]);

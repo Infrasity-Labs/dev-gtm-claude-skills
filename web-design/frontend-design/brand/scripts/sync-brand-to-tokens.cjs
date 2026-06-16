@@ -113,7 +113,9 @@ function generateColorScale(baseHex, darkHex, lightHex) {
  * Adjust hex color brightness
  */
 function adjustBrightness(hex, percent) {
-  const num = parseInt(hex.replace('#', ''), 16);
+  let cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 3) { cleanHex = cleanHex.split('').map(c => c + c).join(''); }
+  const num = parseInt(cleanHex, 16);
   const r = Math.min(255, Math.max(0, (num >> 16) + Math.round(255 * percent)));
   const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + Math.round(255 * percent)));
   const b = Math.min(255, Math.max(0, (num & 0x0000FF) + Math.round(255 * percent)));
@@ -129,6 +131,7 @@ function updateDesignTokens(tokens, colors) {
   tokens.brand = brandName;
 
   // Update primitive colors with new names
+  if (!tokens.primitive) tokens.primitive = {};
   const primitiveColors = tokens.primitive?.color || {};
 
   // Remove old color keys, add new ones
