@@ -7,6 +7,24 @@ description: Guidance for distinctive, intentional visual design when building n
 
 Approach this as the design lead at a small studio known for giving every client a visual identity that could not be mistaken for anyone else's. This client has already rejected proposals that felt templated, and is paying for a distinctive point of view: make deliberate, opinionated choices about palette, typography, and layout that are specific to this brief, and take one real aesthetic risk you can justify.
 
+## Design Intelligence
+
+Before writing any code or finalising a design plan, get a data-backed starting point:
+
+```bash
+python3 ui-ux-pro-max/scripts/search.py "<product type> <industry> <keywords>" --design-system
+```
+
+This returns a complete design system recommendation — style, color palette, typography, and anti-patterns to avoid — based on the product type and audience. Use it to seed the token system in the brainstorm pass below. If the brief already specifies a direction, use it to validate rather than replace that direction.
+
+If a brand already exists, inject brand context first:
+
+```bash
+node brand/scripts/inject-brand-context.cjs
+```
+
+Once the design plan is done and approved, hand implementation off to the `ui-styling` skill for component setup with shadcn/ui + Tailwind.
+
 ## Ground it in the subject
 
 If the brief does not pin down what the product or subject is, pin it yourself before designing: name one concrete subject, its audience, and the page's single job, and state your choice. If there's any information in your memory about the human's preferences, context about what they're building, or designs you've made before – use that as a hint. The subject's own world, its materials, instruments, artifacts, and vernacular, is where distinctive choices come from. Build with the brief's real content and subject matter throughout.
@@ -52,3 +70,10 @@ Use active voice as default. A control should say exactly what happens when it's
 Treat failure and emptiness as moments for direction, not mood. Explain what went wrong and how to fix it, in the interface's voice rather than a person's. Errors don't apologize, and they are never vague about what happened. An empty screen is an invitation to act.
 
 Keep the register conversational and tuned: plain verbs, sentence case, no filler, with tone matched to the brand and the audience. Let each element do exactly one job. A label labels, an example demonstrates, and nothing quietly does double duty.
+
+## Related Skills
+
+- **ui-ux-pro-max**: Design system generation, color palettes, typography recommendations, UX guidelines, and style search
+- **ui-styling**: Component implementation with shadcn/ui and Tailwind CSS — takes the design plan into code
+- **brand**: Brand context injection, visual identity standards, color extraction, and asset validation
+- **web-design-guidelines**: Post-build UI code audit for accessibility, UX, and best practices compliance
