@@ -226,15 +226,14 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph Header Nav
+    subgraph "Header Nav"
         HOME[Homepage]
         FEAT[Features]
         PRICE[Pricing]
         BLOG[Blog]
         CTA[Get Started]
     end
-
-    subgraph Footer Nav
+    subgraph "Footer Nav"
         ABOUT[About]
         CAREERS[Careers]
         CONTACT[Contact]
@@ -347,6 +346,7 @@ Mermaid diagram showing page relationships and navigation zones. Use `graph TD` 
 
 ## Related Skills
 
+- **ui-ux-pro-max**: Navigation pattern best practices — bottom nav limits, adaptive navigation, back behavior, deep linking, and breadcrumb UX rules (use `--domain ux "navigation"` to query)
 - **content-strategy**: For planning what content to create and topic clusters
 - **programmatic-seo**: For building SEO pages at scale with templates and data
 - **seo-audit**: For technical SEO, on-page optimization, and indexation issues
