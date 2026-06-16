@@ -40,6 +40,8 @@ df = pd.read_excel('/mnt/user-data/uploads/filename.xlsx')
 
 # Identify keyword column: look for columns named 'keyword', 'keywords', 'query', 'term', 'search term'
 # If ambiguous, pick the first text column or ask the user
+keyword_candidates = ['keyword', 'keywords', 'query', 'term', 'search term']
+keyword_col = next((col for col in df.columns if col.lower() in keyword_candidates), df.columns[0])
 keywords = df[keyword_col].dropna().tolist()
 ```
 
