@@ -1,5 +1,5 @@
 ---
-name: geo-seo-claude
+name: geo-seo
 description: Audit and optimize content for SEO, GEO (generative engine optimization), and AEO (answer engine optimization). Use when user asks to "audit SEO", "check search visibility", "optimize for AI search", "generate schema markup", "validate metadata", "extract keywords", "optimize for Perplexity/ChatGPT/Gemini", "check Open Graph tags", "submit to IndexNow", or mentions SEO, GEO, AEO, or search optimization. Do NOT use for creating new content from scratch or image optimization.
 ---
 
