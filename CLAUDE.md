@@ -1,1 +1,1 @@
-@AGENTS.md
+Refer to [AGENTS.md](AGENTS.md) for details on the skills, agents, and extensions library structure and workflows.

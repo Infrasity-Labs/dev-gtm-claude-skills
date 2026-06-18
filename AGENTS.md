@@ -7,7 +7,7 @@ This repo is a library of **Claude Code skills, agents, and extensions** — reu
 ## Repo Structure
 
 ```
-Skills/
+dev-gtm-claude-skills/
 ├── seo-skills/                  # SEO cluster (~35 skills + 8 extensions)
 │   ├── seo/                     # Master SEO orchestrator
 │   ├── seo-audit/               # Full site audit
@@ -119,10 +119,10 @@ extensions/<name>/
 ### Installing an extension
 
 ```bash
-# From the seo-skills repo root
-./extensions/dataforseo/install.sh    # prompts for API credentials
-./extensions/ahrefs/install.sh
-./extensions/firecrawl/install.sh
+# From the repository root
+./seo-skills/extensions/dataforseo/install.sh    # prompts for API credentials
+./seo-skills/extensions/ahrefs/install.sh
+./seo-skills/extensions/firecrawl/install.sh
 ```
 
 The install script:
@@ -134,7 +134,7 @@ The install script:
 ### Uninstalling
 
 ```bash
-./extensions/dataforseo/uninstall.sh
+./seo-skills/extensions/dataforseo/uninstall.sh
 ```
 
 ---
