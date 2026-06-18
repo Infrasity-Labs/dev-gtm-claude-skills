@@ -148,19 +148,24 @@ class RICECalculator:
                 current_quarter['features'].append(feature)
                 current_quarter['capacity_used'] += effort
             else:
-                # Move to next quarter
-                current_quarter['capacity_available'] = team_capacity - current_quarter['capacity_used']
-                quarters.append(current_quarter)
-                
-                current_quarter = {
-                    'quarter': len(quarters) + 1,
-                    'features': [feature],
-                    'capacity_used': effort,
-                    'capacity_available': team_capacity - effort
-                }
-        
+                # Close out the current quarter only if it already holds work,
+                # then start a fresh one for this feature. This keeps an oversized
+                # feature (effort > team_capacity) in its own quarter instead of
+                # emitting an empty quarter or cascading every later feature.
+                if current_quarter['features']:
+                    current_quarter['capacity_available'] = max(0, team_capacity - current_quarter['capacity_used'])
+                    quarters.append(current_quarter)
+                    current_quarter = {
+                        'quarter': len(quarters) + 1,
+                        'features': [],
+                        'capacity_used': 0,
+                        'capacity_available': team_capacity
+                    }
+                current_quarter['features'].append(feature)
+                current_quarter['capacity_used'] += effort
+
         if current_quarter['features']:
-            current_quarter['capacity_available'] = team_capacity - current_quarter['capacity_used']
+            current_quarter['capacity_available'] = max(0, team_capacity - current_quarter['capacity_used'])
             quarters.append(current_quarter)
         
         return quarters

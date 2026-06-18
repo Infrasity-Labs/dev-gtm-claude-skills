@@ -1,4 +1,4 @@
-feature,reach,impact,confidence,effort
-Example Feature 1,500,3,0.8,5
-Example Feature 2,1000,2,0.9,3
-Example Feature 3,300,1,1.0,2
+name,reach,impact,confidence,effort,description
+Example Feature 1,500,massive,medium,m,Description 1
+Example Feature 2,1000,high,high,s,Description 2
+Example Feature 3,300,medium,high,xs,Description 3

@@ -16,6 +16,7 @@ Usage:
 """
 
 import json
+import re
 import argparse
 from typing import Dict, List
 from datetime import datetime
@@ -44,10 +45,10 @@ class OKRGenerator:
                 ],
                 'key_results': [
                     'Increase MAU from {current} to {target}',
-                    'Achieve {target}% MoM growth rate',
-                    'Expand to {target} new markets',
-                    'Reduce CAC by {target}%',
-                    'Improve activation rate to {target}%'
+                    'Achieve {target_growth}% MoM growth rate',
+                    'Expand to {target_markets} new markets',
+                    'Reduce CAC by {target_cac_reduction}%',
+                    'Improve activation rate to {target_activation}%'
                 ]
             },
             'retention': {
@@ -57,11 +58,11 @@ class OKRGenerator:
                     'Maximize customer lifetime value'
                 ],
                 'key_results': [
-                    'Improve retention from {current}% to {target}%',
-                    'Increase NPS from {current} to {target}',
-                    'Reduce churn to below {target}%',
-                    'Achieve {target}% product stickiness',
-                    'Increase LTV/CAC ratio to {target}'
+                    'Improve retention from {current_retention}% to {target_retention}%',
+                    'Increase NPS from {current_nps} to {target_nps}',
+                    'Reduce churn to below {target_churn}%',
+                    'Achieve {target_stickiness}% product stickiness',
+                    'Increase LTV/CAC ratio to {target_ltv_cac}'
                 ]
             },
             'revenue': {
@@ -71,11 +72,11 @@ class OKRGenerator:
                     'Expand revenue per customer'
                 ],
                 'key_results': [
-                    'Grow ARR from ${current}M to ${target}M',
-                    'Increase ARPU by {target}%',
-                    'Launch {target} new revenue streams',
-                    'Achieve {target}% gross margin',
-                    'Reduce revenue churn to {target}%'
+                    'Grow ARR from ${current_revenue}M to ${target_revenue}M',
+                    'Increase ARPU by {target_arpu_growth}%',
+                    'Launch {target_revenue_streams} new revenue streams',
+                    'Achieve {target_margin}% gross margin',
+                    'Reduce revenue churn to {target_rev_churn}%'
                 ]
             },
             'innovation': {
@@ -85,11 +86,11 @@ class OKRGenerator:
                     'Build sustainable competitive differentiation'
                 ],
                 'key_results': [
-                    'Launch {target} breakthrough features',
-                    'Achieve {target}% of revenue from new products',
-                    'File {target} patents/IP',
-                    'Reduce time-to-market by {target}%',
-                    'Achieve {target} innovation score'
+                    'Launch {target_features} breakthrough features',
+                    'Achieve {target_new_revenue_pct}% of revenue from new products',
+                    'File {target_patents} patents/IP',
+                    'Reduce time-to-market by {target_ttm_reduction}%',
+                    'Achieve {target_innovation_score} innovation score'
                 ]
             },
             'operational': {
@@ -99,11 +100,11 @@ class OKRGenerator:
                     'Scale operations sustainably'
                 ],
                 'key_results': [
-                    'Improve velocity by {target}%',
-                    'Reduce cycle time to {target} days',
-                    'Achieve {target}% automation',
-                    'Improve team satisfaction to {target}',
-                    'Reduce incidents by {target}%'
+                    'Improve velocity by {target_velocity_growth}%',
+                    'Reduce cycle time to {target_cycle_time} days',
+                    'Achieve {target_automation_pct}% automation',
+                    'Improve team satisfaction to {target_satisfaction}',
+                    'Reduce incidents by {target_incident_reduction}%'
                 ]
             }
         }
@@ -146,11 +147,14 @@ class OKRGenerator:
             for j in range(3):
                 if j < len(template['key_results']):
                     kr_template = template['key_results'][j]
+                    placeholders = re.findall(r'\{([^}]+)\}', kr_template)
+                    current_key = next((p for p in placeholders if 'current' in p), 'current')
+                    target_key = next((p for p in placeholders if 'target' in p), 'target')
                     kr = {
                         'id': f'CO-{i+1}-KR{j+1}',
                         'title': self._fill_metrics(kr_template, metrics),
-                        'current': metrics.get('current', 0),
-                        'target': metrics.get('target', 100),
+                        'current': metrics.get(current_key, 0),
+                        'target': metrics.get(target_key, 100),
                         'unit': self._extract_unit(kr_template),
                         'status': 'not_started'
                     }
@@ -535,10 +539,33 @@ Examples:
         metrics = {
             'current': 100000,
             'target': 150000,
+            'target_growth': 15,
+            'target_markets': 3,
+            'target_cac_reduction': 25,
+            'target_activation': 60,
+            'current_retention': 70,
+            'target_retention': 85,
+            'current_nps': 40,
+            'target_nps': 60,
+            'target_churn': 5,
+            'target_stickiness': 40,
+            'target_ltv_cac': 3,
             'current_revenue': 10,
             'target_revenue': 15,
-            'current_nps': 40,
-            'target_nps': 60
+            'target_arpu_growth': 20,
+            'target_revenue_streams': 2,
+            'target_margin': 70,
+            'target_rev_churn': 2,
+            'target_features': 5,
+            'target_new_revenue_pct': 20,
+            'target_patents': 3,
+            'target_ttm_reduction': 15,
+            'target_innovation_score': 85,
+            'target_velocity_growth': 20,
+            'target_cycle_time': 5,
+            'target_automation_pct': 80,
+            'target_satisfaction': 8,
+            'target_incident_reduction': 30
         }
 
     # Validate contribution
