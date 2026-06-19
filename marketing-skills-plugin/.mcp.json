@@ -1,0 +1,23 @@
+{
+  "dataforseo": {
+    "type": "http",
+    "url": "https://${DATAFORSEO_USERNAME}:${DATAFORSEO_PASSWORD}@mcp.dataforseo.com/http"
+  },
+  "apollo.io": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "apollo-mcp@0.2.0"],
+    "env": {
+      "APOLLO_API_KEY": "${APOLLO_API_KEY}"
+    }
+  },
+  "slack": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-slack@2025.4.25"],
+    "env": {
+      "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+      "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
+    }
+  }
+}
