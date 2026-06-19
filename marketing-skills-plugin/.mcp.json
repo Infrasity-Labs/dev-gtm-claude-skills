@@ -19,5 +19,18 @@
       "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
       "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
     }
+  },
+  "firecrawl": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@mendable/firecrawl-mcp-server"],
+    "env": {
+      "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+    }
+  },
+  "google-analytics": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-google-analytics"]
   }
 }
