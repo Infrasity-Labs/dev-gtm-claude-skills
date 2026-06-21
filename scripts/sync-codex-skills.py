@@ -31,6 +31,22 @@ SKILL_DOMAINS = {
     "writing-skills": {
         "category": "writing",
         "description": "Blog and content-production skills"
+    },
+    "seo-skills": {
+        "category": "seo",
+        "description": "Comprehensive SEO suite (25 skills)"
+    },
+    "seo-skills/extensions": {
+        "category": "seo-extensions",
+        "description": "MCP-backed SEO extension skills (needs MCPs installed)"
+    },
+    "web-design": {
+        "category": "web-design",
+        "description": "Visual design, UI audit, and site architecture skills"
+    },
+    "product-management-skills": {
+        "category": "product-management",
+        "description": "PM workflows: strategy, PRDs, backlog, prioritization, growth"
     }
 }
 

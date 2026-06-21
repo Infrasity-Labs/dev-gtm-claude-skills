@@ -5,7 +5,11 @@ sync-vibe-skills.py — Install claude-code-skills into Mistral Vibe.
 Mistral Vibe (https://github.com/mistralai/mistral-vibe) discovers skills
 from ~/.vibe/skills/ (user-global) and .vibe/skills/ (project-local). This
 script creates symlinks from our repo's skill directories into Vibe's skill
-directory, preserving the category structure.
+directory as a flat list — one subdirectory per skill.
+
+Vibe's SkillManager iterates direct children of each search-path directory and
+looks for <skill-name>/SKILL.md. Skills must be installed flat — no domain
+subdirectory layer — or Vibe won't discover them.
 
 Both tools use the agentskills.io standard (SKILL.md with YAML frontmatter),
 so no format conversion is needed — just symlink the directories.
@@ -18,7 +22,7 @@ Usage:
     python scripts/sync-vibe-skills.py --copy             # copy instead of symlink
 
 Vibe skill directory: ~/.vibe/skills/
-Our skills land under:  ~/.vibe/skills/claude-skills/<domain>/<skill-name>/
+Our skills land under:  ~/.vibe/skills/<skill-name>/
 """
 from __future__ import annotations
 
@@ -31,13 +35,16 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 VIBE_SKILLS_DIR = Path.home() / ".vibe" / "skills"
-TARGET_SUBDIR = "claude-skills"  # namespace to avoid collisions with Vibe built-in skills
 
 # Top-level source directories in this repo (each holds <skill>/SKILL.md folders)
 DOMAIN_DIRS = [
-    "skills",            # SEO, GEO, AI-discoverability, and documentation skills
-    "marketing-skills",  # full-funnel developer-marketing skills
-    "writing-skills",    # blog and content-production skills
+    "skills",                  # SEO, GEO, AI-discoverability, and documentation skills
+    "marketing-skills",        # full-funnel developer-marketing skills
+    "writing-skills",          # blog and content-production skills
+    "seo-skills",              # comprehensive SEO suite (25 skills)
+    "seo-skills/extensions",   # MCP-backed SEO extension skills (8 skills, needs MCPs)
+    "web-design",              # visual design, UI audit, and site architecture skills
+    "product-management-skills",  # PM workflows: strategy, PRDs, backlog, growth
 ]
 
 
@@ -135,16 +142,16 @@ def read_frontmatter(skill_md):
 
 def sync_skill(skill, target_root, use_copy, verbose, dry_run):
     """Create a symlink or copy for one skill."""
-    target = target_root / skill["domain"] / skill["name"]
+    target = target_root / skill["name"]
 
     if target.exists() or target.is_symlink():
         if verbose:
-            print(f"  skip (exists): {skill['domain']}/{skill['name']}")
+            print(f"  skip (exists): {skill['name']}")
         return "skip"
 
     if dry_run:
         if verbose:
-            print(f"  would {'copy' if use_copy else 'link'}: {skill['domain']}/{skill['name']}")
+            print(f"  would {'copy' if use_copy else 'link'}: {skill['name']}")
         return "would"
 
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -162,7 +169,7 @@ def sync_skill(skill, target_root, use_copy, verbose, dry_run):
             target.symlink_to(skill["source"])
 
     if verbose:
-        print(f"  {'copied' if use_copy else 'linked'}: {skill['domain']}/{skill['name']}")
+        print(f"  {'copied' if use_copy else 'linked'}: {skill['name']}")
     return "new"
 
 
@@ -181,7 +188,7 @@ def write_index(target_root, skills):
         index["domains"][d].append({
             "name": s["name"],
             "description": fm.get("description", ""),
-            "path": f"{d}/{s['name']}",
+            "path": s["name"],
         })
     index_path = target_root / "skills-index.json"
     index_path.write_text(json.dumps(index, indent=2), encoding="utf-8")
@@ -209,7 +216,7 @@ def main():
     )
     args = p.parse_args()
 
-    target_root = Path(args.target).expanduser() / TARGET_SUBDIR
+    target_root = Path(args.target).expanduser()
     domains = [args.domain] if args.domain else None
     skills = discover_skills(REPO_ROOT, domains)
 

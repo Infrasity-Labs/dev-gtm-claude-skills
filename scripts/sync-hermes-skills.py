@@ -34,9 +34,13 @@ TARGET_SUBDIR = "claude-skills"  # namespace to avoid collisions with Hermes bui
 
 # Top-level source directories in this repo (each holds <skill>/SKILL.md folders)
 DOMAIN_DIRS = [
-    "skills",            # SEO, GEO, AI-discoverability, and documentation skills
-    "marketing-skills",  # full-funnel developer-marketing skills
-    "writing-skills",    # blog and content-production skills
+    "skills",                  # SEO, GEO, AI-discoverability, and documentation skills
+    "marketing-skills",        # full-funnel developer-marketing skills
+    "writing-skills",          # blog and content-production skills
+    "seo-skills",              # comprehensive SEO suite (25 skills)
+    "seo-skills/extensions",   # MCP-backed SEO extension skills (8 skills, needs MCPs)
+    "web-design",              # visual design, UI audit, and site architecture skills
+    "product-management-skills",  # PM workflows: strategy, PRDs, backlog, growth
 ]
 
 
