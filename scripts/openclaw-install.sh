@@ -17,8 +17,10 @@ for arg in "$@"; do
   esac
 done
 
-FORCE_FLAG=""
-$FORCE && FORCE_FLAG="--force"
+FORCE_ARGS=()
+if [ "$FORCE" = true ]; then
+  FORCE_ARGS+=("--force")
+fi
 
 installed=0
 skipped=0
@@ -29,7 +31,7 @@ while IFS= read -r skill_md; do
   skill_name="$(basename "$skill_dir")"
   target="${HOME}/.openclaw/skills/${skill_name}"
 
-  if [[ -e "$target" ]] && ! $FORCE; then
+  if [[ -e "$target" ]] && [ "$FORCE" = false ]; then
     skipped=$((skipped + 1))
     continue
   fi
@@ -40,7 +42,7 @@ while IFS= read -r skill_md; do
     continue
   fi
 
-  if openclaw skills install "$skill_dir" --global --as "$skill_name" $FORCE_FLAG > /dev/null 2>&1; then
+  if openclaw skills install "$skill_dir" --global --as "$skill_name" "${FORCE_ARGS[@]}" > /dev/null 2>&1; then
     echo "  ✅ installed: $skill_name"
     installed=$((installed + 1))
   else
