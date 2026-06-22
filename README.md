@@ -10,7 +10,7 @@
 
 [Skills](#skills) · [Install](#installation) · [Commands](#commands) · [Who it's for](#who-its-for) · [FAQ](#faq) · [Website](https://www.infrasity.com/claude-skills)
 
-**Works with:** Claude Code · OpenAI Codex · Gemini CLI · OpenClaw · Hermes Agent[^hermes] · Mistral Vibe[^vibe] · Cursor · Aider · Windsurf · Kilo Code · OpenCode · Augment · Antigravity
+**Works with:** Claude Code · OpenAI Codex · OpenClaw · Hermes Agent[^hermes] · Mistral Vibe[^vibe] · Cursor · Aider · Windsurf · Kilo Code · OpenCode · Augment · Antigravity
 
 <p align="center">
   <img src="./assets/dev-gtm-claude-skills.png" width="100%" alt="dev-gtm-claude-skills"/>
@@ -90,33 +90,23 @@ cd dev-gtm-claude-skills
 
 Each script discovers all skills under `skills/`, `marketing-skills/`, and `writing-skills/` and installs them in the format that tool expects.
 
-| Tool | Format | Install command |
+| Tool | Tested | Skills land in |
 | --- | --- | --- |
-| **Claude Code** | Native `SKILL.md` | `npx skills add Infrasity-Labs/dev-gtm-claude-skills` |
-| **Claude Desktop / Claude.ai** | ZIP upload | See [Installation](#claude-desktop--claudeai) |
-| **OpenAI Codex** | `~/.codex/skills/` | `python3 scripts/sync-codex-skills.py && ./scripts/codex-install.sh` |
-| **Gemini CLI** | `.gemini/skills/` | `./scripts/gemini-install.sh` |
-| **OpenClaw** | `~/.openclaw/workspace/skills/` | `./scripts/openclaw-install.sh` |
-| **Hermes Agent**[^hermes] | `~/.hermes/skills/` | `python3 scripts/sync-hermes-skills.py --verbose` |
-| **Mistral Vibe**[^vibe] | `~/.vibe/skills/` | `./scripts/vibe-install.sh` |
-| **Cursor** | `.cursor/rules/*.mdc` | `./scripts/convert.sh --tool cursor && ./scripts/install.sh --tool cursor --target .` |
-| **Aider** | `CONVENTIONS.md` | `./scripts/convert.sh --tool aider && ./scripts/install.sh --tool aider --target .` |
-| **Windsurf** | `.windsurf/skills/` | `./scripts/convert.sh --tool windsurf && ./scripts/install.sh --tool windsurf --target .` |
-| **Kilo Code** | `.kilocode/rules/` | `./scripts/convert.sh --tool kilocode && ./scripts/install.sh --tool kilocode --target .` |
-| **OpenCode** | `.opencode/skills/` | `./scripts/convert.sh --tool opencode && ./scripts/install.sh --tool opencode --target .` |
-| **Augment** | `.augment/skills/` | `./scripts/convert.sh --tool augment && ./scripts/install.sh --tool augment --target .` |
-| **Antigravity** | `~/.gemini/antigravity/skills/` | `./scripts/convert.sh --tool antigravity && ./scripts/install.sh --tool antigravity` |
+| **Claude Code** | ✅ | `~/.claude/skills/` |
+| **Claude Desktop / Claude.ai** | ✅ | ZIP upload |
+| **Hermes Agent** | ✅ | `~/.hermes/skills/` |
+| **Kilo Code** | ✅ | `~/.claude/skills/` (via `claudeCodeCompat`) |
+| **Mistral Vibe** | ✅ | `~/.vibe/skills/` |
+| **OpenAI Codex** | ✅ | `~/.codex/skills/` |
+| **OpenClaw** | ✅ | `~/.openclaw/skills/` |
+| **Augment** | ✅ | `.augment/skills/` (project-local) |
+| **Antigravity** | ✅ | `~/.gemini/antigravity/skills/` |
+| **Cursor** | 🔜 | `.cursor/rules/` (project-local) |
+| **Aider** | 🔜 | `CONVENTIONS.md` (project-local) |
+| **Windsurf** | 🔜 | `.windsurf/skills/` (project-local) |
+| **OpenCode** | 🔜 | `.opencode/skills/` (project-local) |
 
-**How the scripts work:**
-
-- **`convert.sh --tool <name>`** rewrites each `SKILL.md` into the target tool's format (Cursor `.mdc` rules, Aider `CONVENTIONS.md`, Kilo Code markdown rules, or `SKILL.md` bundles for Windsurf/OpenCode/Augment/Antigravity) and writes the result to `integrations/<tool>/`. Use `--tool all` to build every format at once.
-- **`install.sh --tool <name> [--target <dir>]`** copies the converted output from `integrations/<tool>/` into the right place — a project directory (`--target .`) for the rule-based tools, or your home directory for Antigravity. Re-run with `--force` to overwrite.
-- **`sync-codex-skills.py`**, **`sync-gemini-skills.py`**, **`sync-hermes-skills.py`**, and **`sync-vibe-skills.py`** symlink (or `--copy`) the skills straight into each tool's directory — no conversion needed, since those tools read the agentskills.io `SKILL.md` standard directly. Pass `--dry-run` to preview.
-
-The Python tooling that ships with the live-data skills is stdlib-only, so it runs anywhere Python runs.
-
-[^hermes]: **Hermes Agent** is BYO-sync: run `python3 scripts/sync-hermes-skills.py` once to install into `~/.hermes/skills/`. Uses the same agentskills.io `SKILL.md` standard — no format conversion.
-[^vibe]: **Mistral Vibe** is also BYO-sync: run `./scripts/vibe-install.sh` once to install into `~/.vibe/skills/`. Same agentskills.io `SKILL.md` standard — no conversion. Docs: <https://docs.mistral.ai/mistral-vibe/agents-skills>.
+See [full install steps per tool](#per-tool-install-steps) below.
 
 ---
 
@@ -230,6 +220,182 @@ https://your_email:your_api_password@mcp.dataforseo.com/http
 ```
 
 Get credentials at [dataforseo.com](https://dataforseo.com).
+
+---
+
+## Install Steps for Every Tool
+
+All CLI installs start with cloning the repo:
+
+```bash
+git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
+cd dev-gtm-claude-skills
+```
+
+### Hermes Agent ✅
+
+1. Run the sync script:
+   ```bash
+   python3 scripts/sync-hermes-skills.py
+   ```
+2. Skills are symlinked into `~/.hermes/skills/`. Add `--copy` if you want to delete the repo clone after install.
+3. Open Hermes and describe your task — the agent auto-loads the matching skill. You can also invoke by name: `/docs-auditor`.
+
+> Pass `--verbose` to see each skill as it syncs, `--dry-run` to preview without installing.
+
+---
+
+### Kilo Code ✅
+
+1. In VS Code settings, enable the compatibility flag:
+   ```
+   kilo-code.new.claudeCodeCompat: true
+   ```
+   (Search "kilo-code claudeCodeCompat" in the VS Code settings UI.)
+2. Install skills using the standard Claude Code method — either the quick install:
+   ```bash
+   npx skills add Infrasity-Labs/dev-gtm-claude-skills
+   ```
+   or manual copy to `~/.claude/skills/`:
+   ```bash
+   mkdir -p ~/.claude/skills
+   cp -r skills/<skill-name> ~/.claude/skills/
+   ```
+3. Open a Kilo Code chat and describe your task. Kilo Code reads from `~/.claude/skills/` when `claudeCodeCompat` is on.
+
+> **Note:** Placing `.md` files in `.kilocode/rules/` only injects passive context — it does not enable skill invocation. The `claudeCodeCompat` path is the correct approach.
+
+---
+
+### Mistral Vibe ✅
+
+1. Run the install script:
+   ```bash
+   ./scripts/vibe-install.sh
+   ```
+2. Skills are symlinked flat into `~/.vibe/skills/<skill-name>/`. Add `--copy` to copy instead of symlink.
+3. Open Vibe and describe your task, or invoke directly: `/docs-auditor`. Vibe auto-discovers skills from `~/.vibe/skills/`.
+
+> Pass `--dry-run` to preview without installing, `--verbose` to list each skill.
+
+---
+
+### OpenAI Codex ✅
+
+1. Generate local symlinks:
+   ```bash
+   python3 scripts/sync-codex-skills.py
+   ```
+2. Copy skills to the Codex global directory:
+   ```bash
+   ./scripts/codex-install.sh
+   ```
+3. Skills land in `~/.codex/skills/<skill-name>/`. Open Codex and describe your task — the model reads the skill automatically.
+
+> Use `./scripts/codex-install.sh --dry-run` to preview, `--list` to see all available skills.
+
+---
+
+### OpenClaw ✅
+
+1. Run the install script:
+   ```bash
+   ./scripts/openclaw-install.sh
+   ```
+2. Restart the OpenClaw gateway to pick up the new skills:
+   ```bash
+   openclaw gateway restart
+   ```
+3. Verify the skills are visible:
+   ```bash
+   openclaw skills list
+   ```
+4. Open an OpenClaw chat and describe your task. The agent auto-loads the matching skill. You can also invoke explicitly: `/docs-auditor`.
+
+> Use `--dry-run` to preview without installing, `--force` to overwrite existing skills.
+
+---
+
+### Augment ✅
+
+Augment reads skills from the `.augment/skills/` directory inside your **project** — run these commands from your project root, not from the cloned repo.
+
+1. Convert skills to Augment format:
+   ```bash
+   cd /path/to/dev-gtm-claude-skills
+   ./scripts/convert.sh --tool augment
+   ```
+2. Install into your project:
+   ```bash
+   ./scripts/install.sh --tool augment --target /path/to/your/project
+   ```
+   Skills land in `/path/to/your/project/.augment/skills/<skill-name>/SKILL.md`.
+3. Open Augment in that project and describe your task — Augment detects the matching skill from `.augment/skills/` automatically.
+
+> Re-run both commands whenever you want to update to the latest skills. Use `--force` on `install.sh` to overwrite.
+
+---
+
+### Antigravity ✅
+
+1. Convert skills to Antigravity format:
+   ```bash
+   ./scripts/convert.sh --tool antigravity
+   ```
+2. Install globally:
+   ```bash
+   ./scripts/install.sh --tool antigravity
+   ```
+3. Skills land in `~/.gemini/antigravity/skills/<skill-name>/SKILL.md`. Open Antigravity and describe your task — the agent auto-loads the matching skill.
+
+> Re-run both commands to update. Use `--force` on `install.sh` to overwrite existing skills.
+
+---
+
+### Cursor 🔜 *(steps ready, not yet tested)*
+
+1. Convert skills to Cursor `.mdc` rule format:
+   ```bash
+   ./scripts/convert.sh --tool cursor
+   ```
+2. Install into your project:
+   ```bash
+   ./scripts/install.sh --tool cursor --target /path/to/your/project
+   ```
+   Skills land in `/path/to/your/project/.cursor/rules/<skill-name>.mdc`.
+3. Open Cursor in that project — rules are applied automatically per the `globs` and `alwaysApply` settings in each `.mdc` file.
+
+---
+
+### Aider 🔜 *(steps ready, not yet tested)*
+
+1. Convert all skills into a single `CONVENTIONS.md`:
+   ```bash
+   ./scripts/convert.sh --tool aider
+   ```
+2. Install into your project:
+   ```bash
+   ./scripts/install.sh --tool aider --target /path/to/your/project
+   ```
+3. Run Aider with the conventions file:
+   ```bash
+   aider --read CONVENTIONS.md
+   ```
+
+---
+
+### Windsurf 🔜 *(steps ready, not yet tested)*
+
+1. Convert skills to Windsurf skill bundle format:
+   ```bash
+   ./scripts/convert.sh --tool windsurf
+   ```
+2. Install into your project:
+   ```bash
+   ./scripts/install.sh --tool windsurf --target /path/to/your/project
+   ```
+   Skills land in `/path/to/your/project/.windsurf/skills/<skill-name>/SKILL.md`.
+3. Open Windsurf in that project and describe your task.
 
 ---
 
@@ -394,9 +560,39 @@ Alongside the suite, [`seo-skills/`](seo-skills/) ships **`geo-seo-claude`** —
 
 ---
 
+## Web design skills
+
+Four skills for visual design, UI auditing, and site planning. Install via the standard Claude Code or CLI method — they live in `web-design/`.
+
+| Skill | What it does | Example prompt |
+| --- | --- | --- |
+| **`frontend-design`** | Distinctive visual design direction, typography, palette, and aesthetic choices for new UI or redesigns. Rejects templated defaults. | `Give me frontend design direction for a devtools dashboard` |
+| **`landing-page-auditor`** | Audits any landing or service page across 48 checks in 10 categories — LLM/AI discoverability, GEO readiness, content clarity, schema, internal linking, freshness, and technical hygiene. | `Audit the landing page at stripe.com/payments` |
+| **`site-architecture`** | Plans page hierarchy, navigation, URL structure, and internal linking for a website or product. Use when figuring out what pages a site needs and how they connect. | `Plan the site architecture for a B2B SaaS docs portal` |
+| **`web-design-guidelines`** | Reviews UI code against accessibility, UX, and web design best practices. | `Review my UI component for accessibility and UX issues` |
+
+---
+
+## Product management skills
+
+Eight skills for PM workflows — strategy, PRDs, prioritization, backlog, and growth. Install via the standard Claude Code or CLI method — they live in `product-management-skills/`.
+
+| Skill | What it does | Example prompt |
+| --- | --- | --- |
+| **`product-strategist`** | Strategic product leadership toolkit: OKR cascades, quarterly planning, competitive analysis, product vision documents, and team scaling proposals. | `Build a quarterly OKR cascade for our AI platform` |
+| **`prd-development`** | Builds a structured, engineering-ready PRD from discovery notes — problem, users, solution, and success criteria. | `Write a PRD for our new API key management feature` |
+| **`prioritization-advisor`** | Chooses the right prioritization framework (RICE, ICE, value/effort, etc.) based on product stage, team context, and decision type. | `Help me pick a prioritization framework for our early-stage product` |
+| **`agile-product-owner`** | Agile backlog management: user stories, acceptance criteria, sprint planning, velocity tracking, and epic breakdown. | `Write user stories for our onboarding flow` |
+| **`user-story-mapping`** | Creates a user story map — activities, steps, tasks, and release slices organized around the user journey. | `Map the user story for our checkout flow` |
+| **`organic-growth-advisor`** | Diagnoses which organic growth path fits the current constraint: new segments, geographies, channels, or products. Uses a 2×2 framework. | `We've plateaued in our core market — what's the next growth move?` |
+| **`product-manager-toolkit`** | Comprehensive PM toolkit: RICE scoring, customer interview analysis, PRD templates, discovery frameworks, and go-to-market strategy. | `Help me run a RICE prioritization session` |
+| **`pm-skill-creator`** | Designs a new PM skill through guided conversation — from raw idea to a structured, repo-compliant `SKILL.md` draft. | `Help me create a skill for competitive positioning` |
+
+---
+
 ## Commands
 
-If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; and the blog content engine runs under `/blog`.
+If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; the blog content engine runs under `/blog`; the web design skills run under `/web-design`; and the product management skills run under `/pm`.
 
 <p align="center">
   <img src="./assets/claude-commands.png" alt="Claude Commands" width="400"/>
@@ -517,6 +713,32 @@ Single entry point for the SEO suite. The `seo` orchestrator detects business ty
 | `/seo dataforseo [command]` | Live SEO data via DataForSEO (extension). |
 | `/seo image-gen [use-case] <description>` | AI image generation for SEO assets (extension). |
 | `/seo firecrawl [command] <url>` | Full-site crawling and site mapping (extension). |
+
+---
+
+### `/web-design` — design & UI
+
+| Command | Description |
+| --- | --- |
+| `/web-design frontend-design <brief or url>` | Get distinctive visual design direction, typography, and aesthetic guidance. |
+| `/web-design landing-page-auditor <url>` | Audit a page across 48 checks — LLM/AI discoverability, GEO readiness, content clarity, schema, and technical crawlability. Produces a scored HTML report. |
+| `/web-design site-architecture <domain or goal>` | Plan page hierarchy, navigation, URL structure, and internal linking. |
+| `/web-design web-design-guidelines <file or pattern>` | Audit UI code for accessibility, UX, and web design best practices. |
+
+---
+
+### `/pm` — product management
+
+| Command | Description |
+| --- | --- |
+| `/pm strategy <product or context>` | Drive vision, OKR cascades, quarterly planning, roadmaps, and team scaling. |
+| `/pm prd <feature or notes>` | Build a structured, engineering-ready PRD from discovery notes. |
+| `/pm prioritize <context>` | Choose the right prioritization framework (RICE, ICE, value/effort, etc.). |
+| `/pm backlog <story or sprint context>` | Write user stories, define acceptance criteria, plan sprints, and track velocity. |
+| `/pm story-map <product or journey>` | Build a user story map (activities, steps, tasks, release slices). |
+| `/pm growth <growth constraint>` | Diagnose which organic growth path to pursue next. |
+| `/pm toolkit <PM task>` | RICE prioritization, customer interview analysis, PRD templates, discovery frameworks, and GTM strategy. |
+| `/pm create-skill <idea or content>` | Design a new PM skill through guided conversation. |
 
 ---
 

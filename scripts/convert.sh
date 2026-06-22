@@ -434,13 +434,13 @@ trap 'rm -f "$SKILLS_TMP"' EXIT
   cd "$REPO_ROOT"
   # Source-of-truth skill directories for this repo. The .claude/skills/ mirror,
   # venv/, node_modules/, and generated integrations/ are intentionally excluded.
-  find skills marketing-skills writing-skills -type f -name 'SKILL.md' \
-    -not -path '*/.git/*' 2>/dev/null | sed 's|^|./|' | sort
+  find skills marketing-skills writing-skills seo-skills web-design product-management-skills \
+    -type f -name 'SKILL.md' -not -path '*/.git/*' 2>/dev/null | sed 's|^|./|' | sort
 ) > "$SKILLS_TMP"
 
 TOTAL_CANDIDATES="$(wc -l < "$SKILLS_TMP" | tr -d ' ')"
 if [[ "$TOTAL_CANDIDATES" -eq 0 ]]; then
-  err "No skills found under skills/, marketing-skills/, or writing-skills/"
+  err "No skills found under skills/, marketing-skills/, writing-skills/, seo-skills/, web-design/, or product-management-skills/"
   rm -f "$SKILLS_TMP"
   exit 1
 fi
