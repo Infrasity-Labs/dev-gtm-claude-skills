@@ -626,7 +626,7 @@ Seven personal-productivity and workflow skills under [`notion-skills/`](notion-
 | **`reflect`** | Pauses execution mid-conversation and reassesses direction, assumptions, and bias across 5 dimensions. Ends with a concrete continue/pivot/pause recommendation. | `step back — are we overthinking this?` |
 | **`workflow-builder`** | Designs and writes deterministic multi-agent workflow scripts (`.js`) for Claude Code's Workflow tool — fan-out, pipeline, loop, and judge-panel topologies. | `Build a workflow that researches 10 companies and writes a cold email for each` |
 | **`content-brief`** | Generates a fully structured SEO content brief for a target keyword and optionally pushes it to a Notion database. | `Create a content brief for "developer onboarding best practices"` |
-| **`md-starter`** | Scans the repo, infers tech stack and conventions, asks at most 3 questions, and writes a populated CLAUDE.md from scratch. | `Generate a CLAUDE.md for this repo` |
+| **`claude-md-starter`** | Scans the repo, infers tech stack and conventions, asks at most 3 questions, and writes a populated CLAUDE.md from scratch. | `Generate a CLAUDE.md for this repo` |
 | **`meeting-notes`** | Structured meeting summaries with action items, decisions, and key discussion points. | `Summarize these meeting notes: [paste]` |
 
 ---
@@ -792,7 +792,7 @@ Single entry point for the SEO suite. The `seo` orchestrator detects business ty
 | `/notion reflect` | Pause mid-conversation for a frank 5-dimension reassessment with a concrete continue/pivot/pause recommendation. |
 | `/notion workflow <task>` | Design and generate a multi-agent Claude Code workflow script for any repeatable multi-step task. |
 | `/notion content-brief <keyword>` | Generate a full SEO content brief and optionally push it to Notion. |
-| `/notion md-starter` | Scan the current repo and auto-generate a populated CLAUDE.md. |
+| `/notion claude-md-starter` | Scan the current repo and auto-generate a populated CLAUDE.md. |
 | `/notion meeting-notes` | Structure raw meeting notes into action items, decisions, and a summary. |
 
 ---
