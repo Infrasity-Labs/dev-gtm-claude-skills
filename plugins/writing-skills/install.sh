@@ -81,6 +81,7 @@ copy_item() {
     esac
   fi
   if [[ -d "$src" ]]; then
+    [[ -e "$dst" ]] && rm -rf "$dst"
     cp -r "$src" "$dst"
   else
     cp "$src" "$dst"
@@ -101,7 +102,7 @@ echo ""
 info "Installing 34 skills..."
 $DRY_RUN || mkdir -p "$SKILLS_DST"
 skill_count=0
-for skill_dir in "${PLUGIN_DIR}"/*/; do
+for skill_dir in "${PLUGIN_DIR}/skills"/*/; do
   [[ -d "$skill_dir" ]] || continue
   # Skip non-skill directories
   [[ -f "${skill_dir}/SKILL.md" ]] || continue

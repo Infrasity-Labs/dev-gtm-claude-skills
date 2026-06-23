@@ -61,6 +61,7 @@ function Copy-Item-Safe {
     }
   }
   if (Test-Path $Src -PathType Container) {
+    if (Test-Path $Dst) { Remove-Item -Recurse -Force $Dst }
     Copy-Item -Recurse -Path $Src -Destination $Dst -Force:$Force
   } else {
     Copy-Item -Path $Src -Destination $Dst -Force:$Force

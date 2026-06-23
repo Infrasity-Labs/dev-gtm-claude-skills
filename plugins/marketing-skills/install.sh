@@ -76,6 +76,7 @@ copy_item() {
       *) warn "Skipped: $(basename "$dst")"; return 0 ;;
     esac
   fi
+  [[ -e "$dst" ]] && rm -rf "$dst"
   cp -r "$src" "$dst"
   ok "Installed: $(basename "$src")"
 }

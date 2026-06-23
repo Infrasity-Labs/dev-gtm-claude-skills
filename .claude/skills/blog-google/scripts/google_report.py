@@ -31,11 +31,11 @@ except ImportError:
     print("Error: matplotlib required. Install with: pip install matplotlib", file=sys.stderr)
     sys.exit(1)
 
+HAS_WEASYPRINT = True
 try:
     from weasyprint import HTML
 except ImportError:
-    print("Error: weasyprint required. Install with: pip install weasyprint", file=sys.stderr)
-    sys.exit(1)
+    HAS_WEASYPRINT = False
 
 # ─── Brand Colors ────────────────────────────────────────────────────────────
 
@@ -728,6 +728,9 @@ def generate_report(report_type, data, domain, output_dir, output_format="pdf"):
         result["files"].append(str(html_path))
 
     if output_format in ("pdf", "both"):
+        if not HAS_WEASYPRINT:
+            result["error"] = "PDF output requires weasyprint. Install with: pip install weasyprint. Use --format html instead."
+            return result
         pdf_path = _safe_path(f"{base_name}.pdf")
         try:
             HTML(string=html_content).write_pdf(str(pdf_path))

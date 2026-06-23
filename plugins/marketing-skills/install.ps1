@@ -58,6 +58,7 @@ function Copy-Item-Safe {
       return
     }
   }
+  if (Test-Path $Dst) { Remove-Item -Recurse -Force $Dst }
   Copy-Item -Recurse -Path $Src -Destination $Dst -Force:$Force
   Write-Ok "Installed: $(Split-Path -Leaf $Src)"
 }
