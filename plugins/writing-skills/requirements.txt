@@ -1,0 +1,20 @@
+# writing-skills-plugin -- Python Dependencies
+# Bounded version pinning with security-conscious minimums
+# Last updated: June 2026
+
+# Core dependencies (required for full functionality)
+textstat>=0.7.3,<1.0.0          # Readability scoring (Flesch, Gunning Fog, SMOG)
+beautifulsoup4>=4.12.0,<5.0.0   # HTML/schema parsing
+
+# ─────────────────────────────────────────────────────────────────────
+# OPTIONAL -- Heavy dependencies that unlock advanced features.
+# The shared scripts work WITHOUT these but gain capabilities when present.
+# Install individually as needed:
+#
+#   pip install lxml                   # Faster HTML parser backend for BeautifulSoup
+#   pip install jsonschema             # JSON-LD schema validation
+#   pip install spacy                  # NER, advanced NLP (+ python -m spacy download en_core_web_sm)
+#   pip install sentence-transformers  # Semantic similarity for duplicate detection
+#   pip install scikit-learn           # Clustering for topic cannibalization detection
+#   pip install language-tool-python   # Grammar and style checking (requires Java)
+# ─────────────────────────────────────────────────────────────────────

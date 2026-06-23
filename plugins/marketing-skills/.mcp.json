@@ -1,0 +1,6 @@
+{
+  "dataforseo": {
+    "type": "http",
+    "url": "https://${DATAFORSEO_USERNAME}:${DATAFORSEO_PASSWORD}@mcp.dataforseo.com/http"
+  }
+}
