@@ -1,5 +1,5 @@
 ---
-name: claude-md-starter
+name: md-starter
 description: "Generates a fully structured, project-specific CLAUDE.md by scanning the repo for signal files (package.json, Makefile, .github/workflows/, .env.example, etc.), inferring stack, commands, architecture, and conventions, then asking at most 3 targeted questions for what cannot be inferred. Use whenever the user says 'create a CLAUDE.md', 'my CLAUDE.md is blank', 'generate project context', 'initialize CLAUDE.md', 'set up Claude context for this repo', 'fill in my CLAUDE.md', or any variation where someone needs their project context documented for Claude. If a CLAUDE.md already exists with content, runs a diff-and-merge flow before writing."
 user-invokable: true
 argument-hint: ""
