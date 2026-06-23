@@ -20,6 +20,13 @@ Understand the situation (ask if not provided):
 4. **What's your proof?** — A result, case study, or credibility signal
 5. **Any research signals?** — Funding, hiring, LinkedIn posts, company news, tech stack changes
 
+**If Clay MCP is available, pull signals before asking:**
+- **Single prospect:** Call `find-and-enrich-company` (prospect's domain) to get funding stage, tech stack, and headcount. Then call `ask-question-about-accounts` to surface recent events (funding round, hiring spike, product launch). This answers question 5 without asking the user.
+- **Contact not yet identified:** Call `find-and-enrich-contacts-at-company` with the company name to find the right buyer and their verified email.
+- **Working from a list:** Call `find-and-enrich-list-of-contacts` to enrich all prospects in bulk before writing. Run this first.
+
+If Clay surfaces a strong signal (e.g., "raised Series B 6 weeks ago" or "recently migrated to HubSpot"), lead with it as the personalization hook. See [personalization.md](references/personalization.md) for how signals connect to the problem.
+
 Work with whatever the user gives you. If they have a strong signal and a clear value prop, that's enough to write. Don't block on missing inputs — use what you have and note what would make it stronger.
 
 ---

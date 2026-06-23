@@ -83,6 +83,17 @@ Do not rely on a fixed list of databases. Cast wide. Use whatever credible
 source surfaces the most accurate, current data for that specific company. The
 goal is accuracy, not source loyalty.
 
+**Clay enrichment (start here for funding, headcount, and tech stack)**
+Call `get-credits-available` to check budget before enriching many companies.
+Then call `find-and-enrich-company` for each candidate to retrieve funding
+stage, round amount, lead investor, date, current headcount, tech stack
+(BuiltWith + HG Insights aggregated), LinkedIn URL, and HQ location. Clay
+aggregates Crunchbase and LinkedIn data — always verify headcount and funding
+from one additional manual source before including any company in the list.
+
+Note: Clay does not cover developer and open-source signals (GitHub, npm,
+Docker Hub, etc.) — use the manual sources below for those.
+
 **Funding and company data**
 Crunchbase, PitchBook, Tracxn, CB Insights, Dealroom, Harmonic, Carta,
 Companies House (UK), SEC EDGAR (US public filings)
@@ -124,6 +135,11 @@ from at least one credible source before including any company.
 ---
 
 ### Step 4 — Map one Signal per company
+
+**Check Clay first:** Call `ask-question-about-accounts` with the company name
+to surface recent events before manual news searching. If Clay returns a
+verifiable signal that meets the criteria below, use it as the starting point.
+If not, fall back to manual sources from Step 3.
 
 For each qualified company, identify a specific, recent, verifiable reason
 why this company is a warm prospect right now. Must be one of:

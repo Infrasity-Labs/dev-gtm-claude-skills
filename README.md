@@ -68,6 +68,7 @@ This repo ships several bundles: the SEO/GEO/docs **skills** under [`skills/`](s
 - [Marketing skills](#marketing-skills)
 - [Writing skills](#writing-skills)
 - [SEO skills](#seo-skills)
+- [Notion skills](#notion-skills)
 - [Commands](#commands)
 - [Who it's for](#who-its-for)
 - [Requirements](#requirements)
@@ -88,7 +89,7 @@ git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 cd dev-gtm-claude-skills
 ```
 
-Each script discovers all skills under `skills/`, `marketing-skills/`, and `writing-skills/` and installs them in the format that tool expects.
+Each script discovers all skills under `skills/`, `marketing-skills/`, `writing-skills/`, `notion-skills/`, and `seo-skills/` and installs them in the format that tool expects.
 
 | Tool | Tested | Skills land in |
 | --- | --- | --- |
@@ -220,6 +221,30 @@ https://your_email:your_api_password@mcp.dataforseo.com/http
 ```
 
 Get credentials at [dataforseo.com](https://dataforseo.com).
+
+### Clay connector (for prospect enrichment and cold-email)
+
+`dev-marketing-prospector` and `cold-email` use Clay's data enrichment tools to look up company funding, headcount, tech stack, and verified contact information — replacing manual research across Crunchbase, LinkedIn, and Apollo.
+
+**Claude.ai / Claude Desktop** — Settings → Customize → Connectors → Connect Clay. Sign in with your Clay account. Once connected, the `find-and-enrich-company`, `ask-question-about-accounts`, and `find-and-enrich-contacts-at-company` tools become available automatically.
+
+**Claude Code** — add to `.claude/settings.json` or `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "clay": {
+      "command": "npx",
+      "args": ["-y", "@clay-hq/mcp-server"],
+      "env": {
+        "CLAY_API_KEY": "your_clay_api_key"
+      }
+    }
+  }
+}
+```
+
+Get your API key at [clay.com](https://clay.com). Both skills degrade gracefully when Clay is not connected — `dev-marketing-prospector` falls back to manual web search across all source categories, and `cold-email` prompts the user for research signals instead.
 
 ---
 
@@ -590,9 +615,25 @@ Eight skills for PM workflows — strategy, PRDs, prioritization, backlog, and g
 
 ---
 
+## Notion skills
+
+Seven personal-productivity and workflow skills under [`notion-skills/`](notion-skills/) — brain dumps, email triage, meeting notes, SEO content briefs, CLAUDE.md generation, mid-conversation reassessment, and multi-agent workflow scripting. Install via the standard Claude Code or CLI method.
+
+| Skill | What it does | Example prompt |
+| --- | --- | --- |
+| **`capture`** | Transforms any chaotic brain dump into a clean four-section actionable system (Projects/Ideas, Tasks, Connections, Next Steps). Zero information loss, no upfront intake. | `brain dump: we need to redesign onboarding, fix the pricing page, interview 5 customers this week…` |
+| **`inbox`** | Full email triage system — builds a personalized taxonomy KB on first run, then classifies, researches senders, and drafts replies (never sends). | `triage my inbox` |
+| **`reflect`** | Pauses execution mid-conversation and reassesses direction, assumptions, and bias across 5 dimensions. Ends with a concrete continue/pivot/pause recommendation. | `step back — are we overthinking this?` |
+| **`workflow-builder`** | Designs and writes deterministic multi-agent workflow scripts (`.js`) for Claude Code's Workflow tool — fan-out, pipeline, loop, and judge-panel topologies. | `Build a workflow that researches 10 companies and writes a cold email for each` |
+| **`content-brief`** | Generates a fully structured SEO content brief for a target keyword and optionally pushes it to a Notion database. | `Create a content brief for "developer onboarding best practices"` |
+| **`md-starter`** | Scans the repo, infers tech stack and conventions, asks at most 3 questions, and writes a populated CLAUDE.md from scratch. | `Generate a CLAUDE.md for this repo` |
+| **`meeting-notes`** | Structured meeting summaries with action items, decisions, and key discussion points. | `Summarize these meeting notes: [paste]` |
+
+---
+
 ## Commands
 
-If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; the blog content engine runs under `/blog`; the web design skills run under `/web-design`; and the product management skills run under `/pm`.
+If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; the blog content engine runs under `/blog`; the web design skills run under `/web-design`; the product management skills run under `/pm`; and the Notion and productivity skills run under `/notion`.
 
 <p align="center">
   <img src="./assets/claude-commands.png" alt="Claude Commands" width="400"/>
@@ -742,6 +783,20 @@ Single entry point for the SEO suite. The `seo` orchestrator detects business ty
 
 ---
 
+### `/notion` — productivity & workflow
+
+| Command | Description |
+| --- | --- |
+| `/notion capture` | Transform a messy brain dump into four structured sections (Projects/Ideas, Tasks, Connections, Next Steps). |
+| `/notion inbox` | Run email triage — first run builds your taxonomy KB, recurring runs classify and draft replies. |
+| `/notion reflect` | Pause mid-conversation for a frank 5-dimension reassessment with a concrete continue/pivot/pause recommendation. |
+| `/notion workflow <task>` | Design and generate a multi-agent Claude Code workflow script for any repeatable multi-step task. |
+| `/notion content-brief <keyword>` | Generate a full SEO content brief and optionally push it to Notion. |
+| `/notion md-starter` | Scan the current repo and auto-generate a populated CLAUDE.md. |
+| `/notion meeting-notes` | Structure raw meeting notes into action items, decisions, and a summary. |
+
+---
+
 ## Who it's for
 
 These skills are built for technical teams who care about being discoverable by AI, not just by Google:
@@ -796,6 +851,14 @@ dev-gtm-claude-skills/
 │   ├── cro/
 │   ├── emails/
 │   └── …                            # ad-creative, ads, pricing, launch, and more
+├── notion-skills/                   # 7 personal-productivity and workflow skills (/notion)
+│   ├── capture/                     # brain-dump organizer
+│   ├── inbox/                       # email triage system
+│   ├── reflect/                     # mid-conversation reassessment
+│   ├── workflow-builder/            # multi-agent workflow script generator
+│   ├── content-brief/               # keyword → SEO brief → Notion
+│   ├── claude-md-starter/           # repo scanner + CLAUDE.md generator
+│   └── meeting-notes/               # structured meeting summaries
 ├── writing-skills/                  # 30 blog/content-engine sub-skills (/blog) + 4 standalone
 │   ├── blog/                        # orchestrator
 │   ├── blog-write/
