@@ -171,8 +171,8 @@ def render_human(parsed: Dict[str, Any]) -> str:
     ]
     for label in simple_order:
         val = parsed.get(label, "")
-        status = "[ok]" if val and val != "not available" else "[missing]"
-        out.append(f"  {status}  {label}: {val if val else '(empty)'}")
+        status = "[ok]" if val is not None and str(val).strip() not in ("", "not available") else "[missing]"
+        out.append(f"  {status}  {label}: {val if val is not None and val != '' else '(empty)'}")
 
     out.append("")
     out.append("Block fields:")
@@ -182,7 +182,7 @@ def render_human(parsed: Dict[str, Any]) -> str:
         preview = (val[:60] + "...") if len(val) > 60 else val
         out.append(f"  {status}  {label}: {preview if preview else '(empty)'}")
 
-    empty_count = sum(1 for v in parsed.values() if not v or v == "not available")
+    empty_count = sum(1 for v in parsed.values() if v is None or str(v).strip() in ("", "not available"))
     out.append("")
     out.append(f"Fields empty or unavailable: {empty_count} / {len(ALL_LABELS)}")
     if empty_count > 2:

@@ -64,7 +64,7 @@ def validate(parsed: Dict[str, Any]) -> Dict[str, Any]:
     empty_count = 0
     for field in REQUIRED_SIMPLE:
         val = parsed.get(field, "")
-        if not val or str(val) in ("", "not available"):
+        if val is None or str(val).strip() in ("", "not available"):
             issues.append({
                 "field": field,
                 "severity": "warn" if str(val) == "not available" else "error",

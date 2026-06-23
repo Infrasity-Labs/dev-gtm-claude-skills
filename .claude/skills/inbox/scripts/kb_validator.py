@@ -96,7 +96,7 @@ def check_h1(workspace: Path, filename: str) -> Optional[str]:
             if m:
                 return m.group(1).strip()
         return None
-    except OSError:
+    except (OSError, ValueError):
         return None
 
 
@@ -107,7 +107,7 @@ def has_section(workspace: Path, filename: str, section_header: str) -> bool:
     try:
         text = p.read_text(encoding="utf-8")
         return bool(re.search(rf"^##\s+{re.escape(section_header)}\s*$", text, re.MULTILINE))
-    except OSError:
+    except (OSError, ValueError):
         return False
 
 

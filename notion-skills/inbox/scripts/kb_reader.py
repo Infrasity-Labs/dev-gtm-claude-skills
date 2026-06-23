@@ -84,7 +84,7 @@ def load_file(workspace: Path, filename: str) -> Optional[Dict[str, Any]]:
             "size": p.stat().st_size,
             "text": text,
         }
-    except OSError:
+    except (OSError, ValueError):
         return None
 
 
