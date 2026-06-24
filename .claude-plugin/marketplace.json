@@ -1,0 +1,21 @@
+{
+  "name": "dev-gtm-claude-skills",
+  "description": "Marketing and writing skills for Claude Code — analytics, ads, CRO, copywriting, blog writing, SEO, and more.",
+  "author": {
+    "name": "divyamprusty",
+    "url": "https://github.com/Infrasity-Labs"
+  },
+  "repository": "https://github.com/Infrasity-Labs/dev-gtm-claude-skills",
+  "plugins": [
+    {
+      "name": "marketing-skills",
+      "description": "28 marketing skills: analytics, ads, A/B testing, cold email, CRO, copywriting, competitor profiling, and more.",
+      "path": "plugins/marketing-skills"
+    },
+    {
+      "name": "writing-skills",
+      "description": "34 blog and content writing skills: blog orchestration, SEO, AI citation readiness, multilingual publishing, and more.",
+      "path": "plugins/writing-skills"
+    }
+  ]
+}
