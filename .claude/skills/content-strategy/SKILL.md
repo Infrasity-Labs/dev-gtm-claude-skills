@@ -346,6 +346,25 @@ Visual or structured representation of how content interconnects.
 
 ---
 
+## Notion MCP (Optional)
+
+After generating the content strategy, attempt `notion-query-data-sources`. If it returns results, Notion is connected — save the strategy to Notion. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+Content strategy is a living document teams refer back to constantly — Notion is the right home for it:
+
+1. Call `notion-search` for an existing content strategy page or Content Pillars database in the workspace
+2. **Strategy document:** call `notion-create-pages` to save the full strategy as a Notion page, organized with sections matching the output (pillars, audience, topic clusters, content mix, measurement)
+3. **Content Pillars tracker:** call `notion-create-database` if no pillars database exists, with properties — Pillar Name (title), Cluster (select), Status (select: Active / Planned / Retired), Owner (person), Linked Calendar (relation). Populate with the pillars from the strategy
+4. If a blog-calendar database already exists in the workspace (found via `notion-search`): link the Content Pillars database to it via the Linked Calendar relation property
+5. Confirm: "✅ Content strategy saved to Notion — strategy page created and [N] content pillars added to tracker."
+
+**If not connected:**
+> 💡 **Notion not connected** — content strategy output to chat only. Connect the Notion MCP connector to save your strategy as a living document and track content pillars in a shared database. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
+
+---
+
 ## References
 
 - **[Headless CMS Guide](references/headless-cms.md)**: CMS selection, content modeling for marketing, editorial workflows, platform comparison (Sanity, Contentful, Strapi)

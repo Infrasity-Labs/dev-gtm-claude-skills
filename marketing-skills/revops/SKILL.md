@@ -314,6 +314,27 @@ Format each as a standalone document the user can implement directly. Include pl
 
 ---
 
+## Notion MCP (Optional)
+
+After generating RevOps documentation (lifecycle stages, lead scoring, routing rules, SLAs, handoff protocols), attempt `notion-query-data-sources`. If it returns results, Notion is connected — save to a shared RevOps wiki. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+RevOps documents are operational references the whole revenue team depends on — Notion centralizes them so marketing, sales, and CS all work from the same source of truth:
+
+1. Call `notion-search` for an existing RevOps wiki, revenue operations page, or operations database in the workspace
+2. If not found: call `notion-create-pages` to create a "Revenue Operations" parent page as the wiki root
+3. For each doc generated:
+   - **Lead scoring matrix:** call `notion-create-database` with properties — Attribute (title), Weight (number), Threshold (number), Signal Type (select: Fit / Behavior / Engagement). Add each scoring criterion as a row
+   - **Lifecycle stage definitions, routing rules, SLA docs, handoff protocols:** call `notion-create-pages` to save each as a sub-page under the RevOps wiki root
+4. When scoring rules or routing logic changes: call `notion-search` to find the existing page, then `notion-update-page` to refresh it — never create duplicate docs
+5. Confirm: "✅ RevOps wiki saved to Notion — [N] document(s) added. Lead scoring matrix and lifecycle stages are now shared with your revenue team."
+
+**If not connected:**
+> 💡 **Notion not connected** — RevOps documentation output to chat only. Connect the Notion MCP connector to build a shared Notion wiki for your revenue team. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
+
+---
+
 ## Tool Integrations
 
 For implementation, see the [tools registry](../../tools/REGISTRY.md). Key RevOps tools:

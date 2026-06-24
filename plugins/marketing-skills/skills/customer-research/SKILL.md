@@ -125,6 +125,28 @@ Choose sources based on your ICP type — then read `references/source-guides.md
 | B2C / consumer | App store reviews (1-3 star), Reddit hobby/lifestyle subs, YouTube comments, TikTok/Instagram comments |
 | Enterprise | LinkedIn, industry analyst reports, G2 Enterprise filter, job postings, SparkToro |
 
+### Apify Research Mode (Optional)
+
+Before starting digital watering hole research, check if Apify MCP tools are available (any tool whose name includes `apify`).
+
+**If Apify is available** — use Apify actors to gather structured research data from primary sources. This replaces WebSearch/WebFetch for these sources and returns full, untruncated content with pagination:
+
+| Source | Apify Actor | Use When |
+|---|---|---|
+| Reddit threads + comments | `apify/reddit-scraper` | ICP uses Reddit; need full thread content |
+| G2 reviews | `apify/g2-scraper` | Have a product category; need competitor review language |
+| Capterra reviews | `apify/capterra-scraper` | B2B ICP; need reviewer role and company size context |
+| YouTube comments | `apify/youtube-scraper` | B2C or developer ICP; need raw audience language at scale |
+| Amazon reviews | `apify/amazon-reviews-scraper` | B2C/e-commerce ICP; 1–3 star reviews are a pain language goldmine |
+
+Run each relevant actor with the product name, subreddit URL, or competitor name as input. Feed the structured JSON output directly into the extraction framework below — no manual parsing needed.
+
+**If Apify is not available** — continue with WebSearch and WebFetch as described below.
+
+> 💡 **Apify not connected** — digital watering hole research will use WebSearch and WebFetch, which may be rate-limited or truncated on Reddit, G2, and YouTube. Connect the Apify MCP connector to unlock full-thread Reddit scraping, structured G2/Capterra review mining, and YouTube comment extraction.
+
+---
+
 **Quick decision guide:**
 - Have a product category? → Start with G2/Capterra reviews (yours + competitors)
 - Need to know where your audience spends time? → SparkToro (reveals podcasts, YouTube, subreddits, websites, social accounts)
@@ -238,6 +260,32 @@ Depending on what the user needs, offer:
 6. **Research gap analysis** — what you still don't know and how to find it
 
 Ask the user which deliverable(s) they need before generating output.
+
+---
+
+## Notion MCP (Optional)
+
+After generating the requested deliverables, attempt `notion-query-data-sources`. If it returns results, Notion is connected — save the output to Notion. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+Different deliverables map to different Notion structures:
+
+1. **VOC quote bank** (highest value in Notion — it's a searchable, filterable database):
+   - Call `notion-search` for an existing VOC or Research database
+   - If not found: call `notion-create-database` with properties — Customer (title), Quote (rich text), Theme (select), Segment (select), Source (select: Interview / Survey / Review / Support), Date (date)
+   - Call `notion-create-pages` to add each quote as a row in the database
+   - On subsequent runs: call `notion-query-database-view` to check for duplicate quotes before inserting
+
+2. **Synthesis report / personas / JTBD map** (best as linked Notion pages):
+   - Call `notion-search` for an existing Customer Research project or page
+   - If found: call `notion-create-pages` to add the new deliverable as a sub-page under the existing project
+   - If not found: call `notion-create-pages` at the workspace top level with title "Customer Research — [segment/date]"
+
+3. Confirm: "✅ [deliverable type] saved to Notion → [page/database title]."
+
+**If not connected:**
+> 💡 **Notion not connected** — research output to chat only. Connect the Notion MCP connector to automatically save VOC quote banks as searchable databases and sync research reports to your workspace. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
 
 ---
 

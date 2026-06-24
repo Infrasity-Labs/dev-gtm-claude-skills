@@ -246,6 +246,74 @@ Get credentials at [dataforseo.com](https://dataforseo.com).
 
 Get your API key at [clay.com](https://clay.com). Both skills degrade gracefully when Clay is not connected — `dev-marketing-prospector` falls back to manual web search across all source categories, and `cold-email` prompts the user for research signals instead.
 
+### Notion connector (for saving outputs to your workspace)
+
+`competitor-profiling`, `customer-research`, and `content-brief` save their outputs to Notion as structured databases — competitor profiles become queryable competitive intelligence records, VOC research becomes a searchable quote bank, and content briefs sync to a living Notion database your whole team can filter and reference.
+
+**Claude.ai / Claude Desktop** — Settings → Customize → Connectors → Connect Notion. Sign in with your Notion account and grant access to the workspaces you want skills to write to. Once connected, the `notion-search`, `notion-create-database`, `notion-create-pages`, and `notion-update-page` tools become available automatically.
+
+**Claude Code** — add to `.claude/settings.json` or `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_API_KEY": "your_notion_integration_secret"
+      }
+    }
+  }
+}
+```
+
+Get your integration secret at [notion.so/my-integrations](https://www.notion.so/my-integrations). All skills degrade gracefully when Notion is not connected — outputs are returned in chat or saved locally, and each skill appends a 💡 note with setup instructions.
+
+### Apify connector (for web scraping — reviews, Reddit, Google Maps)
+
+`reddit-comments`, `competitor-profiling`, `customer-research`, `seo-maps`, and `programmatic-seo` use Apify actors to scrape data that WebFetch and Firecrawl can't reliably reach — Reddit threads blocked by rate limits, G2/Capterra/Trustpilot review pages with anti-bot protection, and live Google Maps business listings.
+
+> **Note:** Apify is an **official Anthropic connector** and is available on **Claude Desktop only**. It cannot be configured as a Claude Code MCP server.
+
+**Claude Desktop** — Settings → Customize → Connectors → Connect Apify. Sign in with your Apify account. Once connected, the following actors are available across skills:
+
+| Actor | Used by |
+|---|---|
+| `apify/reddit-scraper` | `reddit-comments`, `customer-research` |
+| `apify/g2-scraper`, `apify/capterra-scraper`, `apify/trustpilot-scraper` | `competitor-profiling`, `customer-research` |
+| `apify/google-maps-scraper`, `apify/google-maps-reviews-scraper`, `apify/yelp-scraper` | `seo-maps` |
+| `apify/youtube-scraper`, `apify/amazon-reviews-scraper` | `customer-research` |
+| `apify/google-maps-scraper`, `apify/g2-scraper`, `apify/capterra-scraper` | `programmatic-seo` |
+
+All skills degrade gracefully when Apify is not connected — each falls back to WebFetch or Firecrawl and appends a 💡 note explaining what Apify would unlock.
+
+### Klaviyo connector (for email template and campaign sync)
+
+`emails`, `churn-prevention`, `lead-magnets`, and `onboarding` use Klaviyo's MCP tools to read your existing email setup and push new templates directly into your account — auditing existing flows, creating HTML and drag-and-drop templates, building campaigns, and pulling open/click/revenue metrics per flow step.
+
+> **Note:** The Klaviyo MCP can create templates and campaigns but **cannot create automated flows**. After the skill builds your templates, configure trigger conditions, delays, and branching logic in the Klaviyo UI.
+
+**Claude.ai / Claude Desktop** — Settings → Customize → Connectors → Connect Klaviyo. Sign in with your Klaviyo account. Once connected, tools like `list_email_templates`, `create_email_template`, `get_flows`, `create_campaign`, and `query_metric_aggregates` become available automatically.
+
+**Claude Code** — add to `.claude/settings.json` or `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "klaviyo": {
+      "command": "npx",
+      "args": ["-y", "@klaviyo/mcp-server"],
+      "env": {
+        "KLAVIYO_API_KEY": "your_klaviyo_private_api_key"
+      }
+    }
+  }
+}
+```
+
+Get your private API key at [klaviyo.com/account#api-keys-tab](https://www.klaviyo.com/account#api-keys-tab). All skills degrade gracefully when Klaviyo is not connected — they output email copy and sequence structure in chat, which you can manually import into any ESP.
+
 ---
 
 ## Install Steps for Every Tool

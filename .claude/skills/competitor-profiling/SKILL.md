@@ -118,6 +118,26 @@ Extract from each page:
 
 #### Step 3: Scrape competitor reviews (optional but high-value)
 
+### Apify Connector (Optional)
+
+Before scraping review sites, check if Apify MCP tools are available (any tool whose name includes `apify`).
+
+**If Apify is available** — use these actors instead of Firecrawl for review scraping. Apify actors are purpose-built for these platforms and handle anti-bot protections reliably:
+
+| Review Source | Apify Actor | Data Returned |
+|---|---|---|
+| G2 | `apify/g2-scraper` | Rating, review count, review text, reviewer role, date |
+| Capterra | `apify/capterra-scraper` | Rating, review count, pros/cons text, reviewer company size |
+| Trustpilot | `apify/trustpilot-scraper` | Rating, review count, review text, date |
+
+Run each actor with the competitor's product name or URL as input. Save raw results to `competitor-profiles/raw/<competitor-slug>/<YYYY-MM-DD>/reviews/<source>.json` before synthesizing.
+
+**If Apify is not available** — continue with the Firecrawl approach below.
+
+> 💡 **Apify not connected** — review sites will be scraped via Firecrawl, which may be blocked by anti-bot protections on G2 and Capterra. Connect the Apify MCP connector for reliable review data extraction.
+
+---
+
 Use **Firecrawl Scrape** or **Firecrawl Search** to find:
 - G2 reviews page for the competitor
 - Capterra reviews page
@@ -384,6 +404,25 @@ Profiles are snapshots. When updating:
 - Scan changelog for product changes
 - Update the "Generated" date
 - Note what changed since last profile in a `## Change Log` section at the bottom
+
+---
+
+## Notion MCP (Optional)
+
+After saving each competitor profile to the local `competitor-profiles/` directory, attempt `notion-query-data-sources`. If it returns results, Notion is connected — push to Notion as a parallel output alongside the local file. The local file save always happens first; Notion is additive.
+
+**If Notion connected:**
+
+1. Call `notion-search` for an existing "Competitive Intelligence" or "Competitor Profiles" database in the workspace
+2. **First run (no database found):** Call `notion-create-database` to initialize a Competitive Intelligence database with properties — Name (title), Website (url), Category (select), Last Profiled (date), Pricing Model (select), SEO Strength (select: High / Medium / Low), Status (select: Active / Monitoring / Archived)
+3. For each competitor profile just generated:
+   - Call `notion-search` to check if this competitor already has a page (match on Name)
+   - If found: call `notion-update-page` to refresh the profile with the latest data and update Last Profiled date
+   - If not found: call `notion-create-pages` to create a new page in the database with the profile content and structured properties
+4. Confirm: "✅ [N] competitor profile(s) saved/updated in Notion Competitive Intelligence database."
+
+**If not connected:**
+> 💡 **Notion not connected** — competitor profiles saved to `competitor-profiles/` locally only. Connect the Notion MCP connector to also push profiles to a shared Notion database your whole team can query and filter. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
 
 ---
 

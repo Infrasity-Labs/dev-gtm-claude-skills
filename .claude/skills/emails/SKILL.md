@@ -290,9 +290,31 @@ For implementation, see the [tools registry](../../tools/REGISTRY.md). Key email
 | Tool | Best For | MCP | Guide |
 |------|----------|:---:|-------|
 | **Customer.io** | Behavior-based automation | - | [customer-io.md](../../tools/integrations/customer-io.md) |
+| **Klaviyo** | E-commerce & B2C lifecycle, flows + campaigns | ✓ | — |
 | **Mailchimp** | SMB email marketing | ✓ | [mailchimp.md](../../tools/integrations/mailchimp.md) |
 | **Nitrosend** | AI-native email (sequences via prompts) | ✓ | [nitrosend.md](../../tools/integrations/nitrosend.md) |
 | **Resend** | Developer-friendly transactional | ✓ | [resend.md](../../tools/integrations/resend.md) |
 | **SendGrid** | Transactional email at scale | - | [sendgrid.md](../../tools/integrations/sendgrid.md) |
 | **Kit** | Creator/newsletter focused | - | [kit.md](../../tools/integrations/kit.md) |
+
+### Klaviyo (MCP)
+
+Best fit for e-commerce and B2C lifecycle email — behavior-based flows, purchase history segmentation, revenue attribution. When Klaviyo MCP is connected:
+
+| MCP Tool | Use For |
+|----------|---------|
+| `list_email_templates` | Audit existing templates before designing new sequences |
+| `create_email_template` | Build HTML templates for each email in the sequence |
+| `create_dnd_email_template` | Build drag-and-drop templates |
+| `clone_email_template` | Duplicate a base template across a sequence |
+| `get_flows` | Read existing flows to audit, extend, or redesign |
+| `get_flow_message` | Pull exact copy from a flow step for rewrite |
+| `get_flow_report` | Get open/click performance per flow step |
+| `create_campaign` | Create one-time sends (newsletters, announcements) |
+| `get_campaign_report` | Measure campaign performance |
+| `get_lists` + `get_segments` | Understand audience before designing segmentation logic |
+| `query_metric_aggregates` | Pull open rate, click rate, and revenue metrics |
+| `get_coupons` + `get_coupon_codes` | Reference discount codes for re-engagement emails |
+
+**Flow creation gap:** MCP can read existing flows and create templates and campaigns, but cannot create automated flows. Flow setup (trigger conditions, delays, branching) is done in the Klaviyo UI after templates are built here.
 

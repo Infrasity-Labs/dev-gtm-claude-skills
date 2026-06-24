@@ -208,3 +208,22 @@ When recommending experiments, consider tests for:
 4. What's your activation rate target?
 5. Do you have cohort analysis on successful vs. churned users?
 
+---
+
+## Tool Integrations
+
+### Klaviyo (MCP)
+
+Klaviyo's metric-triggered flows fire based on product events (user completed step X, visited pricing page) — well suited for onboarding email automation. When Klaviyo MCP is connected:
+
+| MCP Tool | Use For |
+|----------|---------|
+| `get_flows` + `get_flow_report` | Audit existing onboarding flow; identify drop-off by step |
+| `get_flow_message` | Pull exact copy of each onboarding email for rewrite |
+| `create_email_template` | Build onboarding email templates (welcome, quick win, feature highlight, check-in) |
+| `get_events` | Read activation events (first login, feature used, first project created) |
+| `query_metric_aggregates` | Track activation event rates to measure onboarding email effectiveness |
+| `get_segments` | Segment users by onboarding stage for targeted follow-up |
+
+**Flow creation gap:** Metric-triggered flows are configured in the Klaviyo UI. MCP builds the templates; you wire the triggers manually.
+

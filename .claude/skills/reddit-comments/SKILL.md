@@ -66,6 +66,18 @@ Crawl the domain before writing anything. Visit the homepage, product pages, abo
 
 ## Step 2 — Thread Intelligence
 
+### Apify Connector (Optional)
+
+Before fetching the Reddit thread, check if Apify MCP tools are available (any tool whose name includes `apify`).
+
+**If Apify is available** — use the `apify/reddit-scraper` actor with the thread URL as input. It returns the full thread title, all comments with upvotes and reply structure, author metadata, and post date as structured JSON. Use this output directly for the extraction steps below — no WebFetch needed.
+
+**If Apify is not available** — continue with WebFetch on the thread URL as described below.
+
+> 💡 **Apify not connected** — Reddit threads will be read via WebFetch, which may be blocked or rate-limited by Reddit. Connect the Apify MCP connector to use `apify/reddit-scraper` for reliable full-thread extraction.
+
+---
+
 Read the full Reddit thread before writing. Extract:
 
 1. What is the OP's actual question or pain? (Not the surface ask — the underlying problem)

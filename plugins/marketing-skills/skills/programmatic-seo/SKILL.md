@@ -124,6 +124,25 @@ You can layer multiple playbooks (e.g., "Best coworking spaces in San Diego").
 - Is it first-party, scraped, licensed, public?
 - How is it updated?
 
+### Apify Data Sources (Optional)
+
+For playbooks that require external data, check if Apify MCP tools are available (any tool whose name includes `apify`) before sourcing data manually.
+
+**If Apify is available** — use these actors to acquire data programmatically for the playbooks below:
+
+| Playbook | Apify Actor | Input | Data Returned |
+|---|---|---|---|
+| **Locations** ("dentists in Austin") | `apify/google-maps-scraper` | Business category + city/region | Name, address, phone, rating, review count, coordinates per business |
+| **Directory** ("AI copywriting tools") | `apify/g2-scraper` or `apify/capterra-scraper` | Product category name | Tool names, descriptions, pricing tiers, ratings, feature tags |
+| **Reviews** (pages built from review data) | `apify/amazon-reviews-scraper` or `apify/g2-scraper` | Product ASIN or product name | Review text, rating, date, reviewer metadata |
+| **Profiles** (entity pages) | `apify/linkedin-company-scraper` | Company name or LinkedIn URL | Description, headcount, industry, founding year |
+
+Run the relevant actor, save the output as a structured JSON data file, and use it as the data layer for template population.
+
+**If Apify is not available** — data must be sourced manually or from first-party/licensed sources as described in Principle 2 above.
+
+> 💡 **Apify not connected** — programmatic SEO data must be sourced manually. Connect the Apify MCP connector to automate data acquisition for Locations, Directory, and Reviews playbooks at scale.
+
 ### 3. Template Design
 
 **Page structure:**
