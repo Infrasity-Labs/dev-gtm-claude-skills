@@ -48,9 +48,21 @@ website-level checks.
 Before any analysis, detect the available capability tier:
 
 ### Tier 0 (Free)
-**Detection:** DataForSEO MCP tools NOT available.
+**Detection:** DataForSEO MCP tools NOT available and Apify MCP tools NOT available.
 **Capabilities:** Overpass API competitor discovery, Geoapify POI search, Nominatim geocoding, static GBP checklist, schema generation, cross-platform NAP guidance.
 **Load:** `references/maps-free-apis.md`
+
+### Tier 0.5 (Apify)
+**Detection:** DataForSEO MCP tools NOT available, but Apify MCP tools ARE available (any tool whose name includes `apify`).
+**Capabilities:** Everything in Tier 0 PLUS live Google Maps business data, real review data with dates and text, and Yelp/TripAdvisor cross-platform presence verification.
+**Actors used:**
+- `apify/google-maps-scraper` — business name, address, phone, rating, review count, hours, categories, coordinates
+- `apify/google-maps-reviews-scraper` — review text, rating, date, author (enables velocity and sentiment analysis)
+- `apify/yelp-scraper` — Yelp listing NAP and reviews for cross-platform NAP verification
+
+**Limitations vs Tier 1:** No geo-grid rank tracking (requires DataForSEO Maps SERP API per coordinate). No GBP completeness score. Tier 0.5 covers competitor mapping, review intelligence, and NAP verification but not position tracking.
+
+> 💡 **Apify not connected** — running at Tier 0 (free APIs only). Connect the Apify MCP connector to unlock live Google Maps data, review velocity analysis, and cross-platform NAP verification without a DataForSEO subscription.
 
 ### Tier 1 (DataForSEO)
 **Detection:** `business_data_business_listings_search` MCP tool IS available.

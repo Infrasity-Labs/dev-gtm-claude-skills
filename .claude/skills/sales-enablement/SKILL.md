@@ -337,6 +337,26 @@ If context is missing, ask:
 
 ---
 
+## Notion MCP (Optional)
+
+After generating sales collateral, attempt `notion-query-data-sources`. If it returns results, Notion is connected — save to a shared sales wiki. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+Sales collateral is only useful if reps can find it when they need it — a Notion sales wiki makes it searchable and always current:
+
+1. Call `notion-search` for an existing sales wiki, sales enablement page, or collateral database in the workspace
+2. If not found: call `notion-create-database` to initialize a Sales Enablement database with properties — Name (title), Type (select: Battle Card / One-Pager / Objection Guide / Case Study / Deck / Playbook), Product (select), Stage (select: Prospecting / Discovery / Demo / Negotiation / Close), Owner (person), Last Updated (date)
+3. Call `notion-create-pages` to save each piece of collateral as a page in the database with the appropriate Type, Product, and Stage properties
+4. Call `notion-get-teams` to find the sales team — present it to the user so they can confirm access before publishing
+5. On updates: call `notion-search` first to find the existing page, then `notion-update-page` to refresh it rather than creating a duplicate. Update Last Updated date.
+6. Confirm: "✅ [N] collateral piece(s) saved to Notion Sales Enablement database. Sales team can now search by type, product, and deal stage."
+
+**If not connected:**
+> 💡 **Notion not connected** — sales collateral output to chat only. Connect the Notion MCP connector to automatically save all collateral to a searchable Notion sales wiki. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
+
+---
+
 ## Tool Integrations
 
 For partner sales enablement, see the [tools registry](../../tools/REGISTRY.md):

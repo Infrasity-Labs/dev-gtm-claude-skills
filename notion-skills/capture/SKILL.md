@@ -154,8 +154,33 @@ The trigger is the `complexity_estimator.py` recommendation OR your judgment whe
 |---|---|
 | Claude Code CLI | Glob for files matching dump keywords; Grep for content matches; read top-level structure. Use `scripts/workspace_inventory.py`. |
 | Claude.ai with project | Check project knowledge files for thematic overlap. List file titles; surface matches by keyword. |
-| Connected tools (Notion, Drive, etc.) | Search via MCP if available. |
+| Connected tools (Notion, Drive, etc.) | Search via MCP if available. See **Notion MCP** section below. |
 | No accessible workspace | State the limitation explicitly; ask user about their setup; do NOT fabricate. |
+
+## Notion MCP (Optional)
+
+This skill integrates with the Notion MCP connector when available. After delivering the organized sections to chat, attempt `notion-query-data-sources`. If it returns results, Notion is connected — run the save flow below. If it fails or is unavailable, skip silently and append the alert.
+
+### Save Flow (If Notion Connected)
+
+Run this **after** the 4-section (or compressed) output is delivered and the user has not yet picked a Section 4 offer — it is a parallel background action, not a gate.
+
+1. Call `notion-search` with keywords from the top Projects and Tasks to detect existing matching pages in the workspace
+2. For each **Project/Idea** in Section 1: check if a matching project page already exists
+   - If yes: surface the match to the user ("Found existing page: [title] — want me to link or update it?") — do NOT auto-update without approval
+   - If no: offer to create it with `notion-create-pages` in a Projects database
+3. For each **Task** in Section 2: call `notion-query-database-view` to check if a tasks database exists
+   - If yes: offer to add the tasks to that database via `notion-create-pages`
+   - If no: offer to create a Tasks database via `notion-create-database` and add them
+4. All Notion actions are **offers, not auto-executions** — present a single grouped offer at the end of Section 4:
+
+> **Save to Notion?** I found [N] projects and [N] tasks from your dump. I can add them to your Notion workspace — [X] matching existing pages, [Y] new entries. Say "save to Notion" to proceed, or pick a Section 4 offer instead.
+
+5. On approval: execute `notion-create-pages` for approved items, confirm with page links
+
+### Fallback (If Notion Not Connected)
+
+> 💡 **Notion not connected** — your organized brain dump is output to chat only. Connect the Notion MCP connector to automatically save projects and tasks to your workspace. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
 
 ## Approval Gate
 

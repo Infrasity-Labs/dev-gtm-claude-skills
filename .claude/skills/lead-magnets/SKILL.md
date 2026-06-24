@@ -290,3 +290,24 @@ When creating a lead magnet strategy, provide:
 4. Do you have an email nurture sequence set up for new leads?
 5. What's your budget for design and promotion?
 
+---
+
+## Tool Integrations
+
+### Klaviyo (MCP)
+
+Klaviyo handles lead magnet delivery (automated email after form fill) and provides form conversion analytics. When Klaviyo MCP is connected:
+
+| MCP Tool | Use For |
+|----------|---------|
+| `get_forms` + `query_form_values` | Analyze signup form conversion rates — which forms convert, which don't |
+| `query_form_series` | Track form performance over time; catch drop-off trends |
+| `create_email_template` | Build the delivery email ("here's your download") |
+| `get_flows` | Check existing delivery flows — extend rather than rebuild |
+| `get_lists` | See which lists new subscribers are added to |
+| `get_segments` | Segment subscribers by which lead magnet they downloaded |
+| `subscribe_profile_to_marketing` | Programmatically add captured leads to the correct list |
+| `query_metric_aggregates` | Track post-delivery engagement — open rate, clicks, lead quality signals |
+
+**Flow creation gap:** The delivery flow (triggering the email after form fill) is configured in the Klaviyo UI. MCP builds the template; the trigger wiring is manual.
+

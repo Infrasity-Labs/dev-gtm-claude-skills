@@ -553,6 +553,26 @@ Day 4 (Optional):
 
 ---
 
+## Notion MCP (Optional)
+
+After completing Phase 8 and delivering the full PRD to chat, attempt `notion-query-data-sources`. If it returns results, Notion is connected — run the save flow. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+PRDs are living, collaborative documents — Notion is their natural home. Save the full PRD so the whole team can read, comment, and track it:
+
+1. Call `notion-search` for an existing Product Specs or PRDs database in the workspace
+2. If found: call `notion-create-pages` to save the PRD as a new page in that database with properties — Name, Status (select: Draft / In Review / Approved / Shipped), Owner (person), Launch Date (date), Epic (rich text)
+3. If not found: call `notion-create-database` to initialize a Product Specs database with those properties, then `notion-create-pages` to save
+4. Call `notion-get-users` to resolve the owner name to a workspace user and assign them in the Owner property
+5. For revisions across the 8 phases: call `notion-update-page` to update the existing PRD page rather than creating duplicates — match on Name
+6. Confirm: "✅ PRD saved to Notion → [page title]. Status: Draft. Assign reviewers directly in Notion."
+
+**If not connected:**
+> 💡 **Notion not connected** — your PRD is output to chat only. Connect the Notion MCP connector to automatically save PRDs to a shared product specs database your team can comment on and track. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
+
+---
+
 ## Examples
 
 See `examples/sample.md` for full PRD examples.

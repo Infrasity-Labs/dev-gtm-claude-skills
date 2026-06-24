@@ -295,3 +295,24 @@ Save the calendar and suggest:
 4. Re-run `/blog calendar` next month/quarter for the next plan
 5. Review the Content Decay Report weekly and address Critical items first
 6. Track Topic Cluster Progress monthly to ensure clusters reach completion
+
+### Step 7: Notion MCP (Optional)
+
+After delivering the calendar to chat, attempt `notion-query-data-sources`. If it returns results, Notion is connected — run the push below. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+The editorial calendar is structured data (Title, Type, Template, Cluster, Keyword, Status, Publish Date, Author) — a natural Notion database. Push it directly:
+
+1. Call `notion-search` for an existing Content Calendar database in the workspace
+2. If found: call `notion-create-pages` to add each new article/update entry to the existing database — skip entries that already exist (match on Title + Publish Date)
+3. If not found: call `notion-create-database` to initialize a Content Calendar database with properties:
+   - Title (title), Type (select: New / Refresh / Repurposed), Template (select), Cluster (select), Keyword (rich text), Status (select: Brief / Draft / Review / Published), Publish Date (date), Author (person)
+   Then call `notion-create-pages` to populate it with every entry from the calendar
+4. Call `notion-create-view` to add a Calendar view grouped by Publish Date (so the team can see the schedule visually)
+5. Confirm: "✅ Editorial calendar pushed to Notion — [N] entries added. Calendar view created."
+
+On re-runs (next month/quarter): call `notion-query-database-view` first to fetch existing entries, skip duplicates, only add new ones.
+
+**If not connected:**
+> 💡 **Notion not connected** — your editorial calendar is output to chat only. Connect the Notion MCP connector to automatically push it to a Notion database with a calendar view your whole team can track. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)

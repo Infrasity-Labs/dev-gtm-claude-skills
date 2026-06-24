@@ -406,7 +406,25 @@ For implementation, see the [tools registry](../../tools/REGISTRY.md).
 |------|---------|
 | `stripe` | Subscription management, dunning config, payment retries |
 | `customer-io` | Dunning email sequences, retention campaigns |
+| `klaviyo` | Win-back campaigns, dunning email templates, at-risk segment data, coupon codes for save offers |
 | `posthog` | Cancel flow A/B tests via feature flags, funnel analytics |
 | `mixpanel` / `ga4` | Usage tracking, churn signal analysis |
 | `segment` | Event routing for health scoring |
+
+### Klaviyo (MCP)
+
+Covers the email layer of churn prevention — win-back campaigns, dunning templates, at-risk segment identification. When Klaviyo MCP is connected:
+
+| MCP Tool | Use For |
+|----------|---------|
+| `get_segments` + `query_segment_values` | Pull at-risk segments (low engagement, no recent activity) |
+| `get_events` | Read behavioral events signaling churn risk |
+| `get_profiles` | Pull individual at-risk profiles for targeted outreach |
+| `query_metric_aggregates` | Email engagement trends — open/click decline as churn signal |
+| `get_flows` + `get_flow_report` | Audit existing win-back flows; measure save rate via email |
+| `create_email_template` | Build dunning email templates (day 0, 3, 7, 10 sequence) |
+| `create_campaign` | Launch win-back campaigns for churned cohorts |
+| `get_coupons` + `get_coupon_codes` | Pull available discount codes to reference in save offer emails |
+
+**Note:** Klaviyo handles the email layer only. Cancel flow logic (Churnkey, ProsperStack) and payment retry logic (Stripe) remain separate.
 

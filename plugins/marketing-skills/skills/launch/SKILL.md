@@ -330,6 +330,26 @@ Even small changelog updates remind customers your product is evolving. This bui
 
 ---
 
+## Notion MCP (Optional)
+
+After generating the launch plan and checklist, attempt `notion-query-data-sources`. If it returns results, Notion is connected — create a launch tracker. If it fails or is unavailable, skip and append the alert.
+
+**If Notion connected:**
+
+A launch involves many deliverables, owners, and deadlines across multiple teams — a Notion database keeps it all trackable:
+
+1. Call `notion-search` for an existing launch tracker or project management database in the workspace
+2. If not found: call `notion-create-database` to initialize a Launch Tracker with properties — Deliverable (title), Owner (person), Channel (select: Email / Social / Blog / PR / Product Hunt / Community / Paid), Due Date (date), Status (select: Not Started / In Progress / Done), Phase (select: Pre-Launch / Launch Day / Post-Launch)
+3. Call `notion-create-pages` to add each item from the Pre-Launch, Launch Day, and Post-Launch checklists as database entries with appropriate properties
+4. Call `notion-get-teams` to surface available teams — present them to the user for owner assignment (do not auto-assign without input)
+5. Call `notion-get-users` to allow the user to assign specific owners to each deliverable
+6. Confirm: "✅ Launch tracker created in Notion — [N] deliverables added across pre-launch / launch day / post-launch. Assign owners directly in Notion."
+
+**If not connected:**
+> 💡 **Notion not connected** — launch plan output to chat only. Connect the Notion MCP connector to automatically create a launch tracker database with owner assignments and status tracking. Setup: [notion-mcp-server](https://github.com/makenotion/notion-mcp-server)
+
+---
+
 ## Task-Specific Questions
 
 1. What are you launching? (New product, major feature, minor update)
