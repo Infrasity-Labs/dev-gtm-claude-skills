@@ -1,479 +1,215 @@
 ---
 name: orphan-pages-internal-linking-opportunities
-description: >
-  Runs a full orphan page audit for any website using Ahrefs only. Discovers all blog/content
-  pages, finds which ones receive zero incoming internal links (orphan pages), fetches keywords,
-  clusters pages by topic, and generates 3 linking suggestions per orphan with anchor text and
-  placement guidance. Outputs a styled HTML report matching report-style-reference.html.
-  Trigger when a user provides a domain or URL and asks for an internal linking audit, orphan
-  page report, interlinking analysis, "which pages have no internal links", "find pages nobody
-  links to", "internal link gap", or "which blogs are isolated". Always use this skill for
-  internal linking audits — never attempt the workflow without following every step here.
+description: Audit any domain for orphan blog pages, map internal links across all blog posts, generate keyword-backed interlinking briefs via DataForSEO, and produce a self-contained downloadable HTML report. Invoke with the target domain as the argument.
+arguments:
+  - name: domain
+    description: The domain to audit (e.g. example.com or https://www.example.com)
+    required: true
+example_invocation: /orphan-pages-internal-linking-opportunities infrasity.com
 ---
 
-You are an expert SEO strategist specialising in internal linking architecture and content
-discoverability. Your job is to run a full orphan page audit for any website the user provides,
-and deliver a professional HTML report.
+# Orphan Page Audit & Interlinking Brief Generator
 
-Before writing any code or HTML, read the design reference file in this skill's folder:
-  → references/report-style-reference.html
+You are running a complete SEO orphan page audit. The user has provided a domain as input via `args`. Your job is to execute every phase below in order, using the tools available, and produce a single downloadable HTML report file saved to the current working directory.
 
-That file is the canonical visual and code reference for the report you will generate.
-Every colour, font, spacing value, component pattern, and interaction must match it exactly.
-Do not deviate from it.
+**Input domain:** `{args}`
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DEFINITIONS — READ BEFORE STARTING
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-ORPHAN PAGE
-A page on the site that receives zero internal links from any other page on the same site.
-No other page links TO it. It cannot be discovered by crawlers or readers through normal
-navigation. This is about INCOMING links to the page — not about whether the page itself
-contains outgoing links.
+## PHASE 1 — Domain Normalization & Sitemap Discovery
 
-INTERNAL LINKING AUDIT
-Finding all orphan pages on a site, then recommending which existing pages should link TO
-each orphan, with specific anchor text and placement guidance.
+1. Normalize the input domain:
+   - Strip leading/trailing whitespace
+   - If it doesn't start with `http`, prepend `https://`
+   - If it doesn't have `www.` and the base domain resolves with it, use `www.`
+   - Remove any trailing slash
+   - Store as `BASE_URL` (e.g., `https://www.example.com`)
 
-WHAT THIS AUDIT IS NOT
-This is not a check of whether a page's own body content contains outgoing links. That is
-a different audit requiring individual page fetches. This audit is strictly about which pages
-receive zero incoming internal links site-wide.
+2. Fetch `BASE_URL/robots.txt` using WebFetch. Look for any `Sitemap:` directive — if found, use that URL as the sitemap location. If not found, default to `BASE_URL/sitemap.xml`.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. Fetch the sitemap URL. Determine its type:
+   - **Sitemap index** (`<sitemapindex>` tag present): extract all `<loc>` child sitemap URLs, fetch each one, and merge all `<loc>` URLs from every child sitemap into a single master URL list
+   - **Regular sitemap** (`<urlset>` tag): extract all `<loc>` URLs directly
 
-The user provides one of:
-- A domain URL (e.g. `example.com` or `https://example.com`)
-- A sitemap URL (e.g. `https://example.com/sitemap.xml`)
-- A blog prefix URL (e.g. `https://example.com/blog/`)
+4. Store the full master URL list.
 
-Extract the root domain and the blog/content path prefix from whatever is provided. If the
-user does not specify a content section (blog, articles, resources, etc.), ask them which
-URL prefix contains the content pages you should audit before proceeding.
+---
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TOOLS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## PHASE 2 — Blog URL Identification
 
-Step 1 uses curl commands via bash_tool to fetch and parse the site's sitemap directly.
-Steps 2 and 3 use Ahrefs MCP tools. Before calling any Ahrefs tool, use `Ahrefs:doc` to
-confirm the correct input schema for that tool. Never guess parameter names.
+From the master URL list:
 
-TOOLS USED IN ORDER:
-1. `curl` via bash_tool                            — discover all content page URLs from sitemap
-2. `Ahrefs:site-explorer-pages-by-internal-links`  — identify which pages have incoming links
-3. `Ahrefs:site-explorer-top-pages`                — fetch keywords and traffic for all pages
+1. Analyze all URL patterns to identify the blog/content section. Look for the URL prefix that appears most frequently in a uniform pattern. Common prefixes to check: `/blog/`, `/articles/`, `/posts/`, `/insights/`, `/resources/`, `/learn/`, `/news/`, `/guides/`
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 1 — BLOG / CONTENT PAGE DISCOVERY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. Select the prefix that best represents the blog content (most URLs, most uniform structure). If multiple prefixes qualify, include all of them.
 
-WHY THIS STEP EXISTS
-We fetch the site's sitemap directly via curl to get the full list of published URLs without
-relying on any third-party crawler. This is fast, free, and always reflects what the site
-itself publishes.
+3. Filter the master URL list to only include URLs matching the identified blog prefix(es). Exclude index/listing pages (e.g., `BASE_URL/blog` with no further slug). Store as `BLOG_URLS`.
 
-METHOD: curl via bash_tool
+4. If no blog prefix is identifiable from the sitemap, fetch `BASE_URL` homepage and look for a blog/articles navigation link, then fetch that page and extract all post URLs from it.
 
-SUBSTEP 1A — FIND THE SITEMAP
-Try these locations in order until one returns valid XML. Run all curl commands inside
-bash_tool.
+5. Log the total count: "Found {N} blog posts at {BASE_URL}"
 
-```bash
-# Try the most common sitemap locations
-curl -sI https://example.com/sitemap.xml
-curl -sI https://example.com/sitemap_index.xml
-curl -sI https://example.com/blog-sitemap.xml
-curl -sI https://example.com/post-sitemap.xml
+---
+
+## PHASE 3 — Crawl & Build Inbound Link Map
+
+Run a **Workflow** to crawl all blog posts in parallel. The workflow should:
+
+**Script logic:**
+- Take `BLOG_URLS` as the items list
+- For each URL, spawn an agent that:
+  - Fetches the page using WebFetch
+  - Extracts ALL href links in the body/article content (not nav, header, footer) that point to other pages on the same domain matching the blog URL pattern
+  - Normalizes all found links to absolute URLs (no trailing slash, no query params, no hash)
+  - Returns `{ source_url, outbound_blog_links: [...] }`
+- Use schema: `{ type: 'object', properties: { source_url: { type: 'string' }, outbound_blog_links: { type: 'array', items: { type: 'string' } } }, required: ['source_url', 'outbound_blog_links'] }`
+
+After the workflow completes, aggregate results:
+- Build `inbound_count` map: `{ url -> number }` initialized to 0 for all `BLOG_URLS`
+- Build `inbound_sources` map: `{ url -> [source_url, ...] }` initialized to `[]` for all `BLOG_URLS`
+- For each crawl result, iterate `outbound_blog_links` and increment the inbound count + push the source URL for each valid link
+
+Classify every page:
+- **Orphan** = 0 inbound links → store as `ORPHAN_URLS`
+- **Low-linked** = 1–2 inbound links → store as `LOW_LINKED_URLS`
+- **Healthy** = 3+ inbound links → store as `HEALTHY_URLS`
+
+Build `FULL_INBOUND_MAP`: array of `{ url, inbound, linked_from }` sorted descending by inbound count.
+
+---
+
+## PHASE 4 — Keyword Research for Orphan Pages
+
+Run a **Workflow** to get the top US search volume keyword for each orphan page. The workflow should:
+
+**Script logic:**
+- Take `ORPHAN_URLS` as the items list
+- For each orphan URL, spawn an agent that:
+  1. Extracts the slug from the URL (last path segment)
+  2. Generates 6–8 keyword variants from the slug (convert hyphens to spaces, try variations with different word orders, add/remove qualifiers)
+  3. Uses ToolSearch to load `mcp__claude_ai_DataForSEO__kw_data_google_ads_search_volume`, then calls it with the keyword variants, `location_code: 2840` (United States), `language_code: "en"`
+  4. Picks the keyword with the highest US monthly search volume as `anchor_text`
+  5. Fallback: if DataForSEO returns no data or errors, convert the slug to a phrase (hyphens → spaces) as the `anchor_text`
+  6. Fetches the page and writes a 2–3 sentence `page_summary` of what the page covers
+  7. Returns `{ orphan_url, anchor_text, us_monthly_volume, page_summary }`
+- Use schema: `{ type: 'object', properties: { orphan_url: { type: 'string' }, anchor_text: { type: 'string' }, us_monthly_volume: { type: 'number' }, page_summary: { type: 'string' } }, required: ['orphan_url', 'anchor_text', 'us_monthly_volume', 'page_summary'] }`
+
+Store results as `KEYWORD_DATA`: map of `{ orphan_url -> { anchor_text, us_monthly_volume, page_summary } }`
+
+---
+
+## PHASE 5 — Generate Interlinking Briefs for Orphan Pages
+
+Run a **Workflow** using a 2-stage pipeline over `ORPHAN_URLS`:
+
+**Stage 1** — Pass through keyword data (already computed, no agent needed — use the `KEYWORD_DATA` directly)
+
+**Stage 2** — For each orphan, spawn an agent that:
+1. Receives `orphan_url`, `anchor_text`, `page_summary`, and the full `BLOG_URLS` list
+2. Selects exactly **3 topically relevant source pages** from `BLOG_URLS` (exclude the orphan itself; prefer well-linked, non-orphan pages)
+3. Fetches each of the 3 source pages using WebFetch
+4. For each source page produces:
+   - `source_url`: the full URL of the source page
+   - `where_to_place`: specific, precise description of the location within that page — naming the H2/H3 section, which paragraph, what content surrounds it. Must be specific enough that a content editor can navigate there without guessing
+   - `context_copy`: minimum 300 characters of naturally flowing copy to be inserted at that location. The `anchor_text` MUST appear exactly once within it as `<a href="ORPHAN_URL">ANCHOR_TEXT</a>`. Copy must read as if it was always part of the article — not promotional, not forced. Same anchor text across all 3 placements.
+5. Returns `{ orphan_url, anchor_text, placements: [{ source_url, where_to_place, context_copy }, ...] }`
+- Use schema with `placements` as array of 3 objects each requiring `source_url`, `where_to_place`, `context_copy`
+
+After the workflow completes, post-process every `context_copy`:
+- Check if `anchor_text` appears as a hyperlink (`href="orphan_url"` present)
+- If not, find the first occurrence of `anchor_text` (case-insensitive) and replace with `<a href="orphan_url">anchor_text</a>`
+
+Store as `BRIEFS`.
+
+---
+
+## PHASE 6 — Generate HTML Report
+
+Using the Write tool, save a single self-contained HTML file to the current working directory named `orphan-audit-{domain}-{YYYYMMDD}.html` where `{domain}` is the base domain (no protocol, no www, dots replaced with hyphens) and `{YYYYMMDD}` is today's date.
+
+The HTML file must be completely self-contained — all CSS inline in a `<style>` tag, no external CDN or font imports, works offline. Use clean, professional design with the following structure:
+
+### HTML Report Structure
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Orphan Page Audit — {domain}</title>
+  <style>
+    /* Full inline CSS — professional design, light background, clean typography */
+    /* Use system fonts: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif */
+    /* Color palette: #0f172a (headings), #334155 (body), #3b82f6 (accent/links), #f1f5f9 (backgrounds), #e2e8f0 (borders) */
+    /* Stat cards, tables, collapsible sections, copy buttons */
+  </style>
+</head>
+<body>
 ```
 
-If none return 200, check robots.txt for the Sitemap: directive:
-```bash
-curl -s https://example.com/robots.txt | grep -i sitemap
-```
-
-SUBSTEP 1B — FETCH AND PARSE THE SITEMAP
-Once a valid sitemap URL is found, fetch it and extract all <loc> URLs:
-
-```bash
-curl -s https://example.com/sitemap.xml | grep -oP '(?<=<loc>)[^<]+'
-```
-
-If it is a SITEMAP INDEX (contains <sitemap> entries pointing to child sitemaps), find
-the blog/content child sitemap and fetch that instead:
-
-```bash
-# Extract child sitemap URLs from index
-curl -s https://example.com/sitemap_index.xml | grep -oP '(?<=<loc>)[^<]+'
-
-# Then fetch the relevant child sitemap (e.g. blog or post sitemap)
-curl -s https://example.com/blog-sitemap.xml | grep -oP '(?<=<loc>)[^<]+'
-```
-
-SUBSTEP 1C — FILTER TO CONTENT PREFIX
-From the extracted URLs, keep only those matching the blog/content path prefix the user
-specified (e.g. /blog/, /articles/, /resources/):
-
-```bash
-curl -s https://example.com/sitemap.xml \
-  | grep -oP '(?<=<loc>)[^<]+' \
-  | grep "example.com/blog/" > urls.txt
-```
-
-SUBSTEP 1D — VALIDATE EACH URL (OPTIONAL BUT RECOMMENDED)
-For smaller sites (<100 pages), confirm each URL is live with a HEAD request:
-
-```bash
-# Check HTTP status for each URL
-while IFS= read -r url; do
-  status=$(curl -o /dev/null -s -w "%{http_code}" -L "$url")
-  echo "$status $url"
-done < urls.txt | grep "^200"
-```
-
-Skip this substep for large sites (>100 pages) to avoid excessive requests. Instead, rely
-on the sitemap as the source of truth — sitemaps should only list live pages.
-
-CLEANING THE RESULTS — EXCLUDE:
-- Any URL not matching the target content prefix
-- Any URL returning non-200 status (if validation was run)
-- Any URL that is a pagination page (e.g. /blog/page/2/, /blog/?page=3)
-- Any URL that is a tag, category, or author archive page
-- Any URL ending in feed/, .xml, .json, or .rss
-
-EDGE CASES FOR STEP 1:
-- SITEMAP NOT FOUND: Ask the user to provide the sitemap URL directly, or fall back to
-  crawling the blog index page and following pagination links manually.
-- GZIPPED SITEMAP (.xml.gz): Fetch and decompress in one command:
-  curl -s https://example.com/sitemap.xml.gz | gunzip | grep -oP '(?<=<loc>)[^<]+'
-- NO SITEMAP AT ALL: Fetch the blog index page and extract linked URLs:
-  curl -s https://example.com/blog/ | grep -oP 'href="\K/blog/[^"]+' | sort -u
-  Prepend the domain to make absolute URLs. Note in the report that discovery was
-  done via HTML crawl, not sitemap.
-- JAVASCRIPT-RENDERED SITE: curl cannot execute JS. If the sitemap is empty or the
-  blog index returns no links, inform the user that their site is JS-rendered and
-  ask them to provide a manual list of blog URLs or a static sitemap export.
-
-RESULT: A clean list of valid live content page URLs. Call this LIST_ALL.
-Record the total count as TOTAL_PAGES.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 2 — IDENTIFY ORPHAN PAGES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-WHY THIS STEP EXISTS
-This is the core of the audit. We need to know which pages in LIST_ALL receive at least one
-internal link from anywhere on the site. Pages that do NOT appear in this result are the
-orphans.
-
-TOOL: `Ahrefs:site-explorer-pages-by-internal-links`
-
-PARAMETERS TO USE:
-- `target`: the blog/content prefix (e.g. `www.example.com/blog/`)
-- `mode`: `prefix`
-- `select`: `url_to,links_to_target,title_target`
-- `limit`: 1000
-- `order_by`: `links_to_target:asc`
-
-⚠️ CRITICAL — DO NOT ADD A `url_from` FILTER
-Do not filter by `url_from` prefix. If you filter to only blog-to-blog links, you will miss
-internal links coming from the homepage, service pages, navigation, or any other non-blog
-section of the site. This causes false positives — pages incorrectly labelled as orphans
-when they actually have incoming links. Always query site-wide with no source URL filter.
-
-RESULT: A list of pages that have at least 1 incoming internal link. Call this LIST_HAS_LINKS.
-
-COMPUTING ORPHANS:
-- LIST_ORPHANS = LIST_ALL minus LIST_HAS_LINKS (match on full URL string)
-- ORPHAN_COUNT = length of LIST_ORPHANS
-- PAGES_WITH_LINKS = length of LIST_HAS_LINKS
-- GAP_RATE = ORPHAN_COUNT / TOTAL_PAGES × 100, rounded to nearest whole number
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 3 — KEYWORD RESEARCH
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-WHY THIS STEP EXISTS
-To generate relevant linking suggestions, you need to understand what each orphan page is
-about. The top keyword tells you the page's primary topic. This is done in a single Ahrefs
-call for the entire content prefix — not per page — to avoid excessive API usage.
-
-TOOL: `Ahrefs:site-explorer-top-pages`
-
-PARAMETERS TO USE:
-- `target`: the blog/content prefix
-- `mode`: `prefix`
-- `date`: today's date in YYYY-MM-DD format
-- `select`: `url,top_keyword,keywords,sum_traffic`
-- `limit`: 500
-- `order_by`: `sum_traffic:desc`
-
-RESULT: A keyword map. Call this MAP_KEYWORDS.
-
-For each orphan in LIST_ORPHANS:
-- If its URL appears in MAP_KEYWORDS → use the `top_keyword` value
-- If it does not appear (no Ahrefs data yet — common for newer sites) → derive the primary
-  keyword from the URL slug by replacing hyphens with spaces
-  (e.g. `/blog/developer-marketing-strategy` → "developer marketing strategy")
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 4 — TOPIC CLUSTER MATCHING
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-WHY THIS STEP EXISTS
-Linking suggestions must be topically relevant. Clustering first, then matching within and
-across clusters, produces accurate and natural suggestions.
-
-HOW TO CLUSTER
-Group all orphan pages by primary topic based on their keyword and title. Create between 5
-and 15 clusters depending on the site's content breadth. Common clusters for SaaS/tech
-sites include: Product, Documentation, Developer Marketing, SEO, Content Marketing, GTM
-Strategy, Community/DevRel, Technical Writing, Tutorials, etc. Adapt cluster names to match
-the actual content on the site being audited.
-
-HOW TO GENERATE SUGGESTIONS
-For each orphan page, identify 3 pages from LIST_ALL (any page on the site, not just
-orphans) that:
-
-1. Are topically related to the orphan — they cover the same or adjacent subject
-2. Would naturally reference the orphan's topic in their body content
-3. Are preferably from LIST_HAS_LINKS (already discoverable pages) so link equity flows
-   to the orphan
-
-For each of the 3 suggestions, provide:
-
-ANCHOR TEXT
-The exact phrase to hyperlink in the source page. Rules:
-- 3–8 words long
-- Descriptive of what the orphan page covers
-- Natural-sounding within a sentence — not forced or keyword-stuffed
-- Not the exact page title verbatim unless it reads naturally as link text
-
-WHERE TO PLACE
-A specific description of where in the source page to insert the link. Rules:
-- Section-level specific — not just "somewhere in the article"
-- Contextually logical — where a reader would naturally want more on this topic
-- Examples:
-  "In the 'Tools and Resources' section at the end"
-  "After the intro when explaining X concept"
-  "In the 'What to Avoid' section when listing bad practices"
-  "In the conclusion when suggesting next steps"
-
-SUGGESTED CONTEXT COPY
-A ready-to-paste sentence (1–2 sentences max) the writer drops directly into the source
-page at the placement location. Rules:
-- Must contain the anchor text as a real HTML hyperlink to the orphan page URL:
-  <a href="[orphan_url]">[anchor text]</a>
-- Must read naturally in the context described in WHERE TO PLACE
-- Must add genuine value — not just "click here to learn more"
-- Should feel written for that source article's voice and section
-- 15–35 words total (excluding HTML tags)
-- No em dashes (—) anywhere in the copy
-- Examples:
-  "If you're mapping out your Reddit strategy, understanding the difference between
-   <a href="...">karma farming vs building real credibility</a> will help you avoid
-   the most common engagement mistakes."
-  "For teams already running paid ads, <a href="...">organic vs paid Reddit marketing</a>
-   breaks down exactly when each approach delivers better ROI."
-
-Store this as the `copy` field in each suggestion object in the D[] array.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STEP 5 — GENERATE HTML REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-BEFORE WRITING ANY CODE, read the design reference file in this skill's folder:
-  → references/report-style-reference.html
-
-The reference file is the single source of truth for:
-- CSS variables (:root tokens — colours, surfaces, borders)
-- Typography (IBM Plex Sans + IBM Plex Mono, sizes, weights)
-- Every component (header, controls bar, sidebar, cluster sections,
-  blog cards, suggestion panels, cluster tags, footer)
-- Spacing and layout values
-- JavaScript patterns (filterAll, sidebar builder, card toggle)
-
-Do not invent new styles. Do not substitute different values. Copy them from the reference.
-
-━━━━━━━━━━━━━━━━━━━━
-HOW REFERENCE COMPONENTS MAP TO THIS REPORT
-━━━━━━━━━━━━━━━━━━━━
-
-The reference file contains annotated examples of every component. Use them as follows:
-
-| Reference section      | This report usage                                         |
-|------------------------|-----------------------------------------------------------|
-| C1. Header             | Report header with domain, h1, URL badge, stats, fix-tag  |
-| C2. Controls Bar       | Sticky search + cluster filter + live result count        |
-| C3. Layout             | 240px sidebar + fluid content grid                        |
-| C4. Sidebar            | Cluster nav links, built by JS (Section D3)               |
-| C5. Cluster Section    | One .cluster-section per topic cluster                    |
-| C6. Blog Card (closed) | Title + URL + keyword pill + traffic + cluster tag        |
-| C7. Suggestions Panel  | 3-column .sug-grid with anchor + placement per suggestion |
-| C8. Cluster Tags       | .ctag + colour modifier class (c-reddit, c-seo, etc.)     |
-| C9. Footer             | Domain · audit title · date  /  Source attribution        |
-| C10. No-results        | Shown by JS when filter returns 0 matches                 |
-| D1. CC map             | Cluster name → CSS class mapping object                   |
-| D2. D[] array          | All orphan data — replace with real audit output          |
-| D3. Sidebar builder    | Copy verbatim — builds sidebar links + sections from D[]  |
-| D4. filterAll()        | Copy verbatim — drives search, dropdown, count update     |
-
-━━━━━━━━━━━━━━━━━━━━
-HEADER STATS — values and colour classes
-━━━━━━━━━━━━━━━━━━━━
-
-Stat order: Total Pages (total) · divider · Orphan Count (fail) · Pages With Links (pass)
-            · divider · Gap Rate % (warn) · Total Suggestions (accent)
-
-Use these exact .hstat-val modifier classes:
-  .total   → var(--text)    white
-  .fail    → var(--fail)    red     — orphan count
-  .pass    → var(--pass)    green   — pages with links
-  .warn    → var(--warn)    amber   — gap rate %
-  .accent  → var(--accent2) indigo  — total suggestions
-
-━━━━━━━━━━━━━━━━━━━━
-CLUSTER TAG COLOUR MAP
-━━━━━━━━━━━━━━━━━━━━
-
-Use .ctag + one of these modifier classes. Add new clusters following the same pattern.
-
-  c-reddit    → Reddit Marketing
-  c-devmkt    → Developer Marketing
-  c-content   → Content Marketing
-  c-seo       → SEO
-  c-docs      → Documentation
-  c-llm       → LLM / AI Visibility
-  c-gtm       → GTM Strategy
-  c-devrel    → DevRel
-  c-techwrite → Technical Writing
-  c-product   → Product
-  c-other     → Other / fallback
-
-━━━━━━━━━━━━━━━━━━━━
-TRAFFIC DISPLAY RULES (kw-traffic)
-━━━━━━━━━━━━━━━━━━━━
-
-  null / no data  → <span class="kw-traffic">—</span>
-  ≥ 10 visits/mo  → <span class="kw-traffic hot">▲ N visits/mo</span>   (.hot = green)
-  1–9 visits/mo   → <span class="kw-traffic">▲ N visits/mo</span>
-  0 traffic       → <span class="kw-traffic">ranking · 0 traffic</span>
-
-━━━━━━━━━━━━━━━━━━━━
-FIX-TAG (below header stats)
-━━━━━━━━━━━━━━━━━━━━
-
-Always include the .fix-tag note below the stats row. Content:
-  ⚑ Ahrefs site-wide query (no url_from filter) · [date generated]
-
-━━━━━━━━━━━━━━━━━━━━
-FOOTER
-━━━━━━━━━━━━━━━━━━━━
-
-  Left:  "[domain] · Internal Linking Audit · [date]"
-  Right: "Source: Ahrefs site-explorer-pages-by-internal-links (site-wide)"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Save the HTML file to `/mnt/user-data/outputs/[domain]-orphan-linking-audit.html`
-
-The file must be fully self-contained — all CSS and JS inline, no external dependencies
-except the Google Fonts link tag.
-
-The report is data-driven: populate the CC{} map and D[] array in JavaScript, then let
-the sidebar builder (D3) and filterAll() (D4) generate all DOM from that data. Do not
-hard-code individual blog cards as static HTML.
-
-Call `present_files` with the file path immediately after saving.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-STRICT RULES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. READ references/report-style-reference.html BEFORE writing any HTML or CSS. Mandatory.
-
-2. NEVER filter `site-explorer-pages-by-internal-links` by `url_from`. Always query
-   site-wide. This is the most common mistake and causes incorrect orphan identification.
-
-3. ALWAYS use curl via bash_tool for Step 1. Never use Ahrefs or any other tool for
-   blog/content page discovery. Start with sitemap.xml, fall back to robots.txt, then
-   HTML crawl. Follow the substep order in Step 1 exactly.
-
-4. NEVER invent Ahrefs keyword data. If a page has no data in top-pages response,
-   derive the keyword from the slug. Do not fabricate traffic numbers.
-
-5. NEVER suggest a page as a source link to itself. Source and target must always differ.
-
-6. NEVER produce generic suggestions like "link from your homepage" unless the homepage
-   genuinely covers the same topic. All 3 suggestions per orphan must be topically justified.
-
-7. ALWAYS make both the target blog URL (.blog-url) and all 3 source URLs (.sug-from-url)
-   clickable <a href> links opening in target="_blank".
-
-8. ALWAYS clean the URL list from Step 1 before computing orphans. Exclude pagination,
-   tag/category pages, and any non-content URLs to avoid inflating the orphan count.
-
-9. ALWAYS call `Ahrefs:doc` before the first use of any Ahrefs tool in a session to
-   confirm the current parameter schema.
-
-10. NEVER deviate from the CSS values in report-style-reference.html. Do not substitute
-    different colours, fonts, or spacing.
-
-11. ALWAYS build the report data-driven — populate D[] and CC{}, let JS render the DOM.
-    Do not write static HTML for individual blog cards.
-
-12. NEVER use em dashes (—) in SUGGESTED CONTEXT COPY. Replace any em dash with a comma
-    or restructure the sentence. This applies to all copy fields in the D[] array and to
-    the static examples in report-style-reference.html.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EDGE CASES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-SITE HAS NO BLOG PREFIX
-Ask the user for the correct content prefix (e.g. `/articles/`, `/resources/`, `/posts/`,
-`/learn/`) before running Step 1.
-
-SMALL SITE (< 20 pages)
-Note in the report header. The audit is still valid but the linking suggestion pool is
-small — some suggestions may reuse the same source blogs across multiple orphans.
-
-VERY NEW SITE (most pages have no Ahrefs data)
-Note in the fix-tag that keyword data is derived from URL slugs rather than Ahrefs
-rankings. Linking suggestions are still valid but based on topical inference.
-
-SITEMAP NOT FOUND OR RETURNS 0 URLS
-Follow the fallback order in Step 1: robots.txt → blog index HTML crawl → ask user to
-provide sitemap URL manually.
-
-SITEMAP IS GZIPPED (.xml.gz)
-Decompress inline:
-  curl -s https://example.com/sitemap.xml.gz | gunzip | grep -oP '(?<=<loc>)[^<]+'
-
-MORE THAN 500 PAGES
-Process all URLs from the sitemap. Note in the fix-tag if the sitemap itself is paginated
-or appears truncated.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WHAT THIS AUDIT FINDS VS. DOES NOT FIND
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-FINDS:
-- Pages receiving zero incoming internal links from anywhere on the site
-- Which existing pages should link TO each orphan
-- Exact anchor text for each suggested link
-- Where in each source page to place the link
-
-DOES NOT FIND:
-- Whether a page's own body content contains outgoing internal links
-- Whether existing internal links use good vs. poor anchor text
-- Pages with too many outgoing links
-- Broken internal links (use `site-explorer-broken-backlinks` for that)
-
-If the user asks for any of the above, explain it is a different audit type not covered
-by this skill.
+**Section 1 — Header**
+- Site logo area with domain name (large)
+- Audit date
+- "Download Report" button (triggers `window.print()` or direct file save)
+
+**Section 2 — Executive Summary**
+Four stat cards in a row:
+- Total Blog Posts Found: `{BLOG_URLS.length}`
+- Orphan Pages: `{ORPHAN_URLS.length}` + percentage of total
+- Low-Linked Pages: `{LOW_LINKED_URLS.length}` (1–2 inbound links)
+- Healthy Pages: `{HEALTHY_URLS.length}` (3+ inbound links)
+
+A horizontal bar showing the proportion of orphan / low-linked / healthy visually.
+
+**Section 3 — Orphan Pages List**
+Table with columns: `#` | `Page URL` (clickable link) | `Anchor Text` | `US Monthly Volume`
+One row per orphan page.
+
+**Section 4 — Inbound Link Map (Non-Orphan Pages)**
+Table sorted descending by inbound count: `Page URL` | `Inbound Links` | `Linked From`
+For the "Linked From" column, list each source URL on a new line or as a comma-separated list.
+
+**Section 5 — Interlinking Briefs**
+For each orphan page, a card containing:
+- Orphan URL (h3, clickable)
+- Anchor Text (badge/pill)
+- US Monthly Search Volume
+- Three placement blocks, each showing:
+  - Source page URL (bold, clickable)
+  - "Where to Place" — displayed as a styled blockquote or info box
+  - "Context Copy" — displayed in a styled `<pre>` or `<div>` with a "Copy" button that uses `navigator.clipboard.writeText()` to copy the HTML
+
+**Section 6 — Footer**
+- "Generated by Infrasity Orphan Page Audit Skill"
+- Audit date and domain
+
+### JavaScript (inline `<script>` tag)
+- Copy button functionality: `navigator.clipboard.writeText(element.innerText)`
+- Smooth scroll for any nav links
+- Optional: collapse/expand for brief cards
+
+---
+
+## PHASE 7 — Confirm & Report to User
+
+After saving the HTML file:
+1. Report the file path to the user
+2. Give a brief summary:
+   - Total blog posts found
+   - Number of orphan pages
+   - Number of interlinking briefs generated
+   - File name and location
+3. Note any pages where keyword data could not be fetched from DataForSEO (fell back to slug)
+
+---
+
+## Important Rules
+
+- **Never hardcode `/blog/`** — always detect the URL pattern from the actual sitemap
+- **Anchor text is fixed per orphan** — the same `anchor_text` string appears in all 3 `context_copy` blocks for that orphan, always as a hyperlink
+- **Context copy minimum 300 characters** — enforce strictly; if an agent returns shorter copy, flag it
+- **Where to place must be specific** — section heading + paragraph position + surrounding content context
+- **HTML report is self-contained** — no external requests, no CDN, works offline
+- **DataForSEO fallback** — if API returns no data, use the slug converted to a readable phrase
+- **Post-process hyperlinks** — after all briefs are generated, always verify and fix anchor text hyperlinks before writing the HTML
+- **File naming** — `orphan-audit-{domain}-{YYYYMMDD}.html` saved in the user's current working directory

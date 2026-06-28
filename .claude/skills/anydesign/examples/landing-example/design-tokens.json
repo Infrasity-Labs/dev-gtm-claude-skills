@@ -1,0 +1,69 @@
+{
+  "color": {
+    "bg":                { "$value": "#0F172A", "$type": "color", "$description": "Surface — base background",      "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "surface-elevated":  { "$value": "#1E293B", "$type": "color", "$description": "Cards, feature blocks",          "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "text": {
+      "primary":         { "$value": "#F8FAFC", "$type": "color", "$description": "Body text on dark",              "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+      "muted":           { "$value": "#94A3B8", "$type": "color", "$description": "Captions, eyebrows, metadata",   "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+      "subtle":          { "$value": "#64748B", "$type": "color", "$description": "De-emphasized footer links",     "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } }
+    },
+    "border":            { "$value": "#334155", "$type": "color", "$description": "Subtle border (cards, dividers)","$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "border-strong":     { "$value": "#475569", "$type": "color", "$description": "Focus ring, emphasized borders", "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "accent":            { "$value": "#10B981", "$type": "color", "$description": "Primary CTA, brand accent",      "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "accent-hover":      { "$value": "#059669", "$type": "color", "$description": "Accent hover state",             "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "success":           { "$value": "#22C55E", "$type": "color", "$description": "Positive feedback",              "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "warning":           { "$value": "#F59E0B", "$type": "color", "$description": "Caution feedback",               "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+    "danger":            { "$value": "#EF4444", "$type": "color", "$description": "Error feedback",                 "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } }
+  },
+  "typography": {
+    "font-family": {
+      "sans":            { "$value": "Inter, ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily",          "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } }
+    },
+    "font-size": {
+      "body":            { "$value": "16px", "$type": "dimension",                                                  "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+      "h2":              { "$value": "32px", "$type": "dimension",                                                  "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } },
+      "display":         { "$value": "60px", "$type": "dimension",                                                  "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } }
+    },
+    "letter-spacing": {
+      "display":         { "$value": "-0.02em", "$type": "dimension",                                               "$extensions": { "anydesign": { "confidence": "high", "source": "css-custom-property" } } }
+    },
+    "font-weight": {
+      "regular":         { "$value": 400, "$type": "fontWeight" },
+      "medium":          { "$value": 500, "$type": "fontWeight" },
+      "semibold":        { "$value": 600, "$type": "fontWeight" }
+    }
+  },
+  "spacing": {
+    "1":                 { "$value": "4px",   "$type": "dimension" },
+    "2":                 { "$value": "8px",   "$type": "dimension" },
+    "3":                 { "$value": "12px",  "$type": "dimension" },
+    "4":                 { "$value": "16px",  "$type": "dimension" },
+    "6":                 { "$value": "24px",  "$type": "dimension" },
+    "8":                 { "$value": "32px",  "$type": "dimension" },
+    "12":                { "$value": "48px",  "$type": "dimension" },
+    "16":                { "$value": "64px",  "$type": "dimension" },
+    "24":                { "$value": "96px",  "$type": "dimension" },
+    "32":                { "$value": "128px", "$type": "dimension" }
+  },
+  "radius": {
+    "sm":                { "$value": "6px",  "$type": "dimension", "$description": "Buttons, inputs, badges",       "$extensions": { "anydesign": { "confidence": "high" } } },
+    "md":                { "$value": "16px", "$type": "dimension", "$description": "Cards, modals",                 "$extensions": { "anydesign": { "confidence": "high" } } }
+  },
+  "border": {
+    "width-default":     { "$value": "1px", "$type": "dimension" },
+    "width-focus":       { "$value": "2px", "$type": "dimension" }
+  },
+  "breakpoint": {
+    "md":                { "$value": "768px",  "$type": "dimension", "$extensions": { "anydesign": { "confidence": "medium", "note": "Declared but usage not observed in capture" } } },
+    "lg":                { "$value": "1024px", "$type": "dimension", "$extensions": { "anydesign": { "confidence": "medium", "note": "Declared but usage not observed in capture" } } }
+  },
+  "$extensions": {
+    "anydesign": {
+      "source":       "https://lumen.example/",
+      "captured_at":  "2026-05-18",
+      "method":       "html + css-vars-extraction",
+      "spec":         "W3C Design Tokens Community Group 2025.10",
+      "note":         "Fictional example for documentation. Token map fully extracted from CSS custom properties — no inference."
+    }
+  }
+}

@@ -69,6 +69,9 @@ This repo ships several bundles: the SEO/GEO/docs **skills** under [`skills/`](s
 - [Writing skills](#writing-skills)
 - [SEO skills](#seo-skills)
 - [Notion skills](#notion-skills)
+- [Coding skills](#coding-skills)
+- [Job search skills](#job-search-skills)
+- [Product designer skills](#product-designer-skills)
 - [Commands](#commands)
 - [Who it's for](#who-its-for)
 - [Requirements](#requirements)
@@ -699,9 +702,228 @@ Seven personal-productivity and workflow skills under [`notion-skills/`](notion-
 
 ---
 
+## Coding skills
+
+Seven skills for software engineering workflows — code review, architecture, TDD, and LLM coding best practices. Install via the standard Claude Code method — they live in `coding-skills/`.
+
+| Skill | What it does |
+| --- | --- |
+| **`code-reviewer`** | Automated code review for 13 languages — analyzes PRs for complexity and risk, detects code smells and SOLID violations, generates structured review reports. |
+| **`pr-review-expert`** | Expert-level pull request review focused on security, correctness, and code quality across any diff or branch. |
+| **`karpathy-guidelines`** | Behavioral guidelines derived from Andrej Karpathy's observations on LLM coding pitfalls — reduces overcomplication, surfaces assumptions, and enforces verifiable success criteria. |
+| **`senior-architect`** | Architecture design and analysis toolkit — system design, microservices vs monolith evaluation, dependency analysis, ADRs, and Mermaid/PlantUML/ASCII diagrams. |
+| **`brainstorming`** | Collaborative dialogue skill for exploring user intent, requirements, and design before any implementation work begins. Use before creating features or building components. |
+| **`test-driven-development`** | TDD workflow — write the test first, watch it fail, write minimal code to pass. Applies to any feature or bugfix. |
+| **`using-superpowers`** | Session-start skill that establishes how to find and invoke available skills before responding to any task. |
+
+---
+
+## Job search skills
+
+Twenty-seven skills covering the full job search lifecycle — from finding roles and tailoring resumes to writing cover letters, prepping for interviews, and negotiating offers. Install via the standard Claude Code method — they live in `job-search/`.
+
+### Search & Applications
+
+| Skill | What it does |
+| --- | --- |
+| **`job-search`** | Automated job search using browser automation — finds roles matching your resume and preferences across job boards. |
+| **`apply`** | Fills out job applications on Greenhouse, Lever, and Workday end-to-end using browser automation. |
+| **`application-form-filler`** | Fills individual application form fields with context-aware, tailored answers drawn from your CV and the job description. |
+| **`network-scan`** | Scans your LinkedIn contacts' companies for matching job openings — parallelized with caching for fast weekly reruns. |
+| **`job-description-analyzer`** | Analyzes job postings, calculates a match score, identifies skill gaps, and builds an application strategy. |
+
+### Resume Building
+
+| Skill | What it does |
+| --- | --- |
+| **`tailor-resume`** | Full resume tailoring workflow with a profile interview step — fetches the job posting, tailors every section, critiques for AI writing patterns. |
+| **`resume-tailor`** | Customize a resume for a specific role while maintaining truthfulness — reorders, reframes, and adds keywords from the job description. |
+| **`resume-ats-optimizer`** | Optimizes resumes for Applicant Tracking Systems and analyzes keyword match against a job posting. |
+| **`resume-bullet-writer`** | Transforms weak resume bullets into achievement-focused statements with metrics and measurable impact. |
+| **`resume-formatter`** | Ensures ATS-friendly formatting and produces a clean, scannable resume layout. |
+| **`resume-quantifier`** | Finds opportunities to add metrics and estimates reasonable numbers when exact data is unavailable. |
+| **`resume-section-builder`** | Creates targeted resume sections optimized for different experience levels, roles, and industries. |
+| **`resume-version-manager`** | Tracks multiple tailored resume versions against a master resume and logs which version went where. |
+| **`tech-resume-optimizer`** | Optimizes resumes specifically for software engineering, product management, and other technical roles. |
+| **`academic-cv-builder`** | Formats CVs for academic positions — publications, grants, teaching experience, and conference sections. |
+| **`executive-resume-writer`** | Creates C-suite and VP-level resumes emphasizing strategic leadership, P&L ownership, and board interaction. |
+| **`creative-portfolio-resume`** | Balances visual design with ATS compatibility for creative, design, and marketing roles. |
+
+### Cover Letters & Outreach
+
+| Skill | What it does |
+| --- | --- |
+| **`cover-letter`** | Full cover letter workflow — fetches the job posting, writes a tailored 250–350 word letter grounded in your resume. |
+| **`cover-letter-generator`** | Generates a personalized, compelling cover letter directly from a pasted resume and job description. |
+| **`cold-email-writer`** | Writes personalized cold outreach emails to hiring managers and founders — specific, human, and not a pitch deck. |
+
+### Research & Prep
+
+| Skill | What it does |
+| --- | --- |
+| **`interview-prep-generator`** | Generates STAR stories, role-specific practice questions, and talking points from your resume. |
+| **`offer-comparison-analyzer`** | Compares multiple job offers side-by-side with total compensation analysis (base, equity, bonus, benefits). |
+| **`salary-negotiation-prep`** | Researches market rates, builds a negotiation strategy, and writes counter-offer scripts. |
+
+### Profile & Portfolio
+
+| Skill | What it does |
+| --- | --- |
+| **`linkedin-profile-optimizer`** | Optimizes your LinkedIn profile for recruiter searchability, keyword density, and engagement signals. |
+| **`portfolio-case-study-writer`** | Transforms resume bullets into detailed, narrative portfolio case studies. |
+| **`career-changer-translator`** | Translates skills and experience from one industry to another, surfacing transferable skills and reframing language. |
+| **`reference-list-builder`** | Formats professional references correctly and prepares reference sheets and briefing materials. |
+
+---
+
+## Product designer skills
+
+Ninety-nine skills covering the full product design and UX practice — from early research and strategy through design systems, interface craft, critiques, accessibility, and handoff. Install via the standard Claude Code method — they live in `product-designers/`.
+
+### Research & Discovery
+
+| Skill | What it does |
+| --- | --- |
+| **`user-persona`** | Creates refined user personas from research data with demographics, goals, frustrations, and behavioral patterns. |
+| **`empathy-map`** | Builds a 4-quadrant empathy map (Says, Thinks, Does, Feels) to synthesize user research into actionable insights. |
+| **`interview-script`** | Creates structured user interview scripts with warm-up, core exploration, and wrap-up sections. |
+| **`journey-map`** | Creates end-to-end user journey maps with stages, touchpoints, emotions, pain points, and opportunity areas. |
+| **`affinity-diagram`** | Organizes qualitative research data into themes, clusters, and insight statements. |
+| **`user-flow-diagram`** | Creates user flow diagrams showing paths, decisions, and branch logic. |
+| **`experience-map`** | Maps the full ecosystem of user touchpoints, channels, and relationships across a service. |
+| **`diary-study-plan`** | Designs diary studies with prompts, duration, participant criteria, and an analysis framework. |
+| **`card-sort-analysis`** | Analyzes card sorting results to inform information architecture and navigation structure. |
+| **`survey-design`** | Designs surveys that collect reliable, unbiased quantitative data to validate hypotheses. |
+| **`summarize-interview`** | Summarizes a user interview transcript into structured insights with key themes, quotes, and action items. |
+| **`research-repository`** | Builds and maintains a research repository that makes findings findable and reusable across teams. |
+
+### Strategy & Planning
+
+| Skill | What it does |
+| --- | --- |
+| **`design-brief`** | Writes a comprehensive design brief defining problem space, constraints, audience, and success criteria. |
+| **`design-principles`** | Defines actionable design principles that guide decision-making and resolve trade-offs. |
+| **`jobs-to-be-done`** | Maps user Jobs-to-Be-Done with functional, emotional, and social dimensions plus outcome expectations. |
+| **`north-star-vision`** | Articulates a compelling north-star product vision that aligns teams and inspires strategic design decisions. |
+| **`opportunity-framework`** | Identifies, evaluates, and prioritizes design opportunities using impact-effort frameworks. |
+| **`business-design`** | Toolkit for thinking and communicating as a designer in a business context — financials, competitive landscapes, defending decisions in the language of value. |
+| **`competitive-analysis`** | Structured competitive analysis comparing UX patterns, features, strengths, and gaps across rival products. |
+| **`metrics-definition`** | Defines UX metrics and KPIs that connect design decisions to measurable business and user outcomes. |
+| **`design-impact-reporting`** | Communicates design's contribution to business and user outcomes in stakeholder-friendly terms. |
+| **`content-strategy`** | Defines what content a product needs, how it should be structured, and who owns it. |
+| **`stakeholder-alignment`** | Creates responsibility matrices, decision frameworks, and communication plans to align stakeholders. |
+
+### UX Laws & Frameworks
+
+| Skill | What it does |
+| --- | --- |
+| **`fitts-law`** | Applies Fitts's Law to size and position interactive targets for fast, accurate interaction. |
+| **`hicks-law`** | Applies Hick's Law to reduce decision time by limiting the number of simultaneous choices presented. |
+| **`millers-law`** | Applies Miller's Law — chunks information into groups of ~4 to fit working memory limits. |
+| **`doherty-threshold`** | Applies the Doherty Threshold — keeps system response times under 400ms to maintain user flow. |
+| **`aesthetic-usability`** | Applies the Aesthetic-Usability Effect — visually polished interfaces are perceived as more usable. |
+| **`law-of-proximity`** | Applies the Law of Proximity to group related elements through spatial relationships. |
+| **`law-of-common-region`** | Applies the Law of Common Region to group elements using containers, backgrounds, and boundaries. |
+| **`von-restorff-effect`** | Applies the Von Restorff Effect to make the most important element distinctly different from its surroundings. |
+
+### Design System
+
+| Skill | What it does |
+| --- | --- |
+| **`color-system`** | Builds a comprehensive color system with palette generation, semantic mapping, and accessibility compliance. |
+| **`typography-scale`** | Creates a modular typography scale with size, weight, and line-height relationships. |
+| **`spacing-system`** | Creates a consistent spacing system based on a base unit with contextual application rules. |
+| **`layout-grid`** | Defines responsive layout grid systems with columns, gutters, margins, and breakpoint behavior. |
+| **`design-token`** | Defines and organizes design tokens (color, spacing, typography, elevation) with naming conventions and usage guidance. |
+| **`design-token-audit`** | Audits design token usage across a product for consistency and coverage. |
+| **`naming-convention`** | Establishes naming convention systems for design elements, components, and tokens. |
+| **`icon-system`** | Creates an icon system specification covering grid, sizing, naming, categories, and implementation guidance. |
+| **`illustration-style`** | Defines an illustration style guide with visual language, color usage, and application rules. |
+| **`motion-system`** | Defines a motion system with duration tokens, easing vocabulary, and reduced-motion handling. |
+| **`pattern-library`** | Structures pattern library entries with problem context, solution pattern, usage examples, and related patterns. |
+| **`theming-system`** | Designs theming architecture supporting brand variants, dark mode, and high-contrast modes. |
+| **`dark-mode-design`** | Designs effective dark mode interfaces with proper color adaptation, contrast, and elevation. |
+| **`readable-measure`** | Sets optimal line lengths for readability across typography scales and responsive layouts. |
+
+### Interface Design
+
+| Skill | What it does |
+| --- | --- |
+| **`interface-design`** | Craft-first interface design for dashboards, admin panels, SaaS apps, tools, and settings pages — the difference between designed and generated. |
+| **`interfaces-that-feel`** | Applies an emotional resonance lens to technically correct but flat UIs — prescribes specific changes at the copy, motion, and interaction layer. |
+| **`information-architecture`** | Designs the structure, hierarchy, and navigation model for a product's content and features. |
+| **`navigation-patterns`** | Selects and designs navigation patterns matching product structure, user tasks, and platform conventions. |
+| **`visual-hierarchy`** | Establishes clear visual hierarchy through size, weight, color, spacing, and positioning. |
+| **`responsive-design`** | Designs adaptive layouts and interactions that work across all screen sizes and input methods. |
+| **`form-design`** | Designs forms that minimize friction, prevent errors, and guide users to successful completion. |
+| **`loading-states`** | Designs loading, skeleton, and progressive content reveal patterns. |
+| **`error-handling-ux`** | Designs error prevention, detection, and recovery experiences. |
+| **`onboarding-design`** | Designs first-run experiences that get users to value quickly without overwhelming them. |
+| **`search-ux`** | Designs search experiences that help users find what they need, recover from failure, and refine results. |
+| **`feedback-patterns`** | Designs system feedback for user actions including confirmations, status updates, and notifications. |
+| **`data-visualization`** | Designs clear, accessible data visualizations with appropriate chart selection and styling. |
+| **`animation-principles`** | Applies animation principles to UI motion for purposeful, polished interactions. |
+| **`gesture-patterns`** | Designs gesture-based interactions for touch and pointer devices. |
+| **`micro-interaction-spec`** | Specifies micro-interactions with trigger, rules, feedback, and loop/mode definitions. |
+| **`state-machine`** | Models complex UI behavior as finite state machines with states, events, and transitions. |
+| **`localization-design`** | Designs interfaces that adapt gracefully to multiple languages, writing directions, and cultural contexts. |
+
+### Critique
+
+| Skill | What it does |
+| --- | --- |
+| **`critique-affordance`** | Critiques a screen's interactive affordances — what looks clickable, state visibility, CTA clarity. |
+| **`critique-brand-consistency`** | Critiques brand consistency against mood, voice, and token definitions. |
+| **`critique-color`** | Critiques colour usage — contrast ratios, palette coherence, semantic meaning, and colour accessibility. |
+| **`critique-composition`** | Critiques composition — balance, whitespace, rhythm, and gestalt principles. |
+| **`critique-information-density`** | Critiques information density — cognitive load, content prioritisation, and progressive disclosure. |
+| **`critique-typography`** | Critiques typography — scale usage, readability, consistency, and token compliance. |
+| **`critique-visual-hierarchy`** | Critiques visual hierarchy — entry point, eye flow, weight distribution, and emphasis. |
+
+### Testing & Evaluation
+
+| Skill | What it does |
+| --- | --- |
+| **`accessibility-audit`** | Comprehensive accessibility audit against WCAG guidelines with severity ratings and remediation steps. |
+| **`accessibility-test-plan`** | Creates accessibility testing plans covering assistive technologies and WCAG criteria. |
+| **`a-b-test-design`** | Designs rigorous A/B tests with hypotheses, variants, metrics, and sample size calculations. |
+| **`heuristic-evaluation`** | Conducts expert heuristic evaluations using Nielsen's heuristics and domain-specific criteria. |
+| **`usability-test-plan`** | Designs usability test plans with tasks, success metrics, participant criteria, and a facilitation guide. |
+| **`click-test-plan`** | Designs click/first-click tests to evaluate navigation and information findability. |
+| **`test-scenario`** | Generates structured usability test scenarios with realistic tasks, success criteria, and facilitation notes. |
+| **`design-qa-checklist`** | Creates QA checklists for verifying design implementation accuracy. |
+| **`design-debt-audit`** | Identifies, categorizes, and prioritizes accumulated design inconsistencies and structural problems. |
+| **`prototype-strategy`** | Chooses the right prototyping fidelity and method for the design question at hand. |
+
+### Documentation & Handoff
+
+| Skill | What it does |
+| --- | --- |
+| **`component-spec`** | Writes detailed component specifications including props, states, variants, accessibility requirements, and usage guidelines. |
+| **`handoff-spec`** | Creates developer handoff specifications with measurements, behaviors, assets, and edge cases. |
+| **`design-rationale`** | Writes clear design rationale connecting decisions to user needs, business goals, and principles. |
+| **`design-review-process`** | Establishes design review gates with criteria, checklists, and approval workflows. |
+| **`design-critique`** | Facilitates structured design critiques with clear feedback frameworks and actionable outcomes. |
+| **`documentation-template`** | Generates structured documentation templates for components, patterns, or guidelines within a design system. |
+| **`wireframe-spec`** | Specifies wireframe layouts with content priority, component placement, and annotation. |
+| **`anydesign`** | Analyzes any visual source — website, screenshot, Figma file, or image — to extract its design system, tokens, and components into a `design.md`. |
+| **`case-study`** | Crafts portfolio-ready case studies that tell the full story of a design project. |
+| **`presentation-deck`** | Structures compelling design presentations for stakeholders, reviews, and showcases. |
+| **`service-blueprint`** | Maps the end-to-end service delivery system including frontstage, backstage, and supporting infrastructure. |
+| **`team-workflow`** | Designs team workflows covering task management, collaboration rituals, and tooling. |
+| **`version-control-strategy`** | Defines version control strategies for design files, components, and libraries. |
+| **`design-system-governance`** | Defines how a design system evolves — contribution models, versioning, change management, and deprecation. |
+| **`design-system-adoption`** | Creates adoption strategies and materials to drive design system usage across teams. |
+| **`design-sprint-plan`** | Plans and facilitates design sprints from challenge framing through prototype testing. |
+| **`design-negotiation`** | Advocates for design quality, scope, and time with cross-functional partners using evidence and shared goals. |
+| **`ux-writing`** | Writes effective UI copy including microcopy, error messages, empty states, and CTAs. |
+| **`ux-researcher-designer`** | Full UX research and design toolkit — personas, journey mapping, usability testing frameworks, and research synthesis. |
+
+---
+
 ## Commands
 
-If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; the blog content engine runs under `/blog`; the web design skills run under `/web-design`; the product management skills run under `/pm`; and the Notion and productivity skills run under `/notion`.
+If you've installed the command pack, every skill is also a slash subcommand. The SEO, GEO, and docs skills run under `/dev-gtm`; the full-funnel marketing skills run under `/marketing`; the comprehensive SEO suite runs under `/seo`; the blog content engine runs under `/blog`; the web design skills run under `/web-design`; the product management skills run under `/pm`; the Notion and productivity skills run under `/notion`; the coding skills run under `/coding-skills`; the job search skills run under `/job-search`; and the product designer skills run under `/product-designers`.
 
 <p align="center">
   <img src="./assets/claude-commands.png" alt="Claude Commands" width="400"/>
@@ -862,6 +1084,160 @@ Single entry point for the SEO suite. The `seo` orchestrator detects business ty
 | `/notion content-brief <keyword>` | Generate a full SEO content brief and optionally push it to Notion. |
 | `/notion claude-md-starter` | Scan the current repo and auto-generate a populated CLAUDE.md. |
 | `/notion meeting-notes` | Structure raw meeting notes into action items, decisions, and a summary. |
+
+---
+
+### `/coding-skills` — software engineering
+
+| Command | Description |
+| --- | --- |
+| `/coding-skills code-reviewer <repo or file>` | Analyze PRs for complexity, risk, code smells, and SOLID violations across 13 languages. |
+| `/coding-skills pr-review-expert <PR or diff>` | Expert-level PR review for security issues, correctness, and code quality. |
+| `/coding-skills karpathy-guidelines` | Apply behavioral guidelines to reduce common LLM coding mistakes. |
+| `/coding-skills senior-architect <system>` | Design system architecture, evaluate trade-offs, create diagrams, and write ADRs. |
+| `/coding-skills brainstorming <idea or feature>` | Explore user intent, requirements, and design before any implementation begins. |
+| `/coding-skills test-driven-development <feature>` | Write tests first, watch them fail, then write minimal passing code. |
+| `/coding-skills using-superpowers` | Establish skill discovery and invocation at the start of a session. |
+
+---
+
+### `/job-search` — job search & career
+
+| Command | Description |
+| --- | --- |
+| `/job-search job-search <keyword>` | Search jobs matching your resume and preferences across job boards. |
+| `/job-search apply <job URL>` | Fill out a Greenhouse, Lever, or Workday application end-to-end. |
+| `/job-search application-form-filler <job desc>` | Fill application form fields from your CV and the job description. |
+| `/job-search network-scan <contacts or 'all'>` | Scan LinkedIn contacts' companies for matching job openings. |
+| `/job-search job-description-analyzer <posting>` | Analyze a job posting, score the match, and identify gaps. |
+| `/job-search tailor-resume <job URL>` | Full resume tailoring workflow — fetches posting, tailors, critiques. |
+| `/job-search resume-tailor <job posting>` | Customize a resume for a specific role. |
+| `/job-search resume-ats-optimizer <resume>` | Optimize for ATS and analyze keyword match. |
+| `/job-search resume-bullet-writer <bullets>` | Transform weak bullets into achievement-focused statements. |
+| `/job-search resume-formatter <resume>` | ATS-friendly formatting and clean scannable layout. |
+| `/job-search resume-quantifier <resume>` | Add metrics and quantified impact to resume bullets. |
+| `/job-search resume-section-builder <role>` | Build targeted sections for different experience levels and roles. |
+| `/job-search resume-version-manager <context>` | Track and manage multiple resume versions. |
+| `/job-search tech-resume-optimizer <resume>` | Optimize for engineering and technical roles. |
+| `/job-search academic-cv-builder <CV>` | Format CVs for academic positions with publications and grants. |
+| `/job-search executive-resume-writer <context>` | C-suite and VP level resume writing. |
+| `/job-search creative-portfolio-resume <context>` | Visual resume balancing design with ATS compatibility. |
+| `/job-search cover-letter <job URL>` | Write a tailored cover letter for a specific job posting. |
+| `/job-search cover-letter-generator <resume + JD>` | Generate a cover letter from resume and job description. |
+| `/job-search cold-email-writer <target>` | Personalized cold outreach emails to hiring managers. |
+| `/job-search interview-prep-generator <resume>` | STAR stories, practice questions, and talking points. |
+| `/job-search offer-comparison-analyzer <offers>` | Compare multiple offers with total compensation analysis. |
+| `/job-search salary-negotiation-prep <role>` | Market rates, negotiation strategy, and counter-offer scripts. |
+| `/job-search linkedin-profile-optimizer <profile>` | Optimize LinkedIn for recruiter searchability and engagement. |
+| `/job-search portfolio-case-study-writer <project>` | Transform resume bullets into portfolio case studies. |
+| `/job-search career-changer-translator <industries>` | Identify transferable skills across industries. |
+| `/job-search reference-list-builder <context>` | Format and prepare professional references. |
+
+---
+
+### `/product-designers` — UX & product design
+
+| Command | Description |
+| --- | --- |
+| `/product-designers user-persona <research>` | Create user personas from research data. |
+| `/product-designers empathy-map <user>` | Build empathy maps (Says / Thinks / Does / Feels). |
+| `/product-designers interview-script <topic>` | Create structured user interview scripts. |
+| `/product-designers journey-map <user + product>` | End-to-end journey maps with stages and pain points. |
+| `/product-designers affinity-diagram <data>` | Organize research into themes and clusters. |
+| `/product-designers user-flow-diagram <task>` | Create flow diagrams with decisions and branches. |
+| `/product-designers experience-map <service>` | Map full ecosystem of touchpoints and channels. |
+| `/product-designers diary-study-plan <topic>` | Design diary studies for longitudinal research. |
+| `/product-designers card-sort-analysis <data>` | Analyze card sorts for IA decisions. |
+| `/product-designers survey-design <hypothesis>` | Design reliable quantitative surveys. |
+| `/product-designers summarize-interview <transcript>` | Summarize interviews into structured insights. |
+| `/product-designers research-repository <context>` | Build a findable, reusable research repository. |
+| `/product-designers design-brief <problem>` | Write a comprehensive design brief. |
+| `/product-designers design-principles <product>` | Define actionable design principles. |
+| `/product-designers jobs-to-be-done <product>` | Map Jobs-to-Be-Done with full functional, emotional, and social dimensions. |
+| `/product-designers north-star-vision <product>` | Articulate a compelling product vision. |
+| `/product-designers opportunity-framework <problem>` | Identify and prioritize design opportunities. |
+| `/product-designers business-design <context>` | Communicate design in the language of business value. |
+| `/product-designers competitive-analysis <product>` | Compare UX patterns across competitors. |
+| `/product-designers metrics-definition <feature>` | Define UX metrics and KPIs. |
+| `/product-designers design-impact-reporting <project>` | Report design's business contribution to stakeholders. |
+| `/product-designers content-strategy <product>` | Define content structure and ownership. |
+| `/product-designers stakeholder-alignment <project>` | Build alignment with RACI and decision frameworks. |
+| `/product-designers fitts-law <interface>` | Size and position targets for fast, accurate interaction. |
+| `/product-designers hicks-law <interface>` | Reduce decision time by limiting simultaneous choices. |
+| `/product-designers millers-law <content>` | Chunk information to fit working memory limits. |
+| `/product-designers doherty-threshold <feature>` | Keep system response times under 400ms. |
+| `/product-designers aesthetic-usability <interface>` | Polished interfaces feel more usable. |
+| `/product-designers law-of-proximity <layout>` | Group elements through spatial relationships. |
+| `/product-designers law-of-common-region <layout>` | Group elements with containers and backgrounds. |
+| `/product-designers von-restorff-effect <interface>` | Make key elements distinctly different from surroundings. |
+| `/product-designers color-system <product>` | Build a color palette with semantic mapping and a11y compliance. |
+| `/product-designers typography-scale <product>` | Create a modular type scale with size, weight, and line-height. |
+| `/product-designers spacing-system <product>` | Build consistent spacing from a base unit. |
+| `/product-designers layout-grid <product>` | Define responsive grids with columns, gutters, and breakpoints. |
+| `/product-designers design-token <system>` | Define and organize design tokens with naming conventions. |
+| `/product-designers design-token-audit <codebase>` | Audit token usage for consistency and coverage. |
+| `/product-designers naming-convention <system>` | Establish naming rules for components and tokens. |
+| `/product-designers icon-system <product>` | Spec icon grid, sizing, naming, and categories. |
+| `/product-designers illustration-style <product>` | Define illustration visual language and application rules. |
+| `/product-designers motion-system <product>` | Define duration tokens, easing vocabulary, and reduced motion. |
+| `/product-designers pattern-library <pattern>` | Structure pattern library entries with context and examples. |
+| `/product-designers theming-system <product>` | Design theming for brand variants and dark mode. |
+| `/product-designers dark-mode-design <interface>` | Adapt color, contrast, and elevation for dark mode. |
+| `/product-designers readable-measure <typography>` | Set optimal line lengths for readability. |
+| `/product-designers interface-design <product>` | Craft-first design for SaaS apps, dashboards, and tools. |
+| `/product-designers interfaces-that-feel <interface>` | Apply emotional resonance to technically correct but flat UIs. |
+| `/product-designers information-architecture <product>` | Design structure, hierarchy, and navigation model. |
+| `/product-designers navigation-patterns <product>` | Select navigation patterns by task and platform. |
+| `/product-designers visual-hierarchy <screen>` | Establish hierarchy through size, weight, and color. |
+| `/product-designers responsive-design <product>` | Adaptive layouts across all screen sizes. |
+| `/product-designers form-design <form>` | Design forms that minimize friction and prevent errors. |
+| `/product-designers loading-states <component>` | Design skeleton and progressive reveal patterns. |
+| `/product-designers error-handling-ux <flow>` | Design error prevention and recovery experiences. |
+| `/product-designers onboarding-design <product>` | First-run experiences that reach value fast. |
+| `/product-designers search-ux <product>` | Design search with findability and failure recovery. |
+| `/product-designers feedback-patterns <product>` | Confirmations, status updates, and notifications. |
+| `/product-designers data-visualization <data>` | Clear, accessible charts and data displays. |
+| `/product-designers animation-principles <interface>` | Apply animation principles to UI motion. |
+| `/product-designers gesture-patterns <touch interface>` | Design gesture interactions for touch and pointer. |
+| `/product-designers micro-interaction-spec <action>` | Specify micro-interactions with trigger, rules, and feedback. |
+| `/product-designers state-machine <component>` | Model UI behavior as finite state machines. |
+| `/product-designers localization-design <product>` | Design for multiple languages and writing directions. |
+| `/product-designers critique-affordance <screen>` | Critique what looks clickable and CTA clarity. |
+| `/product-designers critique-brand-consistency <screen>` | Critique brand against mood and token definitions. |
+| `/product-designers critique-color <screen>` | Critique contrast, palette, and colour accessibility. |
+| `/product-designers critique-composition <screen>` | Critique balance, whitespace, and gestalt. |
+| `/product-designers critique-information-density <screen>` | Critique cognitive load and content prioritisation. |
+| `/product-designers critique-typography <screen>` | Critique scale, readability, and token compliance. |
+| `/product-designers critique-visual-hierarchy <screen>` | Critique entry point, eye flow, and emphasis. |
+| `/product-designers accessibility-audit <product>` | WCAG audit with severity ratings and remediation steps. |
+| `/product-designers accessibility-test-plan <feature>` | Testing plan covering assistive technologies and WCAG. |
+| `/product-designers a-b-test-design <hypothesis>` | Design A/B tests with metrics and sample sizes. |
+| `/product-designers heuristic-evaluation <product>` | Expert evaluation using Nielsen's heuristics. |
+| `/product-designers usability-test-plan <feature>` | Test plan with tasks, metrics, and facilitation guide. |
+| `/product-designers click-test-plan <navigation>` | First-click tests for navigation findability. |
+| `/product-designers test-scenario <feature>` | Structured usability test scenarios ready to run. |
+| `/product-designers design-qa-checklist <release>` | QA checklist for design implementation accuracy. |
+| `/product-designers design-debt-audit <product>` | Identify and prioritize design inconsistencies. |
+| `/product-designers prototype-strategy <question>` | Choose the right fidelity and prototyping method. |
+| `/product-designers component-spec <component>` | Props, states, variants, and accessibility specification. |
+| `/product-designers handoff-spec <design>` | Dev handoff with measurements, behaviors, and edge cases. |
+| `/product-designers design-rationale <decision>` | Rationale connecting decisions to user needs and goals. |
+| `/product-designers design-review-process <team>` | Review gates with criteria and approval workflows. |
+| `/product-designers design-critique <design>` | Facilitate structured critique sessions. |
+| `/product-designers documentation-template <pattern>` | Generate documentation templates for components. |
+| `/product-designers wireframe-spec <screen>` | Wireframe spec with content priority and annotations. |
+| `/product-designers anydesign <URL or image>` | Extract design system from any visual source. |
+| `/product-designers case-study <project>` | Portfolio-ready design case studies. |
+| `/product-designers presentation-deck <project>` | Compelling design presentations for stakeholders. |
+| `/product-designers service-blueprint <service>` | Map frontstage, backstage, and supporting infrastructure. |
+| `/product-designers team-workflow <team>` | Design team rituals, task management, and tooling. |
+| `/product-designers version-control-strategy <files>` | Version control for design files and libraries. |
+| `/product-designers design-system-governance <system>` | Contribution models, versioning, and deprecation. |
+| `/product-designers design-system-adoption <system>` | Drive design system adoption across teams. |
+| `/product-designers design-sprint-plan <challenge>` | Plan design sprints from brief to prototype. |
+| `/product-designers design-negotiation <context>` | Advocate for design with evidence and shared goals. |
+| `/product-designers ux-writing <screen>` | Microcopy, error messages, empty states, and CTAs. |
+| `/product-designers ux-researcher-designer <context>` | Full UX research and design toolkit. |
 
 ---
 
