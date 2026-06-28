@@ -1,0 +1,20 @@
+# Optional dependencies for anydesign's companion scripts.
+# None of these are required for the skill itself — install only what you'll use.
+
+# Required for scripts/capture_site.py (multi-viewport Playwright capture).
+# After installing the package, also run: playwright install chromium
+playwright>=1.40
+
+# Required for scripts/extract_colors.py (dominant color extraction from images).
+Pillow>=10.0
+
+# scripts/extract_css_vars.py and scripts/check_contrast.py use stdlib only —
+# no dependencies needed.
+
+# Required for scripts/export_for_claude_design.py — emits a bundle of
+# tokens.css, tailwind.config.ts, brand-overview.docx, brand-kit.pptx,
+# README-claude-design.md for upload to claude.ai/design.
+# All three deps are pure Python.
+pyyaml>=6.0
+python-pptx>=0.6
+python-docx>=1.0
