@@ -155,7 +155,7 @@ def find_functions(content: str, language: str) -> List[Dict]:
         # call sites don't get matched. Return type / qualifiers come first.
         # Skip C control-flow keywords that look like function calls.
         "c": (
-            r"^(?:static\s+|inline\s+|extern\s+|const\s+|unsigned\s+|"
+            r"^\s*(?:static\s+|inline\s+|extern\s+|const\s+|unsigned\s+|"
             r"signed\s+|volatile\s+|register\s+)*"
             r"(?:[\w\*]+\s+\**)+"
             r"(?!(?:if|while|for|switch|return|sizeof)\b)"
@@ -164,7 +164,7 @@ def find_functions(content: str, language: str) -> List[Dict]:
         # C++: like C but also catches `ClassName::method(...)` definitions
         # and template return types like `std::vector<int>`.
         "cpp": (
-            r"^(?:static\s+|inline\s+|extern\s+|const\s+|virtual\s+|"
+            r"^\s*(?:static\s+|inline\s+|extern\s+|const\s+|virtual\s+|"
             r"explicit\s+|constexpr\s+|noexcept\s+)*"
             r"(?:[\w:\*<>&,\s]+\s+\**)+"
             r"(?!(?:if|while|for|switch|return|sizeof)\b)"
@@ -296,12 +296,12 @@ def find_classes(content: str, language: str) -> List[Dict]:
             # C has no classes; struct members are typically function pointers
             # rather than methods. Use the function definition pattern.
             "c": (
-                r"^(?:static\s+|inline\s+)*(?:[\w\*]+\s+\**)+"
+                r"^\s*(?:static\s+|inline\s+)*(?:[\w\*]+\s+\**)+"
                 r"(?!(?:if|while|for|switch|return|sizeof)\b)"
                 r"\w+\s*\([^)]*\)\s*\{"
             ),
             "cpp": (
-                r"^(?:static\s+|inline\s+|virtual\s+|explicit\s+|"
+                r"^\s*(?:static\s+|inline\s+|virtual\s+|explicit\s+|"
                 r"constexpr\s+)*(?:[\w:\*<>&,\s]+\s+\**)+"
                 r"(?!(?:if|while|for|switch|return|sizeof)\b)"
                 r"\w+(?:::\w+)?\s*\([^)]*\)"

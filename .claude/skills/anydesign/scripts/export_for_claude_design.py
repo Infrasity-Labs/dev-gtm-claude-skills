@@ -521,7 +521,7 @@ def render_markdown_table(lines, doc):
     ncols = max(len(r) for r in rows)
     rows = [r + [""] * (ncols - len(r)) for r in rows]
     table = doc.add_table(rows=len(rows), cols=ncols)
-    table.style = "Light Grid Accent 1"
+    table.style = "Light Grid Accent 1" if "Light Grid Accent 1" in [s.name for s in doc.styles] else "Table Grid"
     for ri, row in enumerate(rows):
         for ci, cell_text in enumerate(row):
             cell = table.rows[ri].cells[ci]
