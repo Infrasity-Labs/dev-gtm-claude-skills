@@ -2,7 +2,7 @@
 #
 # marketing-skills-plugin installer
 #
-# Installs 28 marketing skills into your Claude Code environment.
+# Installs 29 marketing skills into your Claude Code environment.
 # No agents or shared scripts are required for this plugin — skills only.
 #
 # Usage:
@@ -88,8 +88,8 @@ echo "  skills -> ${SKILLS_DST}"
 $DRY_RUN && warn "DRY RUN — no files will be written"
 echo ""
 
-# Skills (28 directories)
-info "Installing 28 skills..."
+# Skills (29 directories)
+info "Installing 29 skills..."
 $DRY_RUN || mkdir -p "$SKILLS_DST"
 skill_count=0
 for skill_dir in "${PLUGIN_DIR}/skills"/*/; do

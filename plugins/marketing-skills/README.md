@@ -1,6 +1,6 @@
 # marketing-skills-plugin
 
-28 marketing skills for Claude Code — paid ads, analytics, CRO, copywriting, email sequences, competitor research, SEO, and more.
+29 marketing skills for Claude Code, including paid ads, analytics, CRO, copywriting, competitor research, SEO, and X research.
 
 ---
 
@@ -36,6 +36,7 @@
 | 26 | `/schema` | Add, fix, and optimise schema markup and structured data |
 | 27 | `/seo-audit` | Audit and diagnose SEO issues on any site |
 | 28 | `/social` | Create, schedule, and optimise social media content |
+| 29 | `/x-research` | Research public X conversations and audiences with Apify |
 
 ---
 
@@ -114,7 +115,7 @@ After installing and restarting Claude Code:
 
 ## Optional MCP Setup
 
-Five optional MCP servers unlock live data integrations. All skills work without them.
+Six optional MCP servers unlock live data integrations. All skills work without them.
 
 | Server | Skills it unlocks | Credential needed |
 |--------|------------------|-------------------|
@@ -123,6 +124,7 @@ Five optional MCP servers unlock live data integrations. All skills work without
 | `slack` | `/community-marketing`, `/launch`, `/social` | `SLACK_BOT_TOKEN` + `SLACK_TEAM_ID` |
 | `firecrawl` | `/competitor-profiling`, `/competitors`, `/content-strategy` | `FIRECRAWL_API_KEY` |
 | `google-analytics` | `/analytics`, `/cro` | Google OAuth |
+| `apify` | `/x-research`, `/customer-research`, `/programmatic-seo` | `APIFY_TOKEN` |
 
 Add to `~/.claude/settings.json` (copy templates from `.mcp.json` and fill in your credentials):
 
@@ -154,5 +156,5 @@ plugins/marketing-skills/
 ├── install.sh                   # macOS/Linux installer
 ├── install.ps1                  # Windows installer
 ├── uninstall.sh                 # Teardown script
-└── skills/                      # 28 skill directories (each with SKILL.md)
+└── skills/                      # 29 skill directories (each with SKILL.md)
 ```

@@ -1,6 +1,6 @@
 # marketing-skills-plugin installer (Windows / PowerShell)
 #
-# Installs 28 marketing skills into your Claude Code environment.
+# Installs 29 marketing skills into your Claude Code environment.
 # No agents or shared scripts are required for this plugin — skills only.
 #
 # Usage:
@@ -70,8 +70,8 @@ Write-Host "  skills -> $SkillsDst"
 if ($DryRun) { Write-Warn "DRY RUN — no files will be written" }
 Write-Host ""
 
-# Skills (28 directories)
-Write-Info "Installing 28 skills..."
+# Skills (29 directories)
+Write-Info "Installing 29 skills..."
 if (-not $DryRun) { New-Item -ItemType Directory -Force -Path $SkillsDst | Out-Null }
 $skillCount = 0
 Get-ChildItem -Path (Join-Path $PluginDir "skills") -Directory | ForEach-Object {
