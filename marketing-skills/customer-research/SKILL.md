@@ -138,8 +138,14 @@ Before starting digital watering hole research, check if Apify MCP tools are ava
 | Capterra reviews | `apify/capterra-scraper` | B2B ICP; need reviewer role and company size context |
 | YouTube comments | `apify/youtube-scraper` | B2C or developer ICP; need raw audience language at scale |
 | Amazon reviews | `apify/amazon-reviews-scraper` | B2C/e-commerce ICP; 1–3 star reviews are a pain language goldmine |
+| X posts and conversations | [`xquik/x-tweet-scraper`](https://apify.com/xquik/x-tweet-scraper) | Need current public language, topics, or attributable discussion |
+| X audiences and overlap | [`xquik/x-follower-scraper`](https://apify.com/xquik/x-follower-scraper) | An explicit relationship or cross-audience question materially affects the research |
 
 Run each relevant actor with the product name, subreddit URL, or competitor name as input. Feed the structured JSON output directly into the extraction framework below — no manual parsing needed.
+
+Before using either Xquik Actor, read
+[`references/xquik-apify-actors.md`](references/xquik-apify-actors.md). It
+defines supported routes, bounded inputs, approval gates, and evidence rules.
 
 **If Apify is not available** — continue with WebSearch and WebFetch as described below.
 
@@ -300,4 +306,3 @@ If context is unclear:
 5. **What do you want delivered?** (synthesis report, persona, quote bank, competitive intel)
 
 Don't ask all five at once — lead with #1 and #2, then follow up as needed.
-
