@@ -30,10 +30,15 @@ Identify 10-20 creators in your space who consistently get high engagement:
 Gather 500-1000+ posts from your identified creators for analysis:
 
 **Tools:**
-- **Apify** — LinkedIn scraper, Twitter scraper actors
+- **Apify**: LinkedIn scrapers, [X Tweet Scraper](https://apify.com/xquik/x-tweet-scraper), and [X Follower Scraper](https://apify.com/xquik/x-follower-scraper)
 - **Phantom Buster** — Multi-platform automation
 - **Export tools** — Platform-specific export features
 - **Manual collection** — For smaller datasets, copy/paste into spreadsheet
+
+Use the Tweet Actor for bounded post collection. Use the Follower Actor only
+when creator selection requires an explicit audience or overlap comparison.
+Inspect the live schemas and pricing, set result caps, and obtain approval
+before a paid run.
 
 **Data to collect:**
 - Post text/content
