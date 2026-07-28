@@ -538,7 +538,7 @@ Ten production-grade skills for SEO, GEO, documentation, and developer-marketing
 
 ## Marketing skills
 
-A full-funnel pack of **29 developer-marketing skills** under [`marketing-skills/`](marketing-skills/) — covering demand gen, content, lifecycle, conversion, and retention. Install the whole set with the [quick install](#quick-install-recommended) command above.
+A full-funnel pack of **29 developer-marketing skills** under [`marketing-skills/`](marketing-skills/), covering demand gen, content, lifecycle, conversion, and retention. Install the whole set with the [quick install](#quick-install-recommended) command above.
 
 | Skill | Claude skill for… |
 | --- | --- |
