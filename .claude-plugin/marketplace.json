@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "marketing-skills",
-      "description": "28 marketing skills: analytics, ads, A/B testing, cold email, CRO, copywriting, competitor profiling, and more.",
+      "description": "29 marketing skills: analytics, ads, A/B testing, cold email, CRO, copywriting, competitor profiling, X research, and more.",
       "path": "plugins/marketing-skills"
     },
     {

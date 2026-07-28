@@ -2,5 +2,12 @@
   "dataforseo": {
     "type": "http",
     "url": "https://${DATAFORSEO_USERNAME}:${DATAFORSEO_PASSWORD}@mcp.dataforseo.com/http"
+  },
+  "apify": {
+    "command": "npx",
+    "args": ["-y", "@apify/actors-mcp-server"],
+    "env": {
+      "APIFY_TOKEN": "${APIFY_TOKEN}"
+    }
   }
 }

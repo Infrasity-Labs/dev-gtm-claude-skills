@@ -275,11 +275,31 @@ Get your integration secret at [notion.so/my-integrations](https://www.notion.so
 
 ### Apify connector (for web scraping — reviews, Reddit, Google Maps)
 
-`reddit-comments`, `competitor-profiling`, `customer-research`, `seo-maps`, and `programmatic-seo` use Apify actors to scrape data that WebFetch and Firecrawl can't reliably reach — Reddit threads blocked by rate limits, G2/Capterra/Trustpilot review pages with anti-bot protection, and live Google Maps business listings.
+`reddit-comments`, `competitor-profiling`, `customer-research`, `seo-maps`, `programmatic-seo`, and `x-research` use Apify Actors for structured public data.
 
-> **Note:** Apify is an **official Anthropic connector** and is available on **Claude Desktop only**. It cannot be configured as a Claude Code MCP server.
+Before paid runs, fetch live Actor details and show exact inputs.
+Require bounded inputs, explicit approval, and `maxTotalChargeUsd`.
 
-**Claude Desktop** — Settings → Customize → Connectors → Connect Apify. Sign in with your Apify account. Once connected, the following actors are available across skills:
+**Claude Code**: add this server to your MCP configuration:
+
+```json
+{
+  "apify": {
+    "command": "npx",
+    "args": ["-y", "@apify/actors-mcp-server"],
+    "env": {
+      "APIFY_TOKEN": "${APIFY_TOKEN}"
+    }
+  }
+}
+```
+
+Keep `APIFY_TOKEN` in your environment.
+Never paste it into prompts or committed files.
+
+**Claude Desktop**: connect Apify from Settings → Customize → Connectors.
+
+Once connected, these Actors are available across skills:
 
 | Actor | Used by |
 |---|---|
@@ -288,8 +308,10 @@ Get your integration secret at [notion.so/my-integrations](https://www.notion.so
 | `apify/google-maps-scraper`, `apify/google-maps-reviews-scraper`, `apify/yelp-scraper` | `seo-maps` |
 | `apify/youtube-scraper`, `apify/amazon-reviews-scraper` | `customer-research` |
 | `apify/google-maps-scraper`, `apify/g2-scraper`, `apify/capterra-scraper` | `programmatic-seo` |
+| `xquik/x-tweet-scraper`, `xquik/x-follower-scraper` | `x-research` |
 
-All skills degrade gracefully when Apify is not connected — each falls back to WebFetch or Firecrawl and appends a 💡 note explaining what Apify would unlock.
+Existing review and SEO Skills fall back to WebFetch or Firecrawl.
+`x-research` instead offers user-provided data and never swaps X providers silently.
 
 ### Klaviyo connector (for email template and campaign sync)
 
@@ -516,7 +538,7 @@ Ten production-grade skills for SEO, GEO, documentation, and developer-marketing
 
 ## Marketing skills
 
-A full-funnel pack of **28 developer-marketing skills** under [`marketing-skills/`](marketing-skills/) — covering demand gen, content, lifecycle, conversion, and retention. Install the whole set with the [quick install](#quick-install-recommended) command above.
+A full-funnel pack of **29 developer-marketing skills** under [`marketing-skills/`](marketing-skills/), covering demand gen, content, lifecycle, conversion, and retention. Install the whole set with the [quick install](#quick-install-recommended) command above.
 
 | Skill | Claude skill for… |
 | --- | --- |
@@ -548,6 +570,7 @@ A full-funnel pack of **28 developer-marketing skills** under [`marketing-skills
 | **`schema`** | Structured data and JSON-LD for rich results |
 | **`seo-audit`** | Technical and on-page SEO audits and diagnostics |
 | **`social`** | Social content, repurposing, and short-form video scripts |
+| **`x-research`** | Bounded X conversation and audience research with Apify Actors |
 
 ---
 
@@ -972,6 +995,7 @@ If you've installed the command pack, every skill is also a slash subcommand. Th
 | `/marketing customer-research <source or topic>` | Conduct or analyze customer research. |
 | `/marketing competitor-profiling <competitor URLs>` | Produce structured competitor profiles. |
 | `/marketing competitors <you vs competitor>` | Create comparison/alternative pages. |
+| `/marketing x-research <question or targets>` | Research public X conversations and audiences. |
 | `/marketing analytics <what to track>` | Set up or audit measurement. |
 | `/marketing pricing <product or context>` | Pricing & packaging strategy. |
 | `/marketing revops <context>` | Lead lifecycle & marketing-to-sales handoff. |
@@ -1289,7 +1313,7 @@ dev-gtm-claude-skills/
 │   ├── orphan-pages-internal-linking-opportunities/
 │   ├── no-outlinks-audit/
 │   └── dev-marketing-prospector/
-├── marketing-skills/                # 28 full-funnel developer-marketing skills
+├── marketing-skills/                # 29 full-funnel developer-marketing skills
 │   ├── seo-audit/
 │   ├── content-strategy/
 │   ├── cro/

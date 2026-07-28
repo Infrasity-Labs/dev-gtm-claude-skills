@@ -29,7 +29,7 @@ dev-gtm-claude-skills/
 │   ├── blog-audit/              # Quality audit
 │   └── ...
 │
-├── marketing-skills/            # Marketing cluster (~27 skills)
+├── marketing-skills/            # Marketing cluster (~29 skills)
 │   ├── analytics/               # GA4 / tracking setup
 │   ├── ads/                     # Paid ads strategy
 │   ├── competitor-profiling/    # Competitor research
@@ -213,7 +213,7 @@ Credentials are set during `install.sh` — they are stored in `~/.claude/settin
 |---------|-----------|--------|------------|
 | SEO | `seo-skills/` | ~35 | 8 (DataForSEO, Ahrefs, Firecrawl, Bing, Profound, SERanking, Unlighthouse, Banana) |
 | Writing / Blog | `writing-skills/` | ~35 | 0 (gsc-ga4, notebooklm planned) |
-| Marketing | `marketing-skills/` | ~27 | 0 (gsc-ga4, slack, apollo, figma planned) |
+| Marketing | `marketing-skills/` | ~29 | 0 (gsc-ga4, slack, apollo, figma planned) |
 | Web Design | `web-design/` | 4 | 0 (slack planned) |
 | Product Management | `product-management-skills/` | 8 | 0 (figma, canva, slack, linear, notion, jira planned) |
 | Utility | `skills/` | ~10 | 0 (apollo, slack planned) |
