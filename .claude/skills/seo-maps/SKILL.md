@@ -56,7 +56,7 @@ Before any analysis, detect the available capability tier:
 **Detection:** DataForSEO MCP tools NOT available, but Apify MCP tools ARE available (any tool whose name includes `apify`).
 **Capabilities:** Everything in Tier 0 PLUS live Google Maps business data, real review data with dates and text, and Yelp/TripAdvisor cross-platform presence verification.
 **Actors used:**
-- `apify/google-maps-scraper` — business name, address, phone, rating, review count, hours, categories, coordinates
+- `johnvc/google-maps-places-api` — business name, address, phone, rating, review count, hours, categories, coordinates
 - `apify/google-maps-reviews-scraper` — review text, rating, date, author (enables velocity and sentiment analysis)
 - `apify/yelp-scraper` — Yelp listing NAP and reviews for cross-platform NAP verification
 

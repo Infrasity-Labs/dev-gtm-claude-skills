@@ -132,7 +132,7 @@ For playbooks that require external data, check if Apify MCP tools are available
 
 | Playbook | Apify Actor | Input | Data Returned |
 |---|---|---|---|
-| **Locations** ("dentists in Austin") | `apify/google-maps-scraper` | Business category + city/region | Name, address, phone, rating, review count, coordinates per business |
+| **Locations** ("dentists in Austin") | `johnvc/google-maps-places-api` | Business category + city/region | Name, address, phone, rating, review count, coordinates per business |
 | **Directory** ("AI copywriting tools") | `apify/g2-scraper` or `apify/capterra-scraper` | Product category name | Tool names, descriptions, pricing tiers, ratings, feature tags |
 | **Reviews** (pages built from review data) | `apify/amazon-reviews-scraper` or `apify/g2-scraper` | Product ASIN or product name | Review text, rating, date, reviewer metadata |
 | **Profiles** (entity pages) | `apify/linkedin-company-scraper` | Company name or LinkedIn URL | Description, headcount, industry, founding year |

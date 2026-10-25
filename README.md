@@ -285,9 +285,9 @@ Get your integration secret at [notion.so/my-integrations](https://www.notion.so
 |---|---|
 | `apify/reddit-scraper` | `reddit-comments`, `customer-research` |
 | `apify/g2-scraper`, `apify/capterra-scraper`, `apify/trustpilot-scraper` | `competitor-profiling`, `customer-research` |
-| `apify/google-maps-scraper`, `apify/google-maps-reviews-scraper`, `apify/yelp-scraper` | `seo-maps` |
+| `johnvc/google-maps-places-api`, `apify/google-maps-reviews-scraper`, `apify/yelp-scraper` | `seo-maps` |
 | `apify/youtube-scraper`, `apify/amazon-reviews-scraper` | `customer-research` |
-| `apify/google-maps-scraper`, `apify/g2-scraper`, `apify/capterra-scraper` | `programmatic-seo` |
+| `johnvc/google-maps-places-api`, `apify/g2-scraper`, `apify/capterra-scraper` | `programmatic-seo` |
 
 All skills degrade gracefully when Apify is not connected — each falls back to WebFetch or Firecrawl and appends a 💡 note explaining what Apify would unlock.
 
