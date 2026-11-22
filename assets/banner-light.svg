@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="t d">
+<title id="t">Claude Skills for SEO, GEO &amp; Developer Marketing</title>
+<desc id="d">251 skills in 10 bundles, 23 subagents and 8 MCP extensions for Claude Code and other agents.</desc>
+<rect x="0.5" y="0.5" width="1279" height="359" rx="16" fill="#f6f8fa" stroke="#d1d9e0"/>
+<rect x="64" y="56" width="34" height="34" rx="8" fill="#6a5af0"/>
+<path d="M73 66 l7 7 l-7 7" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="83" y="78" width="8" height="3" rx="1.5" fill="#ffffff"/>
+<text x="112" y="82" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#59636e">infrasity-labs / dev-gtm-claude-skills</text>
+<text x="64" y="138" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="44" fill="#1f2328" font-weight="700" letter-spacing="-1">Claude Skills for SEO, GEO &amp; Developer Marketing</text>
+<text x="64" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="19" fill="#59636e">Open-source skills, agents and MCP extensions for Claude Code, Codex, Cursor and more.</text>
+<rect x="64" y="200" width="266" height="96" rx="12" fill="#ffffff" stroke="#d1d9e0"/>
+<text x="86" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="36" fill="#1f2328" font-weight="700" letter-spacing="-0.8" style="font-variant-numeric:tabular-nums">251</text>
+<text x="86" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#59636e">skills</text>
+<rect x="350" y="200" width="266" height="96" rx="12" fill="#ece9ff" stroke="#6a5af0" stroke-opacity="0.55"/>
+<text x="372" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="36" fill="#6a5af0" font-weight="700" letter-spacing="-0.8" style="font-variant-numeric:tabular-nums">10</text>
+<text x="372" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#59636e">skill bundles</text>
+<rect x="636" y="200" width="266" height="96" rx="12" fill="#ffffff" stroke="#d1d9e0"/>
+<text x="658" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="36" fill="#1f2328" font-weight="700" letter-spacing="-0.8" style="font-variant-numeric:tabular-nums">23</text>
+<text x="658" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#59636e">subagents</text>
+<rect x="922" y="200" width="266" height="96" rx="12" fill="#ffffff" stroke="#d1d9e0"/>
+<text x="944" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="36" fill="#1f2328" font-weight="700" letter-spacing="-0.8" style="font-variant-numeric:tabular-nums">8</text>
+<text x="944" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" fill="#59636e">MCP extensions</text>
+<circle cx="70" cy="328" r="4" fill="#1a7f37"/>
+<text x="82" y="333" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#818b98">MIT licensed  ·  npx skills add Infrasity-Labs/dev-gtm-claude-skills</text>
+</svg>

@@ -1,22 +1,32 @@
-<div align="center">
-
-<img src="assets/infrasity_logo.avif" alt="Infrasity" height="64" />
-
-# Claude Code Skills for SEO, GEO & Developer Marketing
-
-**Free, open-source Claude skills that audit your docs, score your AI discoverability, and run developer-marketing workflows — so your product gets found, parsed, and cited by AI systems.**
-
-[![Claude Compatible](https://img.shields.io/badge/Claude-Compatible-FF4A1C)](https://claude.ai/) [![GEO Optimized](https://img.shields.io/badge/GEO-Optimized-7F77DD)](https://www.infrasity.com/services/ai-geo-optimization-agency) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/Infrasity-Labs/dev-gtm-claude-skills?style=social)](https://github.com/Infrasity-Labs/dev-gtm-claude-skills/stargazers) [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue)](https://www.python.org/) [![skills.sh](https://skills.sh/b/Infrasity-Labs/dev-gtm-claude-skills)](https://skills.sh/Infrasity-Labs/dev-gtm-claude-skills)
-
-[Skills](#skills) · [Install](#installation) · [Commands](#commands) · [Who it's for](#who-its-for) · [FAQ](#faq) · [Website](https://www.infrasity.com/claude-skills)
-
-**Works with:** Claude Code · OpenAI Codex · OpenClaw · Hermes Agent[^hermes] · Mistral Vibe[^vibe] · Cursor · Aider · Windsurf · Kilo Code · OpenCode · Augment · Antigravity
-
 <p align="center">
-  <img src="./assets/dev-gtm-claude-skills.png" width="100%" alt="dev-gtm-claude-skills"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
+    <img width="100%" alt="dev-gtm-claude-skills: open-source Claude skills for SEO, GEO and developer marketing" src="./assets/banner-light.svg">
+  </picture>
 </p>
 
-</div>
+<p align="center">
+  <a href="./LICENSE"><img alt="MIT license" src="https://img.shields.io/github/license/Infrasity-Labs/dev-gtm-claude-skills?style=flat-square&labelColor=2b3036"></a>
+  <a href="https://github.com/Infrasity-Labs/dev-gtm-claude-skills/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/Infrasity-Labs/dev-gtm-claude-skills?label=last%20commit&style=flat-square&labelColor=2b3036"></a>
+  <a href="https://github.com/Infrasity-Labs/dev-gtm-claude-skills/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Infrasity-Labs/dev-gtm-claude-skills?style=flat-square&labelColor=2b3036"></a>
+  <a href="#contributing"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-6a5af0?style=flat-square&labelColor=2b3036"></a>
+  <a href="https://skills.sh/Infrasity-Labs/dev-gtm-claude-skills"><img alt="skills.sh" src="https://skills.sh/b/Infrasity-Labs/dev-gtm-claude-skills"></a>
+</p>
+
+<p align="center">
+  <b>Free, open-source Claude skills that audit your docs, score your AI discoverability, and run developer-marketing workflows, so your product gets found, parsed, and cited by AI systems.</b>
+</p>
+
+<p align="center">
+  <a href="#quick-start"><b>Quick start</b></a> &nbsp;·&nbsp;
+  <a href="#browse-by-category"><b>Browse skills</b></a> &nbsp;·&nbsp;
+  <a href="#installation"><b>Install</b></a> &nbsp;·&nbsp;
+  <a href="#commands"><b>Commands</b></a> &nbsp;·&nbsp;
+  <a href="#faq"><b>FAQ</b></a> &nbsp;·&nbsp;
+  <a href="https://www.infrasity.com/claude-skills"><b>Website</b></a>
+</p>
+
+<p align="center"><sub>**Works with:** Claude Code · OpenAI Codex · OpenClaw · Hermes Agent · Mistral Vibe · Cursor · Aider · Windsurf · Kilo Code · OpenCode · Augment · Antigravity</sub></p>
 
 ---
 
@@ -36,6 +46,41 @@ These skills are built for **developer-focused companies** — DevTools, AI-agen
 - **Produce SEO content briefs** as formatted `.docx` outlines
 
 ---
+
+## Quick start
+
+Install every skill with one command, then ask Claude in plain language.
+
+```bash
+npx skills add Infrasity-Labs/dev-gtm-claude-skills
+```
+
+1. Open Claude Code in any project.
+2. Say what you want, for example: _"Audit the docs at example.com for AI discoverability."_
+3. Or run a slash command such as `/seo-audit`, `/blog write` or `/docs-auditor`. See [Commands](#commands).
+
+Using Claude Desktop, Claude.ai, Codex, Cursor or another agent? See [Installation](#installation) and [Multi-Tool Support](#multi-tool-support).
+
+## Browse by category
+
+Every skill lives in its own folder with a `SKILL.md`. Counts below are read from the repo by `scripts/build_readme_assets.py`.
+
+<!-- BROWSE:START -->
+| Bundle | Skills | What it covers | |
+|:--|--:|:--|:--|
+| [SEO, GEO & docs](#seo-geo--docs-skills) | **10** | Docs audits, AI-readiness, SEO reports | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/skills-dark.svg"><img alt="10 skills" src="./assets/bars/skills-light.svg"></picture> |
+| [Marketing](#marketing-skills) | **28** | Full-funnel demand gen, lifecycle, conversion | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/marketing-skills-dark.svg"><img alt="28 skills" src="./assets/bars/marketing-skills-light.svg"></picture> |
+| [Writing & blog](#writing-skills) | **33** | Blog content engine, research to review | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/writing-skills-dark.svg"><img alt="33 skills" src="./assets/bars/writing-skills-light.svg"></picture> |
+| [SEO suite](#seo-skills) | **28** | Technical, content, schema and AI search | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/seo-skills-dark.svg"><img alt="28 skills" src="./assets/bars/seo-skills-light.svg"></picture> |
+| [Web design](#web-design-skills) | **4** | Visual design, UI audits, site planning | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/web-design-dark.svg"><img alt="4 skills" src="./assets/bars/web-design-light.svg"></picture> |
+| [Product management](#product-management-skills) | **8** | Strategy, PRDs, prioritization | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/product-management-skills-dark.svg"><img alt="8 skills" src="./assets/bars/product-management-skills-light.svg"></picture> |
+| [Notion](#notion-skills) | **7** | Brain dumps, triage, meeting notes | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/notion-skills-dark.svg"><img alt="7 skills" src="./assets/bars/notion-skills-light.svg"></picture> |
+| [Coding](#coding-skills) | **7** | Code review, architecture, TDD | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/coding-skills-dark.svg"><img alt="7 skills" src="./assets/bars/coding-skills-light.svg"></picture> |
+| [Job search](#job-search-skills) | **27** | Resumes, applications, interview prep | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/job-search-dark.svg"><img alt="27 skills" src="./assets/bars/job-search-light.svg"></picture> |
+| [Product design](#product-designer-skills) | **99** | UX research to design systems | <picture><source media="(prefers-color-scheme: dark)" srcset="./assets/bars/product-designers-dark.svg"><img alt="99 skills" src="./assets/bars/product-designers-light.svg"></picture> |
+| **Subagents** | **23** | Blog and SEO specialists under [`agents/`](agents/) | |
+| **MCP extensions** | **8** | DataForSEO, Ahrefs, Firecrawl and more under [`seo-skills/extensions/`](seo-skills/extensions/) | |
+<!-- BROWSE:END -->
 
 ## What Are Claude Code Skills & Agent Plugins?
 
@@ -59,12 +104,16 @@ This repo ships several bundles: the SEO/GEO/docs **skills** under [`skills/`](s
 
 ---
 
-## Table of contents
+<details>
+<summary><b>Table of contents</b></summary>
 
 - [What Are Claude Code Skills & Agent Plugins?](#what-are-claude-code-skills--agent-plugins)
 - [Multi-Tool Support](#multi-tool-support)
 - [Installation](#installation)
-- [Skills](#skills)
+- [Install steps for every tool](#install-steps-for-every-tool)
+- [Quick start](#quick-start)
+- [Browse by category](#browse-by-category)
+- [SEO, GEO & docs skills](#seo-geo--docs-skills)
 - [Marketing skills](#marketing-skills)
 - [Writing skills](#writing-skills)
 - [SEO skills](#seo-skills)
@@ -81,6 +130,8 @@ This repo ships several bundles: the SEO/GEO/docs **skills** under [`skills/`](s
 - [Contributing](#contributing)
 - [License](#license)
 
+</details>
+
 ---
 
 ## Multi-Tool Support
@@ -96,21 +147,21 @@ Each script discovers all skills under `skills/`, `marketing-skills/`, `writing-
 
 | Tool | Tested | Skills land in |
 | --- | --- | --- |
-| **Claude Code** | ✅ | `~/.claude/skills/` |
-| **Claude Desktop / Claude.ai** | ✅ | ZIP upload |
-| **Hermes Agent** | ✅ | `~/.hermes/skills/` |
-| **Kilo Code** | ✅ | `~/.claude/skills/` (via `claudeCodeCompat`) |
-| **Mistral Vibe** | ✅ | `~/.vibe/skills/` |
-| **OpenAI Codex** | ✅ | `~/.codex/skills/` |
-| **OpenClaw** | ✅ | `~/.openclaw/skills/` |
-| **Augment** | ✅ | `.augment/skills/` (project-local) |
-| **Antigravity** | ✅ | `~/.gemini/antigravity/skills/` |
-| **Cursor** | 🔜 | `.cursor/rules/` (project-local) |
-| **Aider** | 🔜 | `CONVENTIONS.md` (project-local) |
-| **Windsurf** | 🔜 | `.windsurf/skills/` (project-local) |
-| **OpenCode** | 🔜 | `.opencode/skills/` (project-local) |
+| **Claude Code** | Yes | `~/.claude/skills/` |
+| **Claude Desktop / Claude.ai** | Yes | ZIP upload |
+| **Hermes Agent** | Yes | `~/.hermes/skills/` |
+| **Kilo Code** | Yes | `~/.claude/skills/` (via `claudeCodeCompat`) |
+| **Mistral Vibe** | Yes | `~/.vibe/skills/` |
+| **OpenAI Codex** | Yes | `~/.codex/skills/` |
+| **OpenClaw** | Yes | `~/.openclaw/skills/` |
+| **Augment** | Yes | `.augment/skills/` (project-local) |
+| **Antigravity** | Yes | `~/.gemini/antigravity/skills/` |
+| **Cursor** | Steps ready | `.cursor/rules/` (project-local) |
+| **Aider** | Steps ready | `CONVENTIONS.md` (project-local) |
+| **Windsurf** | Steps ready | `.windsurf/skills/` (project-local) |
+| **OpenCode** | Steps ready | `.opencode/skills/` (project-local) |
 
-See [full install steps per tool](#per-tool-install-steps) below.
+See [full install steps per tool](#install-steps-for-every-tool) below.
 
 ---
 
@@ -328,7 +379,10 @@ git clone https://github.com/infrasity-labs/dev-gtm-claude-skills.git
 cd dev-gtm-claude-skills
 ```
 
-### Hermes Agent ✅
+<details>
+<summary><b>Show install steps for each tool</b></summary>
+
+### Hermes Agent
 
 1. Run the sync script:
    ```bash
@@ -341,7 +395,7 @@ cd dev-gtm-claude-skills
 
 ---
 
-### Kilo Code ✅
+### Kilo Code
 
 1. In VS Code settings, enable the compatibility flag:
    ```
@@ -363,7 +417,7 @@ cd dev-gtm-claude-skills
 
 ---
 
-### Mistral Vibe ✅
+### Mistral Vibe
 
 1. Run the install script:
    ```bash
@@ -376,7 +430,7 @@ cd dev-gtm-claude-skills
 
 ---
 
-### OpenAI Codex ✅
+### OpenAI Codex
 
 1. Generate local symlinks:
    ```bash
@@ -392,7 +446,7 @@ cd dev-gtm-claude-skills
 
 ---
 
-### OpenClaw ✅
+### OpenClaw
 
 1. Run the install script:
    ```bash
@@ -412,7 +466,7 @@ cd dev-gtm-claude-skills
 
 ---
 
-### Augment ✅
+### Augment
 
 Augment reads skills from the `.augment/skills/` directory inside your **project** — run these commands from your project root, not from the cloned repo.
 
@@ -432,7 +486,7 @@ Augment reads skills from the `.augment/skills/` directory inside your **project
 
 ---
 
-### Antigravity ✅
+### Antigravity
 
 1. Convert skills to Antigravity format:
    ```bash
@@ -448,7 +502,7 @@ Augment reads skills from the `.augment/skills/` directory inside your **project
 
 ---
 
-### Cursor 🔜 *(steps ready, not yet tested)*
+### Cursor *(steps ready, not yet tested)*
 
 1. Convert skills to Cursor `.mdc` rule format:
    ```bash
@@ -463,7 +517,7 @@ Augment reads skills from the `.augment/skills/` directory inside your **project
 
 ---
 
-### Aider 🔜 *(steps ready, not yet tested)*
+### Aider *(steps ready, not yet tested)*
 
 1. Convert all skills into a single `CONVENTIONS.md`:
    ```bash
@@ -480,7 +534,7 @@ Augment reads skills from the `.augment/skills/` directory inside your **project
 
 ---
 
-### Windsurf 🔜 *(steps ready, not yet tested)*
+### Windsurf *(steps ready, not yet tested)*
 
 1. Convert skills to Windsurf skill bundle format:
    ```bash
@@ -493,9 +547,11 @@ Augment reads skills from the `.augment/skills/` directory inside your **project
    Skills land in `/path/to/your/project/.windsurf/skills/<skill-name>/SKILL.md`.
 3. Open Windsurf in that project and describe your task.
 
+</details>
+
 ---
 
-## Skills
+## SEO, GEO & docs skills
 
 Ten production-grade skills for SEO, GEO, documentation, and developer-marketing workflows.
 
@@ -722,6 +778,9 @@ Seven skills for software engineering workflows — code review, architecture, T
 
 Twenty-seven skills covering the full job search lifecycle — from finding roles and tailoring resumes to writing cover letters, prepping for interviews, and negotiating offers. Install via the standard Claude Code method — they live in `job-search/`.
 
+<details>
+<summary><b>Show all job search skills by stage</b></summary>
+
 ### Search & Applications
 
 | Skill | What it does |
@@ -774,11 +833,16 @@ Twenty-seven skills covering the full job search lifecycle — from finding role
 | **`career-changer-translator`** | Translates skills and experience from one industry to another, surfacing transferable skills and reframing language. |
 | **`reference-list-builder`** | Formats professional references correctly and prepares reference sheets and briefing materials. |
 
+</details>
+
 ---
 
 ## Product designer skills
 
 Ninety-nine skills covering the full product design and UX practice — from early research and strategy through design systems, interface craft, critiques, accessibility, and handoff. Install via the standard Claude Code method — they live in `product-designers/`.
+
+<details>
+<summary><b>Show all product designer skills by stage</b></summary>
 
 ### Research & Discovery
 
@@ -919,6 +983,8 @@ Ninety-nine skills covering the full product design and UX practice — from ear
 | **`ux-writing`** | Writes effective UI copy including microcopy, error messages, empty states, and CTAs. |
 | **`ux-researcher-designer`** | Full UX research and design toolkit — personas, journey mapping, usability testing frameworks, and research synthesis. |
 
+</details>
+
 ---
 
 ## Commands
@@ -928,6 +994,9 @@ If you've installed the command pack, every skill is also a slash subcommand. Th
 <p align="center">
   <img src="./assets/claude-commands.png" alt="Claude Commands" width="400"/>
 </p>
+
+<details>
+<summary><b>Show the full command reference</b></summary>
 
 ### `/dev-gtm` — SEO, GEO & docs
 
@@ -1239,6 +1308,8 @@ Single entry point for the SEO suite. The `seo` orchestrator detects business ty
 | `/product-designers ux-writing <screen>` | Microcopy, error messages, empty states, and CTAs. |
 | `/product-designers ux-researcher-designer <context>` | Full UX research and design toolkit. |
 
+</details>
+
 ---
 
 ## Who it's for
@@ -1255,6 +1326,8 @@ These skills are built for technical teams who care about being discoverable by 
 
 ## Requirements
 
+What you need installed to run the skills.
+
 - Claude Code, Claude Desktop, or Claude.ai
 - Python 3.10+
 - Node.js with `npx` (to run the DataForSEO MCP server locally)
@@ -1264,13 +1337,17 @@ These skills are built for technical teams who care about being discoverable by 
 
 ## Sample outputs
 
+Two skills running inside Claude Code.
+
 | Docs Auditor | Growth Report |
 | --- | --- |
-| ![Docs Auditor running in Claude Code](./assets/docs-auditor-gif-cc.gif) | ![Growth Report running in Claude Code](./assets//growth-report-cc.gif) |
+| ![Docs Auditor running in Claude Code](./assets/docs-auditor-gif-cc.gif) | ![Growth Report running in Claude Code](./assets/growth-report-cc.gif) |
 
 ---
 
 ## Repository structure
+
+How the repo is laid out and where each skill lives.
 
 ```
 dev-gtm-claude-skills/
@@ -1330,6 +1407,8 @@ dev-gtm-claude-skills/
 
 ## FAQ
 
+Short answers to the questions we get most.
+
 **Are these Claude skills free?**
 Yes, every skill is free and MIT-licensed. No license fees, no paywalls.
 
@@ -1348,6 +1427,8 @@ Regularly. Star or watch the repo to get notified.
 ---
 
 ## Contributing
+
+Adding a skill takes one folder and one pull request.
 
 To add a skill, create a folder under `skills/`:
 
@@ -1382,6 +1463,6 @@ MIT — see [LICENSE](LICENSE).
 
 Infrasity is a developer-marketing agency for DevTools, AI-agent platforms, and B2B SaaS. We help technical products get found, parsed, and cited by AI systems.
 
-🌐 [infrasity.com](https://www.infrasity.com) · 🔗 [LinkedIn](https://www.linkedin.com/company/infrasity/) · 📸 [Instagram](https://www.instagram.com/infrasity/)
+[infrasity.com](https://www.infrasity.com) · [LinkedIn](https://www.linkedin.com/company/infrasity/) · [Instagram](https://www.instagram.com/infrasity/)
 
 **Want a GEO audit of your own docs?** → [infrasity.com/claude-skills](https://www.infrasity.com/claude-skills)
