@@ -144,8 +144,9 @@ def write(path, text):
 def main():
     s = collect()
     top = max((b[4] for b in s["bundles"]), default=1) or 1
-    hero_banner.write(ASSETS / "hero.svg", "skills", "Dev GTM Claude Skills",
-                      f"{s['skills']} skills and {s['agents']} agents for developer marketing")
+    hero_banner.write(ASSETS / "hero.svg", "skills", ("Skills that put", "Claude to work"),
+                      f"{s['skills']} skills + {s['agents']} agents for SEO, GEO and growth",
+                      f"{s['skills']} skills", skills_text=f"{s['skills']} skills ready")
     for theme, c in THEMES.items():
         write(ASSETS / f"banner-{theme}.svg", banner(s, c))
         for _, folder, _, _, n in s["bundles"]:

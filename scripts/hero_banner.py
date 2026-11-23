@@ -1,189 +1,171 @@
-"""Hero banner: dark starry panel with the Infrasity logo, a purple title,
-a white subtitle and a product-card illustration (stdlib only).
+"""Hero banner: light page, big tight headline, thick-outlined flat illustration.
 
-    from hero_banner import write
-    write(".github/assets/hero.svg", "skills", "Dev GTM Claude Skills", "251 skills for developer marketing")
+    from hero_banner import render, write
+    write(path, "jobs", ("Find your next", "marketing role"), "761 open roles, refreshed nightly", "761 open roles")
 
-kind is one of "skills", "events" or "newsletters" and picks the illustration.
-Keep the subtitle under ~58 characters so it fits on one line.
+kind is "jobs", "skills", "events" or "newsletters"; each has its own palette and
+illustration. Headline lines should stay under ~16 characters, the subtitle under
+~50, and the pill label short, so everything fits on one line. Stdlib only.
 """
-import random
+import math
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-W, H = 1280, 700
+W, H = 1280, 560
 SANS = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
-INK, ACCENT, SOFT, SOFTER, PALE = "#2a2160", "#6a5af0", "#d9d4ff", "#ebe8ff", "#efecff"
-
-# Infrasity wordmark, 607x96 PNG
+MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+INK, PAPER, GHOST = "#0b0b0f", "#f4f5f7", "#e9ebef"
 LOGO_B64 = "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"
 
-def _stars():
-    rnd = random.Random(7)
-    out = []
-    for _ in range(80):
-        x, y = rnd.randint(8, W - 8), rnd.randint(8, H - 8)
-        r = rnd.choice([0.8, 1.0, 1.2, 1.5, 1.8])
-        o = rnd.choice([0.25, 0.4, 0.55, 0.75, 0.9])
-        out.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" opacity="{o}"/>')
-    return "\n".join(out)
-
-def _card(x, y, w, h):
-    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="18" fill="#ffffff" filter="url(#shadow)"/>'
-
-def _arrow_right(x, y):
-    return (f'<path d="M{x} {y} h22" stroke="#8b7dff" stroke-width="3" stroke-linecap="round"/>'
-            f'<path d="M{x + 15} {y - 7} l8 7 l-8 7" fill="none" stroke="#8b7dff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
-
-def _arrow_down(x, y):
-    return (f'<path d="M{x} {y} v14" stroke="#8b7dff" stroke-width="3" stroke-linecap="round"/>'
-            f'<path d="M{x - 7} {y + 8} l7 8 l7 -8" fill="none" stroke="#8b7dff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
-
-def _label(x, y, text, size=15, spacing=0):
-    sp = f' letter-spacing="{spacing}"' if spacing else ""
-    return f'<text x="{x}" y="{y}" font-family="{SANS}" font-size="{size}" font-weight="700" fill="{INK}"{sp}>{escape(text)}</text>'
-
-# --- icons (drawn around 0,0, line style) -------------------------------------------------
-def _icon(name, cx, cy, color=ACCENT):
-    s = f'stroke="{color}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"'
-    if name == "sparkle":
-        return f'<path d="M{cx} {cy - 10} l3.2 6.8 l6.8 3.2 l-6.8 3.2 l-3.2 6.8 l-3.2 -6.8 l-6.8 -3.2 l6.8 -3.2 z" {s}/>'
-    if name == "globe":
-        return (f'<circle cx="{cx}" cy="{cy}" r="10" {s}/><ellipse cx="{cx}" cy="{cy}" rx="4.5" ry="10" {s}/>'
-                f'<path d="M{cx - 10} {cy} h20" {s}/>')
-    if name == "search":
-        return f'<circle cx="{cx - 2}" cy="{cy - 2}" r="8" {s}/><path d="M{cx + 4} {cy + 4} l7 7" {s}/>'
-    if name == "monitor":
-        return (f'<rect x="{cx - 11}" y="{cy - 9}" width="22" height="15" rx="3" {s}/>'
-                f'<path d="M{cx - 5} {cy + 11} h10 M{cx} {cy + 6} v5" {s}/>')
-    if name == "terminal":
-        return (f'<rect x="{cx - 11}" y="{cy - 9}" width="22" height="18" rx="3" {s}/>'
-                f'<path d="M{cx - 6} {cy - 3} l4 3 l-4 3 M{cx + 1} {cy + 4} h5" {s}/>')
-    if name == "doc":
-        return (f'<path d="M{cx - 8} {cy - 11} h11 l6 6 v16 h-17 z" {s}/><path d="M{cx - 4} {cy + 1} h9 M{cx - 4} {cy + 6} h9" {s}/>')
-    if name == "pin":
-        return (f'<path d="M{cx} {cy + 12} c-8 -8 -9 -12 -9 -16 a9 9 0 0 1 18 0 c0 4 -1 8 -9 16 z" {s}/>'
-                f'<circle cx="{cx}" cy="{cy - 4}" r="3" {s}/>')
-    if name == "mail":
-        return (f'<rect x="{cx - 11}" y="{cy - 8}" width="22" height="16" rx="3" {s}/><path d="M{cx - 10} {cy - 6} l10 8 l10 -8" {s}/>')
-    return ""
-
-def _badge(kind, x, y):
-    """Floating gradient app tile with a white glyph, tilted like the reference."""
-    g = ""
-    if kind == "skills":      # robot
-        g = ('<rect x="-17" y="-8" width="34" height="25" rx="8" fill="#fff"/>'
-             f'<circle cx="-7" cy="3" r="3.2" fill="{ACCENT}"/><circle cx="7" cy="3" r="3.2" fill="{ACCENT}"/>'
-             f'<path d="M0 -8 v-7" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="0" cy="-17" r="3" fill="#fff"/>'
-             '<rect x="-22" y="1" width="4" height="9" rx="2" fill="#fff"/><rect x="18" y="1" width="4" height="9" rx="2" fill="#fff"/>')
-    elif kind == "events":    # calendar
-        g = ('<rect x="-18" y="-15" width="36" height="32" rx="6" fill="#fff"/>'
-             f'<rect x="-18" y="-15" width="36" height="10" rx="5" fill="#cfc8ff"/>'
-             '<path d="M-9 -20 v8 M9 -20 v8" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>'
-             + "".join(f'<circle cx="{cx}" cy="{cy}" r="2.4" fill="{ACCENT}"/>' for cx in (-9, 0, 9) for cy in (2, 11)))
-    else:                     # envelope
-        g = ('<rect x="-19" y="-13" width="38" height="28" rx="6" fill="#fff"/>'
-             f'<path d="M-17 -10 l17 13 l17 -13" fill="none" stroke="{ACCENT}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
-    return (f'<g transform="translate({x} {y}) rotate(8)"><rect x="-34" y="-34" width="68" height="68" rx="20" fill="url(#tile)"/>{g}</g>')
-
-# --- illustration ----------------------------------------------------------------------
-HEADERS = {
-    "skills": ("Skills", "CLAUDE CODE", "OUTPUT"),
-    "events": ("Events", "SOURCES", "BY MONTH"),
-    "newsletters": ("Newsletters", "SOURCES", "BY CATEGORY"),
+PALETTES = {
+    "jobs":        dict(accent="#ff4f1f", on="#ffffff", a2="#d9d4ff", a3="#ffc933", ghost="jobs"),
+    "skills":      dict(accent="#a6ff4d", on=INK,       a2="#d9d4ff", a3="#ff4f1f", ghost="skills"),
+    "events":      dict(accent="#3d5afe", on="#ffffff", a2="#ffc933", a3="#ff7ab8", ghost="events"),
+    "newsletters": dict(accent="#ff6fb1", on=INK,       a2="#19d3a2", a3="#ffc933", ghost="mail"),
 }
 
-def _illustration(kind):
-    left_h, mid_h, bot_h = HEADERS[kind]
+def _box(x, y, w, h, r, fill, sw=5, dx=8, dy=8, shadow=True):
+    s = f'<rect x="{x + dx}" y="{y + dy}" width="{w}" height="{h}" rx="{r}" fill="{INK}"/>' if shadow else ""
+    return s + f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}" stroke="{INK}" stroke-width="{sw}"/>'
+
+def _rot(a, cx, cy, body):
+    return f'<g transform="rotate({a} {cx} {cy})">{body}</g>'
+
+def _text(x, y, t, size, fill=INK, weight=700, family=SANS, anchor=None, spacing=None):
+    a = f' text-anchor="{anchor}"' if anchor else ""
+    sp = f' letter-spacing="{spacing}"' if spacing else ""
+    return f'<text x="{x}" y="{y}" font-family="{family}" font-size="{size}" font-weight="{weight}" fill="{fill}"{a}{sp}>{escape(str(t))}</text>'
+
+def _icon(name, scale=2.4, color=INK):
+    s = f'stroke="{color}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"'
+    paths = {
+        "sparkle": '<path d="M0 -10 l3.2 6.8 l6.8 3.2 l-6.8 3.2 l-3.2 6.8 l-3.2 -6.8 l-6.8 -3.2 l6.8 -3.2 z"/>',
+        "search": '<circle cx="-2" cy="-2" r="8"/><path d="M4 4 l7 7"/>',
+        "doc": '<path d="M-8 -11 h11 l6 6 v16 h-17 z"/><path d="M-4 1 h9 M-4 6 h9"/>',
+    }
+    return f'<g {s} transform="scale({scale})">{paths[name]}</g>'
+
+# --------------------------------------------------------------------------- illustrations
+
+def _jobs(p):
     out = []
-    # left list card
-    lx, ly, lw, lh = 393, 285, 187, 363
-    out.append(_card(lx, ly, lw, lh))
-    out.append(f'<rect x="{lx + 18}" y="{ly + 22}" width="28" height="28" rx="8" fill="{PALE}"/>')
-    out.append(_icon("doc" if kind == "skills" else ("pin" if kind == "events" else "mail"), lx + 32, ly + 36, ACCENT).replace('stroke-width="2.6"', 'stroke-width="2"'))
-    out.append(_label(lx + 56, ly + 42, left_h, 15))
-    for i in range(6):
-        y0 = ly + 88 + i * 46
-        out.append(f'<circle cx="{lx + 28}" cy="{y0}" r="10" fill="{PALE}"/>')
-        out.append(f'<text x="{lx + 28}" y="{y0 + 4}" text-anchor="middle" font-family="{SANS}" font-size="11" font-weight="700" fill="{ACCENT}">{i + 1}</text>')
-        out.append(f'<rect x="{lx + 50}" y="{y0 - 9}" width="{118 - (i % 3) * 14}" height="8" rx="4" fill="{SOFT}"/>')
-        out.append(f'<rect x="{lx + 50}" y="{y0 + 4}" width="{74 - (i % 2) * 18}" height="6" rx="3" fill="{SOFTER}"/>')
-    out.append(_arrow_right(594, 365))
-    # middle top card
-    mx, my, mw, mh = 624, 285, 241, 157
-    out.append(_card(mx, my, mw, mh))
-    out.append(_label(mx + 20, my + 36, mid_h, 13, 1.2))
-    icons = ["sparkle", "globe", "search", "terminal" if kind == "skills" else "monitor"]
-    for i, ic in enumerate(icons):
-        tx = mx + 20 + i * 54
-        out.append(f'<rect x="{tx}" y="{my + 54}" width="44" height="44" rx="12" fill="{PALE}"/>')
-        out.append(_icon(ic, tx + 22, my + 76))
-    out.append(f'<rect x="{mx + 20}" y="{my + 114}" width="201" height="6" rx="3" fill="{SOFT}"/>')
-    out.append(f'<rect x="{mx + 20}" y="{my + 130}" width="140" height="6" rx="3" fill="{SOFTER}"/>')
-    out.append(_arrow_down(mx + mw // 2, 449))
-    # bottom card
-    bx, by, bw, bh = 624, 469, 241, 179
-    out.append(_card(bx, by, bw, bh))
-    out.append(_label(bx + 20, by + 36, bot_h, 13, 1.2))
-    if kind == "skills":
-        for i in range(3):
-            cy = by + 70 + i * 36
-            out.append(f'<circle cx="{bx + 32}" cy="{cy}" r="11" fill="{ACCENT}"/>')
-            out.append(f'<path d="M{bx + 26} {cy} l4 4 l8 -8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>')
-            out.append(f'<rect x="{bx + 54}" y="{cy - 8}" width="{150 - i * 24}" height="8" rx="4" fill="{SOFT}"/>')
-            out.append(f'<rect x="{bx + 54}" y="{cy + 4}" width="{96 - i * 10}" height="6" rx="3" fill="{SOFTER}"/>')
-    elif kind == "events":
-        hs = [38, 60, 48, 82, 66, 96, 54, 72]
-        for i, h in enumerate(hs):
-            x = bx + 22 + i * 26
-            out.append(f'<rect x="{x}" y="{by + 160 - h}" width="16" height="{h}" rx="5" fill="{ACCENT if h == 96 else SOFT}"/>')
-    else:
-        cx, cy, r = bx + 78, by + 102, 44
-        import math
-        circ = 2 * math.pi * r
-        parts = [(0.46, ACCENT), (0.32, "#a99bff"), (0.22, SOFT)]
-        off = 0.0
-        for frac, col in parts:
-            out.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{col}" stroke-width="22" '
-                       f'stroke-dasharray="{circ * frac - 2:.1f} {circ:.1f}" stroke-dashoffset="{-off:.1f}" transform="rotate(-90 {cx} {cy})"/>')
-            off += circ * frac
-        out.append(f'<text x="{cx}" y="{cy + 6}" text-anchor="middle" font-family="{SANS}" font-size="17" font-weight="700" fill="{INK}">Mix</text>')
-        for i, (name, col) in enumerate([("Dev", ACCENT), ("AI", "#a99bff"), ("Other", SOFT)]):
-            ly2 = by + 86 + i * 26
-            out.append(f'<rect x="{bx + 150}" y="{ly2 - 9}" width="11" height="11" rx="3" fill="{col}"/>')
-            out.append(f'<text x="{bx + 168}" y="{ly2}" font-family="{SANS}" font-size="13" font-weight="600" fill="{INK}">{name}</text>')
-    out.append(_badge(kind, mx + mw - 6, my - 6))
+    def card(x, y, w, h, fill, rot, logo, tag=False):
+        cx, cy = x + w / 2, y + h / 2
+        b = _box(x, y, w, h, 20, fill)
+        b += f'<circle cx="{x + 48}" cy="{y + 50}" r="24" fill="{logo}" stroke="{INK}" stroke-width="4"/>'
+        b += f'<rect x="{x + 88}" y="{y + 32}" width="{w - 190}" height="16" rx="8" fill="{INK}"/>'
+        b += f'<rect x="{x + 88}" y="{y + 58}" width="{(w - 190) * 0.6:.0f}" height="12" rx="6" fill="{INK}" opacity="0.3"/>'
+        b += f'<rect x="{x + 28}" y="{y + h - 52}" width="120" height="30" rx="15" fill="#fff" stroke="{INK}" stroke-width="3.5"/>'
+        b += f'<rect x="{x + w - 124}" y="{y + h - 56}" width="100" height="38" rx="19" fill="{INK}"/>'
+        b += _text(x + w - 74, y + h - 31, "Apply", 17, "#fff", anchor="middle")
+        if tag:
+            b += _rot(-10, x + w - 40, y + 14, f'<rect x="{x + w - 82}" y="{y - 8}" width="74" height="30" rx="15" fill="{p["accent"]}" stroke="{INK}" stroke-width="3.5"/>' + _text(x + w - 45, y + 13, "NEW", 16, "#fff", anchor="middle", spacing=1))
+        return _rot(rot, cx, cy, b)
+    out.append(card(770, 372, 400, 150, p["a3"], -3, "#fff"))
+    out.append(card(810, 232, 400, 150, p["a2"], 4, p["accent"]))
+    out.append(card(762, 82, 400, 150, "#ffffff", -6, p["a3"], tag=True))
+    # magnifier
+    out.append(f'<path d="M1252 494 L1288 530" stroke="{INK}" stroke-width="26" stroke-linecap="round"/>')
+    out.append(f'<path d="M1252 494 L1288 530" stroke="{p["accent"]}" stroke-width="12" stroke-linecap="round"/>')
+    out.append(f'<circle cx="1206" cy="448" r="62" fill="#ffffff" fill-opacity="0.55" stroke="{INK}" stroke-width="10"/>')
+    out.append(f'<path d="M1176 428 a34 34 0 0 1 30 -22" fill="none" stroke="{INK}" stroke-width="7" stroke-linecap="round"/>')
     return "\n".join(out)
 
-def render(kind, title, subtitle):
-    if kind not in HEADERS:
+def _skills(p, count_text):
+    out = [f'<clipPath id="win"><rect x="740" y="76" width="500" height="260" rx="20"/></clipPath>',
+           f'<rect x="748" y="84" width="500" height="260" rx="20" fill="{INK}"/>',
+           '<g clip-path="url(#win)">',
+           f'<rect x="740" y="76" width="500" height="260" fill="{INK}"/>',
+           f'<rect x="740" y="76" width="500" height="48" fill="{p["a2"]}"/>', '</g>',
+           f'<rect x="740" y="76" width="500" height="260" rx="20" fill="none" stroke="{INK}" stroke-width="5"/>',
+           f'<path d="M740 124 H1240" stroke="{INK}" stroke-width="5"/>']
+    for i, col in enumerate([p["a3"], p["a2"], p["accent"]]):
+        out.append(f'<circle cx="{768 + i * 30}" cy="100" r="9" fill="{col}" stroke="{INK}" stroke-width="3"/>')
+    out.append(_text(766, 176, "$ npx skills add", 26, p["accent"], 700, MONO))
+    out.append(_text(766, 212, "Infrasity-Labs/dev-gtm-claude-skills", 18, "#ffffff", 500, MONO))
+    out.append(_text(766, 268, "✓ " + count_text, 24, p["accent"], 700, MONO))
+    out.append(f'<rect x="{766 + len(count_text) * 14.6 + 40:.0f}" y="248" width="14" height="26" fill="{p["accent"]}"/>')
+    tiles = [(760, p["accent"], "sparkle", -6), (900, p["a2"], "search", 4), (1040, p["a3"], "doc", -3)]
+    for x, fill, ic, rot in tiles:
+        cx, cy = x + 60, 462
+        b = _box(x, 402, 120, 120, 30, fill)
+        b += f'<g transform="translate({cx} {cy})">{_icon(ic, 2.7)}</g>'
+        out.append(_rot(rot, cx, cy, b))
+    return "\n".join(out)
+
+def _events(p):
+    out = [_box(760, 76, 420, 420, 24, "#ffffff"),
+           f'<path d="M760 100 a24 24 0 0 1 24 -24 h372 a24 24 0 0 1 24 24 v58 h-420 z" fill="{p["accent"]}" stroke="{INK}" stroke-width="5"/>',
+           _text(790, 130, "UPCOMING", 34, "#fff", spacing=3)]
+    for x in (832, 1092):
+        out.append(f'<rect x="{x}" y="56" width="18" height="46" rx="9" fill="#fff" stroke="{INK}" stroke-width="4"/>')
+    hi = {1: p["a2"], 7: p["a3"], 10: "#d9d4ff", 14: p["a2"], 17: "#a6ff4d"}
+    for n in range(20):
+        c, r = n % 5, n // 5
+        x, y = 790 + c * 76, 184 + r * 74
+        out.append(f'<rect x="{x}" y="{y}" width="64" height="58" rx="12" fill="{hi.get(n, PAPER)}" stroke="{INK}" stroke-width="3.5"/>')
+        out.append(_text(x + 10, y + 27, n + 1, 21))
+    # pin
+    out.append(_rot(10, 1180, 150,
+        f'<path d="M1180 250 C1130 190 1124 168 1124 148 a56 56 0 0 1 112 0 c0 20 -6 42 -56 102 z" fill="{p["a3"]}" stroke="{INK}" stroke-width="6"/>'
+        f'<circle cx="1180" cy="148" r="20" fill="#fff" stroke="{INK}" stroke-width="5"/>'))
+    # ticket
+    t = (f'<path d="M1010 408 h196 a0 0 0 0 1 0 0 v26 a16 16 0 0 0 0 32 v26 h-196 v-26 a16 16 0 0 0 0 -32 z" fill="{p["a2"]}" stroke="{INK}" stroke-width="5"/>'
+         f'<path d="M1150 414 v104" stroke="{INK}" stroke-width="3" stroke-dasharray="6 7"/>'
+         + _text(1030, 452, "ADMIT", 22, INK, spacing=2) + _text(1030, 480, "ONE", 22, INK, spacing=2))
+    out.append(_rot(-9, 1108, 470, f'<g transform="translate(0 0)">{t}</g>'))
+    return "\n".join(out)
+
+def _newsletters(p):
+    out = []
+    env = []
+    # letter paper peeking out
+    env.append(_box(840, 70, 300, 250, 14, "#ffffff"))
+    env.append(f'<rect x="866" y="96" width="170" height="22" rx="11" fill="{p["accent"]}" stroke="{INK}" stroke-width="3.5"/>')
+    for i, w in enumerate([240, 230, 200, 140]):
+        env.append(f'<rect x="866" y="{140 + i * 30}" width="{w}" height="12" rx="6" fill="{INK}" opacity="{0.85 if i == 0 else 0.3}"/>')
+    # envelope
+    env.append(_box(780, 210, 460, 290, 22, p["a3"]))
+    env.append(f'<path d="M780 232 a22 22 0 0 1 22 -22 h416 a22 22 0 0 1 22 22 L1010 390 z" fill="{p["accent"]}" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>')
+    env.append(f'<path d="M784 494 L960 352 M1236 494 L1060 352" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>')
+    out.append(_rot(-5, 1010, 350, "".join(env)))
+    # @ badge
+    out.append(f'<circle cx="790" cy="214" r="46" fill="{p["a2"]}" stroke="{INK}" stroke-width="6"/>')
+    out.append(_text(790, 232, "@", 54, INK, anchor="middle"))
+    # sparkle
+    out.append(f'<path d="M1228 110 l12 26 l26 12 l-26 12 l-12 26 l-12 -26 l-26 -12 l26 -12 z" fill="{p["a3"]}" stroke="{INK}" stroke-width="5" stroke-linejoin="round"/>')
+    return "\n".join(out)
+
+# --------------------------------------------------------------------------- page
+
+def render(kind, headline, subtitle, pill, skills_text="251 skills ready"):
+    if kind not in PALETTES:
         raise ValueError(f"unknown kind {kind!r}")
+    p = PALETTES[kind]
+    art = {"jobs": lambda: _jobs(p), "skills": lambda: _skills(p, skills_text),
+           "events": lambda: _events(p), "newsletters": lambda: _newsletters(p)}[kind]()
+    l1, l2 = headline
+    pill_w = 62 + len(pill) * 15
     return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-labelledby="t">
-<title id="t">{escape(title)}: {escape(subtitle)}</title>
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#090920"/><stop offset="1" stop-color="#14123a"/></linearGradient>
-<linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9a8cff"/><stop offset="1" stop-color="#6a5af0"/></linearGradient>
-<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter>
-<filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.35"/></filter>
-<clipPath id="clip"><rect width="{W}" height="{H}" rx="18"/></clipPath>
-</defs>
+<title id="t">{escape(l1)} {escape(l2)}. {escape(subtitle)}</title>
+<defs><clipPath id="clip"><rect width="{W}" height="{H}" rx="20"/></clipPath></defs>
 <g clip-path="url(#clip)">
-<rect width="{W}" height="{H}" fill="url(#bg)"/>
-<ellipse cx="1030" cy="560" rx="380" ry="230" fill="#2f2a6b" opacity="0.38" filter="url(#blur)"/>
-<ellipse cx="180" cy="90" rx="300" ry="140" fill="#1f1b52" opacity="0.5" filter="url(#blur)"/>
-{_stars()}
-<image x="36" y="30" width="236" height="37" href="data:image/png;base64,{LOGO_B64}" xlink:href="data:image/png;base64,{LOGO_B64}"/>
-<text x="640" y="152" text-anchor="middle" font-family="{SANS}" font-size="68" font-weight="700" letter-spacing="-1.5" fill="#7c6cf2">{escape(title)}</text>
-<text x="640" y="216" text-anchor="middle" font-family="{SANS}" font-size="42" font-weight="700" letter-spacing="-0.5" fill="#ffffff">{escape(subtitle)}</text>
-<g transform="translate(11 0)">
-{_illustration(kind)}
+<rect width="{W}" height="{H}" fill="{PAPER}"/>
+<text x="-24" y="520" font-family="{SANS}" font-size="420" font-weight="800" letter-spacing="-14" fill="{GHOST}">{escape(p["ghost"])}</text>
+<image x="64" y="44" width="200" height="32" href="data:image/png;base64,{LOGO_B64}" xlink:href="data:image/png;base64,{LOGO_B64}"/>
+{_text(60, 200, l1, 70, INK, 800, spacing=-3)}
+{_text(60, 276, l2, 70, INK, 800, spacing=-3)}
+{_text(64, 334, subtitle, 25, INK, 500)}
+<rect x="64" y="378" width="{pill_w}" height="64" rx="16" fill="{p["accent"]}" stroke="{INK}" stroke-width="4"/>
+{_text(64 + 28, 419, pill, 24, p["on"], 800)}
+<g transform="translate({64 + pill_w - 36} 410)" stroke="{p["on"]}" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -10 v20 M-8 3 l8 8 l8 -8"/></g>
+{art}
 </g>
-</g>
-<rect x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="18" fill="none" stroke="#2a2760"/>
+<rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="20" fill="none" stroke="#d9dce3" stroke-width="2"/>
 </svg>
 """
 
-def write(path, kind, title, subtitle):
+def write(path, kind, headline, subtitle, pill, **kw):
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(render(kind, title, subtitle), encoding="utf-8")
+    p.write_text(render(kind, headline, subtitle, pill, **kw), encoding="utf-8")
