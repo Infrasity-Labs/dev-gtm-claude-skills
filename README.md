@@ -1,4 +1,8 @@
 <p align="center">
+  <img width="100%" alt="Infrasity: Dev GTM Claude Skills" src="./assets/hero.svg">
+</p>
+
+<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
     <img width="100%" alt="dev-gtm-claude-skills: open-source Claude skills for SEO, GEO and developer marketing" src="./assets/banner-light.svg">

@@ -5,15 +5,19 @@ Counts come straight from the filesystem, so the numbers never drift:
   python3 scripts/build_readme_assets.py
 
 Writes (stdlib only):
+  assets/hero.svg (Infrasity hero)
   assets/banner-{light,dark}.svg
   assets/bars/<bundle>-{light,dark}.svg
   the block between <!-- BROWSE:START --> and <!-- BROWSE:END --> in README.md
 """
 import re
+import sys
 from pathlib import Path
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import hero_banner
 ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
 REPO_SLUG = "infrasity-labs / dev-gtm-claude-skills"
@@ -140,6 +144,8 @@ def write(path, text):
 def main():
     s = collect()
     top = max((b[4] for b in s["bundles"]), default=1) or 1
+    hero_banner.write(ASSETS / "hero.svg", "skills", "Dev GTM Claude Skills",
+                      f"{s['skills']} skills and {s['agents']} agents for developer marketing")
     for theme, c in THEMES.items():
         write(ASSETS / f"banner-{theme}.svg", banner(s, c))
         for _, folder, _, _, n in s["bundles"]:
